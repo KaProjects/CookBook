@@ -1,9 +1,10 @@
-package org.kaleta.cookbook;
+package org.kaleta.cookbook.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "testt")
+@Deprecated
 public class Data {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
