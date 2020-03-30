@@ -7,9 +7,9 @@ class RestService extends React.Component {
     contacts: []
   }
 
-    render() {
-      return (
-        <div>
+  render() {
+    return (
+      <div>
         <center><h1>Contact List</h1></center>
         {this.state.contacts.map((contact) => (
           <div class="card">
@@ -21,19 +21,19 @@ class RestService extends React.Component {
           </div>
         ))}
       </div>
-      );
-    }
+    );
+  }
 
- 
 
-    componentDidMount() {
-      fetch('http://127.0.0.1:7777/data/all')
+
+  componentDidMount() {
+    fetch('http://127.0.0.1:7777/data/all')
       .then(res => res.json())
       .then((data) => {
         this.setState({ contacts: data })
       })
       .catch(console.log)
-    }
   }
+}
 
-  export default RestService;
+export default RestService;
