@@ -26,8 +26,7 @@ public class Step extends AbstractEntity{
     private String text;
 
     @Column(name = "optional")
-    @NotNull
-    private Boolean optional;
+    private boolean optional = false;
 
     @Override
     public String toString() {

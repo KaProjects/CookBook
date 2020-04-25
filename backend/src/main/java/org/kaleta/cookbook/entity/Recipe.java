@@ -23,7 +23,7 @@ public class Recipe  extends AbstractEntity {
     @Column(name = "image")
     private byte[] image;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER/*, cascade = CascadeType.ALL*/) // TODO: bug1 - EntityNotFoundException: Unable to find
     @JoinColumn(name ="categoryId")
     @Setter(AccessLevel.NONE)
     @NotNull

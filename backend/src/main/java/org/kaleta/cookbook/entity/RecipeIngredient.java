@@ -18,7 +18,7 @@ public class RecipeIngredient  extends AbstractEntity{
     //@NotNull - technically, can be null, while it's only realization of Ingredient, not yet assigned to Recipe.
     private Recipe recipe;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne/*(cascade = CascadeType.ALL)*/ // TODO: bug1 - EntityNotFoundException: Unable to find
     @JoinColumn(name = "ingredientId")
     @Setter(AccessLevel.NONE)
     @NotNull
@@ -33,8 +33,7 @@ public class RecipeIngredient  extends AbstractEntity{
     private String unit;
 
     @Column(name = "optional")
-    @NotNull
-    private Boolean optional;
+    private boolean optional = false;
 
     public void setIngredient(Ingredient ingredient){
         ingredient.getRecipeIngredientSet().add(this);

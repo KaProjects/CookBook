@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @RequestMapping(value="/home")
+    @RequestMapping(value="/hello")
     public String index() {
         return "Hello World! from Syno";
     }

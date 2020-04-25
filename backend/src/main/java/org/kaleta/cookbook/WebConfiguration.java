@@ -1,5 +1,7 @@
 package org.kaleta.cookbook;
 
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -31,4 +33,10 @@ public class WebConfiguration {
             }
         };
     }
+
+    @Bean
+    public Mapper dozer() {
+        return new DozerBeanMapper();
+    }
+
 }
