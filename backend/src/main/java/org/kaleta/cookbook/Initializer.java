@@ -4,6 +4,7 @@ import org.kaleta.cookbook.dao.CategoryDao;
 import org.kaleta.cookbook.dao.IngredientDao;
 import org.kaleta.cookbook.dao.RecipeDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -10,4 +10,6 @@ public interface CategoryService {
 
     Category findCategory(String id);
 
+    String createCategory(String name);
+
 }

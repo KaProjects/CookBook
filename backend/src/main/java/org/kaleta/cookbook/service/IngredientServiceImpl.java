@@ -22,4 +22,11 @@ public class IngredientServiceImpl implements IngredientService {
     public Ingredient findIngredient(String id) {
         return ingredientDao.findById(id).get();
     }
+
+    @Override
+    public String createIngredient(String name) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(name);
+        return ingredientDao.save(ingredient).getId();
+    }
 }

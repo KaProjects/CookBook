@@ -9,4 +9,6 @@ public interface IngredientService {
     List<Ingredient> listAllIngredients();
 
     Ingredient findIngredient(String id);
+
+    String createIngredient(String name);
 }

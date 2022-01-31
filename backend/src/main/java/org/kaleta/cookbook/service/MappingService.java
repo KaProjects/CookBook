@@ -20,4 +20,8 @@ public interface MappingService {
     List<RecipeDto> mapToRecipeDtoList(List<Recipe> recipeList);
 
 //    Recipe mapToRecipe(RecipeDto recipeDto);
+
+//    RecipeDto mapToIngredientDto(Ingredient ingredient);
+//
+//    List<RecipeDto> mapToIngredientDtoList(List<Ingredient> ingredientList);
 }

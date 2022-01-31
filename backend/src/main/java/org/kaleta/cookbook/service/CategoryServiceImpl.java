@@ -22,4 +22,11 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findCategory(String id) {
         return categoryDao.findById(id).get();
     }
+
+    @Override
+    public String createCategory(String name) {
+        Category category = new Category();
+        category.setName(name);
+        return categoryDao.save(category).getId();
+    }
 }

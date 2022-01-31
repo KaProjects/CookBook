@@ -9,11 +9,12 @@ import org.kaleta.cookbook.entity.Data;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@RestController
+//@RestControllertroller
 @Deprecated
 public class DataController {
     private static SessionFactory factory = config().buildSessionFactory();
@@ -116,14 +117,14 @@ public class DataController {
         try (Session session = factory.openSession()) {
             Transaction tx = null;
             try {
-                tx = session.beginTransaction();
+//                tx = session.beginTransaction();
 
 
                 datas = session.createQuery("from Data", Data.class).list();
 
-                tx.commit();
+//                tx.commit();
             } catch (HibernateException e) {
-                if (tx != null) tx.rollback();
+//                if (tx != null) tx.rollback();
                 e.printStackTrace();
             }
         }

@@ -38,6 +38,7 @@ public class MappingServiceImpl implements MappingService{
     @Override
     public RecipeDto mapToRecipeDto(Recipe recipe) {
         RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(recipe.getId());
         recipeDto.setName(recipe.getName());
         recipeDto.setImage(recipe.getImage());
         recipeDto.setCategory(recipe.getCategory().getName());
@@ -68,4 +69,21 @@ public class MappingServiceImpl implements MappingService{
         }
         return recipeDtoList;
     }
+
+//    @Override
+//    public RecipeDto mapToIngredientDto(Ingredient ingredient) {
+//        IngredientDto dto = new IngredientDto();
+//
+//
+//        return dto
+//    }
+//
+//    @Override
+//    public List<RecipeDto> mapToIngredientDtoList(List<Ingredient> ingredientList) {
+//        List<RecipeDto> dtoList = new ArrayList<>();
+//        for (Ingredient ingredient : ingredientList){
+//            dtoList.add(mapTo(ingredient));
+//        }
+//        return dtoList;
+//    }
 }

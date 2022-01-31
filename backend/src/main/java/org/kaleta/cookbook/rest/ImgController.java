@@ -6,16 +6,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.kaleta.cookbook.entity.Image;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Base64;
 
-//@RestController
+@RestController
 @RequestMapping(value = "/img")
 @Deprecated
 public class ImgController {
@@ -57,6 +55,7 @@ public class ImgController {
     }
 
     @RequestMapping("/get")
+    @Transactional
     public @ResponseBody byte[] getImage(@RequestParam(value = "id") String id) {
         Image image = null;
         try (Session session = getFactory().openSession()) {
