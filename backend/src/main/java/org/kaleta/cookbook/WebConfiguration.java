@@ -20,16 +20,18 @@ public class WebConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-                try (InputStream input = new FileInputStream(rootPath + "application.properties")) {
-                    Properties prop = new Properties();
-                    prop.load(input);
-                    if (prop.getProperty("server.host") != null) {
-                        registry.addMapping("/**").allowedOrigins(prop.getProperty("server.host"));
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+//                String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+//                try (InputStream input = new FileInputStream(rootPath + "application.properties")) {
+//                    Properties prop = new Properties();
+//                    prop.load(input);
+//                    if (prop.getProperty("server.host") != null) {
+//                        registry.addMapping("/**").allowedOrigins(prop.getProperty("server.host"));
+//                    }
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                }
+                // TODO: 1.2.2022 temp dev
+                registry.addMapping("/**").allowedOrigins("*");
             }
         };
     }
