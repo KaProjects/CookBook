@@ -3,9 +3,6 @@ package org.kaleta.cookbook.rest;
 import org.kaleta.cookbook.dto.CategoryDto;
 import org.kaleta.cookbook.dto.IngredientDto;
 import org.kaleta.cookbook.dto.RecipeDto;
-import org.kaleta.cookbook.entity.Ingredient;
-import org.kaleta.cookbook.entity.Recipe;
-import org.kaleta.cookbook.facade.RecipeFacade;
 import org.kaleta.cookbook.service.CategoryService;
 import org.kaleta.cookbook.service.IngredientService;
 import org.kaleta.cookbook.service.MappingService;
@@ -18,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/data")
+@RequestMapping(value = "/debug")
 public class DebugController {
 
     @Autowired

@@ -2,6 +2,7 @@ package org.kaleta.cookbook.service;
 
 import org.kaleta.cookbook.dao.CategoryDao;
 import org.kaleta.cookbook.entity.Category;
+import org.kaleta.cookbook.entity.EntityListItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +29,10 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         category.setName(name);
         return categoryDao.save(category).getId();
+    }
+
+    @Override
+    public List<EntityListItem> getCategoryList() {
+        return categoryDao.getCategoryList();
     }
 }

@@ -1,6 +1,7 @@
 package org.kaleta.cookbook.service;
 
 
+import org.kaleta.cookbook.entity.EntityListItem;
 import org.kaleta.cookbook.entity.Recipe;
 
 import java.util.List;
@@ -15,8 +16,9 @@ public interface RecipeService {
 
     String createRecipe(Recipe recipe);
 
-
-
     void removeRecipes();
+
+
+    List<EntityListItem> getRecipeList();
 
 }

@@ -1,6 +1,7 @@
 package org.kaleta.cookbook.service;
 
 import org.kaleta.cookbook.dao.IngredientDao;
+import org.kaleta.cookbook.entity.EntityListItem;
 import org.kaleta.cookbook.entity.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,10 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(name);
         return ingredientDao.save(ingredient).getId();
+    }
+
+    @Override
+    public List<EntityListItem> getIngredientList() {
+        return ingredientDao.getIngredientList();
     }
 }

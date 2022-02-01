@@ -1,6 +1,7 @@
 package org.kaleta.cookbook.service;
 
 import org.kaleta.cookbook.dao.RecipeDao;
+import org.kaleta.cookbook.entity.EntityListItem;
 import org.kaleta.cookbook.entity.Recipe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,10 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void removeRecipes() {
         recipeDao.deleteAll();
+    }
+
+    @Override
+    public List<EntityListItem> getRecipeList() {
+        return recipeDao.getRecipeList();
     }
 }
