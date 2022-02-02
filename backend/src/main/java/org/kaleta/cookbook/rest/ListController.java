@@ -7,6 +7,7 @@ import org.kaleta.cookbook.service.IngredientService;
 import org.kaleta.cookbook.service.MappingService;
 import org.kaleta.cookbook.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,6 +39,20 @@ public class ListController {
     public RecipeListDto getAllRecipeList() {
         RecipeListDto recipeListDto = new RecipeListDto();
         recipeListDto.setRecipeList(recipeService.getRecipeList());
+        return recipeListDto;
+    }
+
+    @RequestMapping(value = "/recipe/ingredient/{id}")
+    public RecipeListDto getIngredientRecipeList(@PathVariable("id") String id) {
+        RecipeListDto recipeListDto = new RecipeListDto();
+        recipeListDto.setRecipeList(recipeService.getIngredientRecipeList(id));
+        return recipeListDto;
+    }
+
+    @RequestMapping(value = "/recipe/category/{id}")
+    public RecipeListDto getCategoryRecipeList(@PathVariable("id") String id) {
+        RecipeListDto recipeListDto = new RecipeListDto();
+        recipeListDto.setRecipeList(recipeService.getCategoryRecipeList(id));
         return recipeListDto;
     }
 }

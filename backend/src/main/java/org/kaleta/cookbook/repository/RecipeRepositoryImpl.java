@@ -28,4 +28,27 @@ public class RecipeRepositoryImpl implements RecipeRepository {
 
         return listItems;
     }
+
+    @Override
+    public List<EntityListItem> getIngredientRecipeList(String ingredientId) {
+        List<EntityListItem> listItems = new ArrayList<>();
+
+        entityManager.createQuery(
+                "select r.id, r.name from Recipe r inner join RecipeIngredient ri on r.id=ri.recipe.id where ri.ingredient.id=:iid"
+                , Object[].class).setParameter("iid", ingredientId).getResultStream()
+                .forEach(item -> listItems.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
+
+        return listItems;
+    }
+
+    @Override
+    public List<EntityListItem> getCategoryRecipeList(String categoryId) {
+        System.out.println(categoryId);
+        List<EntityListItem> listItems = new ArrayList<>();
+
+        entityManager.createQuery("select r.id, r.name from Recipe r where r.category.id=:cid", Object[].class).setParameter("cid", categoryId).getResultStream()
+                .forEach(item -> listItems.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
+
+        return listItems;
+    }
 }

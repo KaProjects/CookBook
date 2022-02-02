@@ -16,4 +16,16 @@ public interface RecipeRepository {
      * Returns list of all recipes as <id,name>
      */
     List<EntityListItem> getRecipeList();
+
+    /**
+     * Returns list of all recipes as <id,name> for specified ingredient
+     */
+    List<EntityListItem> getIngredientRecipeList(String ingredientId);
+
+    /**
+     * Returns list of all recipes as <id,name> for specified category
+     */
+    List<EntityListItem> getCategoryRecipeList(String categoryId);
+
+
 }

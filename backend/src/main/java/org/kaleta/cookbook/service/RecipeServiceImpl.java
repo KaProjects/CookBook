@@ -49,4 +49,14 @@ public class RecipeServiceImpl implements RecipeService {
     public List<EntityListItem> getRecipeList() {
         return recipeDao.getRecipeList();
     }
+
+    @Override
+    public List<EntityListItem> getIngredientRecipeList(String ingredientId) {
+        return recipeDao.getIngredientRecipeList(ingredientId);
+    }
+
+    @Override
+    public List<EntityListItem> getCategoryRecipeList(String categoryId) {
+        return recipeDao.getCategoryRecipeList(categoryId);
+    }
 }
