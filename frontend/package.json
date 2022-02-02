@@ -4,7 +4,10 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@patternfly/patternfly": "^2.41.0",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.3",
+    "@patternfly/patternfly": "^2.71.7",
     "@patternfly/react-charts": "^5.1.6",
     "@patternfly/react-core": "^3.120.8",
     "react": "^16.11.0",
@@ -31,5 +34,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "axios": "^0.25.0"
   }
 }

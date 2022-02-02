@@ -1,6 +1,7 @@
 package org.kaleta.cookbook.rest;
 
-import org.kaleta.cookbook.dto.DataListDto;
+import org.kaleta.cookbook.dto.MenuListDto;
+import org.kaleta.cookbook.dto.RecipeListDto;
 import org.kaleta.cookbook.service.CategoryService;
 import org.kaleta.cookbook.service.IngredientService;
 import org.kaleta.cookbook.service.MappingService;
@@ -25,12 +26,18 @@ public class ListController {
     @Autowired
     MappingService mappingService;
 
-    @RequestMapping(value = "/all")
-    public DataListDto getRecipeList() {
-        DataListDto dataListDto = new DataListDto();
-        dataListDto.setRecipeList(recipeService.getRecipeList());
-        dataListDto.setIngredientList(ingredientService.getIngredientList());
-        dataListDto.setCategoryList(categoryService.getCategoryList());
-        return dataListDto;
+    @RequestMapping(value = "/menu")
+    public MenuListDto getMenuList() {
+        MenuListDto menuListDto = new MenuListDto();
+        menuListDto.setIngredientList(ingredientService.getIngredientList());
+        menuListDto.setCategoryList(categoryService.getCategoryList());
+        return menuListDto;
+    }
+
+    @RequestMapping(value = "/recipe/all")
+    public RecipeListDto getAllRecipeList() {
+        RecipeListDto recipeListDto = new RecipeListDto();
+        recipeListDto.setRecipeList(recipeService.getRecipeList());
+        return recipeListDto;
     }
 }
