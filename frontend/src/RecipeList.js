@@ -1,28 +1,46 @@
-import React, {useState} from "react";
+import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
+import {List, ListItem, ListItemText} from "@mui/material";
+
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
+  list: {
+    // width: "100%",
+    backgroundColor: "rgb(201, 76, 76)",
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0,
+  item: {
+    // width: 1000,
+    // alignItems: "center",
+    // backgroundColor: "rgb(201, 76, 76)",
+    // color: "black",
   },
 }));
 
 const RecipeList = props => {
   const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      {props.recipes.length > 0 && props.recipes.map((recipe, index) => (
+  // function handleClick(id) {
+  //   history.push("/recipe/"+id)
+  // }
 
-        <Typography className={classes.heading}>{index} {recipe.name}</Typography>
+  return (
+    <List
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      className={classes.list}
+    >
+      {props.recipes.length > 0 && props.recipes.map((recipe, index) => (
+        <ListItem className={classes.item} button
+                  key={index}
+
+                  // onClick={props.loadRecipe(recipe.id) }
+                onClick={() => props.loadRecipe(recipe.id)}
+        >
+          <ListItemText  primary={recipe.name} />
+        </ListItem>
       ))}
-    </div>
+
+    </List>
   );
 }
 

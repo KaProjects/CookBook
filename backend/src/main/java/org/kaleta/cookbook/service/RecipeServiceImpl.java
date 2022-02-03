@@ -59,4 +59,9 @@ public class RecipeServiceImpl implements RecipeService {
     public List<EntityListItem> getCategoryRecipeList(String categoryId) {
         return recipeDao.getCategoryRecipeList(categoryId);
     }
+
+    @Override
+    public Recipe getRecipe(String id) {
+        return recipeDao.findById(id).get();
+    }
 }

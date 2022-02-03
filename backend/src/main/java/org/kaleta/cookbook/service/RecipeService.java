@@ -23,4 +23,6 @@ public interface RecipeService {
     List<EntityListItem> getIngredientRecipeList(String ingredientId);
     List<EntityListItem> getCategoryRecipeList(String categoryId);
 
+    Recipe getRecipe(String id);
+
 }

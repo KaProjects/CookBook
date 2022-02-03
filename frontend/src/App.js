@@ -1,11 +1,10 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import MainMenu from "./MainMenu";
-import {CircularProgress} from "@material-ui/core";
 import axios from "axios";
 import MainBar from "./MainBar";
-import RecipeList from "./RecipeList";
-
+import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
+import Menu from "./Menu";
+import Recipe from "./Recipe";
 
 class App extends Component {
   constructor(props) {
@@ -16,9 +15,10 @@ class App extends Component {
       showAllRecipes: this.showAllRecipes,
       showIngredientRecipes: this.showIngredientRecipes,
       showCategoryRecipes: this.showCategoryRecipes,
+      loadRecipe: this.loadRecipe,
       selectedMenu: -1,
       recipes: [],
-
+      recipe: 0,
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -38,7 +38,7 @@ class App extends Component {
     this.setState({recipes: response.data.recipes});
   }
 
-  showIngredientRecipes = (id) => async (event) => {
+  showIngredientRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
     const response = await axios.get("http://" + this.state.host + ":7777/list/recipe/ingredient/"+id);
     // console.log(response);
@@ -46,28 +46,27 @@ class App extends Component {
 
   }
 
-  showCategoryRecipes = (id) => async (event) => {
+  showCategoryRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
     const response = await axios.get("http://" + this.state.host + ":7777/list/recipe/category/"+id);
     // console.log(response);
     this.setState({recipes: response.data.recipes});
   }
 
+  loadRecipe = (recipee) =>  () => {
+    this.setState({recipe: recipee});
+  }
+
   render() {
     return (
       <div>
         <MainBar {...this.state} />
-        {!this.state.loaded &&
-          <div style={{ position: "absolute", top: "50%", left: "50%"}}>
-            <CircularProgress />
-          </div>
-        }
-        {this.state.loaded &&
-          <div>
-            <MainMenu {...this.state} />
-            <RecipeList {...this.state} />
-          </div>
-        }
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<Menu {...this.state}/> }/>
+            <Route exact path="/recipe/:id" element={<Recipe {...this.state}/> }/>
+          </Routes>
+        </BrowserRouter>
 
 
       </div>

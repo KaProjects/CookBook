@@ -4,15 +4,19 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@material-ui/styles": "^4.11.3",
-    "@patternfly/patternfly": "^2.71.7",
-    "@patternfly/react-charts": "^5.1.6",
-    "@patternfly/react-core": "^3.120.8",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "@mui/material": "^5.4.0",
+    "@patternfly/react-core": "^4.192.15",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^0.25.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,6 +40,6 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.25.0"
+    "eslint": "^7.14.0"
   }
 }

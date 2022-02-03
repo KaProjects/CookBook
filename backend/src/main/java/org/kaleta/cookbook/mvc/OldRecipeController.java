@@ -22,8 +22,9 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/recipe")
-public class RecipeController {
+@RequestMapping("/old/recipe")
+@Deprecated
+public class OldRecipeController {
 
     @Autowired
     CategoryService categoryService;
