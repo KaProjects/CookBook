@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "rgb(201, 76, 76)",
     },
     nested: {
-        // paddingLeft: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
         color: theme.palette.text.primary,
     },
 }));

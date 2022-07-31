@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import axios from "axios";
 import MainBar from "./MainBar";
-import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Menu from "./Menu";
 import Recipe from "./Recipe";
 
@@ -10,7 +10,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      host: "10.0.0.7",
+      host: "10.0.0.5", // localhost in production
+      port: "7777",
       loaded: false,
       showAllRecipes: this.showAllRecipes,
       showIngredientRecipes: this.showIngredientRecipes,
@@ -24,7 +25,7 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await axios.get("http://" + this.state.host + ":7777/list/menu");
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/menu");
     // console.log(response);
     this.setState({categories: response.data.categories});
     this.setState({ingredients: response.data.ingredients});
@@ -33,14 +34,14 @@ class App extends Component {
 
   showAllRecipes = () => async () => {
     this.setState({selectedMenu: 0})
-    const response = await axios.get("http://" + this.state.host + ":7777/list/recipe/all");
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/all");
     // console.log(response);
     this.setState({recipes: response.data.recipes});
   }
 
   showIngredientRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
-    const response = await axios.get("http://" + this.state.host + ":7777/list/recipe/ingredient/"+id);
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/ingredient/"+id);
     // console.log(response);
     this.setState({recipes: response.data.recipes});
 
@@ -48,7 +49,7 @@ class App extends Component {
 
   showCategoryRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
-    const response = await axios.get("http://" + this.state.host + ":7777/list/recipe/category/"+id);
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/category/"+id);
     // console.log(response);
     this.setState({recipes: response.data.recipes});
   }
