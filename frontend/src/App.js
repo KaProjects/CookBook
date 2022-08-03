@@ -11,7 +11,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      host: "localhost",
+      host: "10.0.0.6",
       port: "7777",
       loaded: false,
       showAllRecipes: this.showAllRecipes,
