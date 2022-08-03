@@ -1,7 +1,9 @@
 package org.kaleta.cookbook.service;
 
 import org.dozer.Mapper;
+import org.kaleta.cookbook.dto.CategoryDto;
 import org.kaleta.cookbook.dto.RecipeDto;
+import org.kaleta.cookbook.entity.Category;
 import org.kaleta.cookbook.entity.Recipe;
 
 import java.util.Collection;
@@ -17,7 +19,10 @@ public interface MappingService {
 
     RecipeDto mapToRecipeDto(Recipe recipe);
 
+    Recipe mapToRecipe(RecipeDto recipeAddDto);
+
     List<RecipeDto> mapToRecipeDtoList(List<Recipe> recipeList);
+
 
 //    Recipe mapToRecipe(RecipeDto recipeDto);
 

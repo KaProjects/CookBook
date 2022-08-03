@@ -3,8 +3,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useParams} from "react-router";
 import axios from "axios";
 import {
-  Avatar, Box,
-  Divider,
+  Avatar, Box, CircularProgress,
+  Divider, IconButton, Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -15,6 +15,8 @@ import {
 import DiamondIcon from '@mui/icons-material/Diamond';
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import EditIcon from "@mui/icons-material/Edit";
+import {Stack} from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -25,24 +27,43 @@ const useStyles = makeStyles((theme) => ({
 const Recipe = props => {
   const classes = useStyles();
   const { id } = useParams();
+  const editRef = "/recipe/" + id + "/edit";
 
   const [recipe, setRecipe] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(async () => {
     const response = await axios.get("http://" + props.host + ":" + props.port + "/recipe/" + id);
-    console.log(response);
     setRecipe(response.data);
+    setLoaded(true)
   }, []);
 
   return (
     <>
-      {recipe != null && <div>
-        <Typography variant="h2" component="h2">
-          {recipe.name}
-        </Typography>
+      {!loaded &&
+      <div style={{ position: "absolute", top: "50%", left: "50%"}}>
+        <CircularProgress />
+      </div>
+      }
+      {loaded && recipe != null && <div>
+        <Stack direction="row" spacing={2}>
+          <Typography variant="h2" component="h2">
+            {recipe.name}
+          </Typography>
+          <Link href={editRef} underline="none" color="inherit" >
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+            >
+              <EditIcon/>
+            </IconButton>
+          </Link>
+        </Stack>
+
 
         <Typography variant="h5" component="h5">
-          category: {recipe.category}
+          category: {recipe.category.name}
         </Typography>
 
         <div/>
@@ -51,7 +72,7 @@ const Recipe = props => {
 
         <List dense >
           {recipe.ingredients.map((ingredient) =>
-            <div>
+            <div key={ingredient.id}>
               {!ingredient.optional &&
                 <ListItem component="div">
                   <ListItemIcon>
@@ -64,7 +85,7 @@ const Recipe = props => {
             </div>
           )}
           {recipe.ingredients.map((ingredient) =>
-            <div>
+            <div key={ingredient.id}>
               {ingredient.optional &&
               <ListItem component="div">
                 <ListItemIcon>

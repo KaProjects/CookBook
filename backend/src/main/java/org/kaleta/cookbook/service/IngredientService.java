@@ -14,4 +14,6 @@ public interface IngredientService {
     String createIngredient(String name);
 
     List<EntityListItem> getIngredientList();
+
+    void deleteIngredient(String id);
 }

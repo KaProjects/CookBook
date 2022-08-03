@@ -25,4 +25,7 @@ public interface RecipeService {
 
     Recipe getRecipe(String id);
 
+    void deleteRecipe(String id);
+
+    String updateRecipe(Recipe recipe);
 }

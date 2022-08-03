@@ -1,7 +1,8 @@
 import React from "react";
-import {AppBar, Link} from "@material-ui/core";
+import {AppBar, Box, Divider, IconButton, Link, Toolbar} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const useStyles = makeStyles((theme) => ({
   menuList: {
@@ -14,19 +15,33 @@ const MainBar = props => {
 
   return (
       <AppBar position="static">
-        <Link href="/" underline="none" color="inherit">
-          <Typography
-            className={classes.menuList}
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-          >
-            CookBook
-          </Typography>
-        </Link>
+        <Toolbar variant="dense">
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+            >
+              <Link href="/" underline="none" color="inherit">
+                CookBook
+              </Link>
+            </Typography>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <IconButton
+              color="inherit"
+              aria-label="menu"
+            >
+              <Link href="/recipe/create" underline="none" color="inherit">
+                <AddBoxIcon />
+              </Link>
+            </IconButton>
+          </Box>
 
 
+        </Toolbar>
       </AppBar>
   );
 }

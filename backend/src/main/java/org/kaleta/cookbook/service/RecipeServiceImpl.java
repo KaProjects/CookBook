@@ -1,5 +1,6 @@
 package org.kaleta.cookbook.service;
 
+import org.kaleta.cookbook.dao.IngredientDao;
 import org.kaleta.cookbook.dao.RecipeDao;
 import org.kaleta.cookbook.entity.EntityListItem;
 import org.kaleta.cookbook.entity.Recipe;
@@ -63,5 +64,16 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe getRecipe(String id) {
         return recipeDao.findById(id).get();
+    }
+
+    @Override
+    public void deleteRecipe(String id) {
+        recipeDao.delete(recipeDao.findById(id).get());
+    }
+
+    @Override
+    public String updateRecipe(Recipe recipe) {
+        recipeDao.delete(recipeDao.findById(recipe.getId()).get());
+        return recipeDao.save(recipe).getId();
     }
 }

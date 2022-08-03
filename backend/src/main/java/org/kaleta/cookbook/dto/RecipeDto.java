@@ -17,13 +17,13 @@ public class RecipeDto {
 
     private String name;
 
-    private String category;
+    private Category category;
 
     private byte[] image;
 
-    private List<RecipeDto.Ingredient> ingredients = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
 
-    private List<RecipeDto.Step> steps = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -35,6 +35,24 @@ public class RecipeDto {
                 "\ningredients=" + ingredients +
                 "\nsteps=" + steps +
                 "\n}";
+    }
+
+    @Getter
+    @Setter
+    @EqualsAndHashCode
+    public static class Category {
+
+        private String id;
+
+        private String name;
+
+        @Override
+        public String toString() {
+            return "Category{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    '}';
+        }
     }
 
     @Getter
@@ -63,6 +81,8 @@ public class RecipeDto {
     @EqualsAndHashCode
     public static class Ingredient {
 
+        private String id;
+
         private String name;
 
         private Integer quantity;
@@ -74,6 +94,7 @@ public class RecipeDto {
         @Override
         public String toString() {
             return "Ingredient{" +
+                    "id='" + id + '\'' +
                     "name='" + name + '\'' +
                     " | quantity=" + quantity +
                     " | unit='" + unit + '\'' +

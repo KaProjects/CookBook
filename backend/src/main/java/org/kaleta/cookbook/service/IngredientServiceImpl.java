@@ -35,4 +35,9 @@ public class IngredientServiceImpl implements IngredientService {
     public List<EntityListItem> getIngredientList() {
         return ingredientDao.getIngredientList();
     }
+
+    @Override
+    public void deleteIngredient(String id) {
+        ingredientDao.delete(ingredientDao.findById(id).get());
+    }
 }

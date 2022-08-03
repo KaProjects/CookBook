@@ -5,12 +5,13 @@ import MainBar from "./MainBar";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Menu from "./Menu";
 import Recipe from "./Recipe";
+import RecipeEditor from "./RecipeEditor";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      host: "10.0.0.5", // localhost in production
+      host: "localhost",
       port: "7777",
       loaded: false,
       showAllRecipes: this.showAllRecipes,
@@ -66,6 +67,8 @@ class App extends Component {
           <Routes>
             <Route exact path="/" element={<Menu {...this.state}/> }/>
             <Route exact path="/recipe/:id" element={<Recipe {...this.state}/> }/>
+            <Route exact path="/recipe/create" element={<RecipeEditor {...this.state}/> }/>
+            <Route exact path="/recipe/:id/edit" element={<RecipeEditor {...this.state}/> }/>
           </Routes>
         </BrowserRouter>
 

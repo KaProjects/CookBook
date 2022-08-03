@@ -15,4 +15,5 @@ public interface CategoryService {
 
     List<EntityListItem> getCategoryList();
 
+    void deleteCategory(String id);
 }

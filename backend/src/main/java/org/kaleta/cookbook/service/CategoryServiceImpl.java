@@ -35,4 +35,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<EntityListItem> getCategoryList() {
         return categoryDao.getCategoryList();
     }
+
+    @Override
+    public void deleteCategory(String id) {
+        categoryDao.delete(categoryDao.findById(id).get());
+    }
 }

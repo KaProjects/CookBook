@@ -43,7 +43,6 @@ public class RecipeRepositoryImpl implements RecipeRepository {
 
     @Override
     public List<EntityListItem> getCategoryRecipeList(String categoryId) {
-        System.out.println(categoryId);
         List<EntityListItem> listItems = new ArrayList<>();
 
         entityManager.createQuery("select r.id, r.name from Recipe r where r.category.id=:cid", Object[].class).setParameter("cid", categoryId).getResultStream()

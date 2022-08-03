@@ -1,7 +1,10 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {List, ListItem, ListItemText} from "@mui/material";
-
+import EditIcon from '@mui/icons-material/Edit';
+import {IconButton, Link} from "@material-ui/core";
+import EditIcon from '@mui/icons-material/Edit';
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -30,14 +33,16 @@ const RecipeList = props => {
       className={classes.list}
     >
       {props.recipes.length > 0 && props.recipes.map((recipe, index) => (
-        <ListItem className={classes.item} button
-                  key={index}
+        <>
+          <ListItem className={classes.item} button
+                    key={index}
 
-                  // onClick={props.loadRecipe(recipe.id) }
-                onClick={() => props.loadRecipe(recipe.id)}
-        >
-          <ListItemText  primary={recipe.name} />
-        </ListItem>
+            // onClick={props.loadRecipe(recipe.id) }
+                    onClick={() => props.loadRecipe(recipe.id)}
+          >
+            <ListItemText  primary={recipe.name} />
+          </ListItem>
+        </>
       ))}
 
     </List>
