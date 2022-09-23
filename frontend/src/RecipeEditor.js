@@ -233,7 +233,6 @@ const RecipeEditor = props => {
 
             <TextField id="outlined-basic" label="Quantity" variant="outlined" component="h2"
                        value={ingredientToAdd.quantity}
-                       type="number"
                        onChange={(event) => {
                          ingredientToAdd.quantity = event.target.value;
                          setAddIngredientEnabled(addIngredientValidate())
