@@ -17,7 +17,7 @@ const MainBar = props => {
       <AppBar position="static">
         <Toolbar variant="dense">
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }}>
             <Typography
               variant="h6"
               noWrap
