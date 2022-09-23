@@ -11,7 +11,7 @@ public class CreateRecipeIngredientDto {
 
     private String ingredientId;
 
-    private Integer quantity;
+    private String quantity;
 
     private String unit;
 

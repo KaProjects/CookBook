@@ -113,7 +113,7 @@ public class RecipeDaoTest {
     public void testAddRecipeIngredient() {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setIngredient(ingredientA);
-        recipeIngredient.setQuantity(100);
+        recipeIngredient.setQuantity("100");
         recipeIngredient.setUnit("mg");
         recipeIngredient.setOptional(false);
 
