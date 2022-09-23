@@ -43,7 +43,7 @@ public class IngredientDaoTest {
         entityManager.persist(ingredientA);
 
         recipeIngredientA = new RecipeIngredient();
-        recipeIngredientA.setQuantity(100);
+        recipeIngredientA.setQuantity("100");
         recipeIngredientA.setUnit("mg");
         recipeIngredientA.setOptional(false);
         recipeIngredientA.setIngredient(ingredientA);

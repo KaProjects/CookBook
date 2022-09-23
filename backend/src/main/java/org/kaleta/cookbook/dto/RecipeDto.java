@@ -85,7 +85,7 @@ public class RecipeDto {
 
         private String name;
 
-        private Integer quantity;
+        private String quantity;
 
         private String unit;
 

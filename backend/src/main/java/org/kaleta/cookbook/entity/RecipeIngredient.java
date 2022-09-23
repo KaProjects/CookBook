@@ -26,7 +26,7 @@ public class RecipeIngredient  extends AbstractEntity{
 
     @Column(name = "quantity")
     @NotNull
-    private Integer quantity;
+    private String quantity;
 
     @Column(name = "unit")
     @NotNull
