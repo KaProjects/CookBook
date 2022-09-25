@@ -24,9 +24,9 @@ public class RecipeController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public RecipeDto getRecipe(@PathVariable("id") String id) {
         RecipeDto recipeDto = mappingService.mapToRecipeDto(recipeService.getRecipe(id));
-        recipeDto.getSteps().sort(new Comparator<RecipeDto.Step>() {
+        recipeDto.getSteps().sort(new Comparator<RecipeDto.RecipeStepDto>() {
             @Override
-            public int compare(RecipeDto.Step o1, RecipeDto.Step o2) {
+            public int compare(RecipeDto.RecipeStepDto o1, RecipeDto.RecipeStepDto o2) {
                 return o1.getNumber() - o2.getNumber();
             }
         });
