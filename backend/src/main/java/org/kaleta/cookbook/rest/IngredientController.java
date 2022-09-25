@@ -21,7 +21,7 @@ public class IngredientController {
     @Autowired
     MappingService mappingService;
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public IngredientDto getIngredient(@PathVariable("id") String id) {
         return mappingService.mapTo(ingredientService.findIngredient(id), IngredientDto.class);
     }

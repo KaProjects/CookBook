@@ -21,7 +21,7 @@ public class RecipeController {
     @Autowired
     MappingService mappingService;
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public RecipeDto getRecipe(@PathVariable("id") String id) {
         RecipeDto recipeDto = mappingService.mapToRecipeDto(recipeService.getRecipe(id));
         recipeDto.getSteps().sort(new Comparator<RecipeDto.Step>() {
