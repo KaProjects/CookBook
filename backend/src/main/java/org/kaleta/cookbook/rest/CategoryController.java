@@ -19,7 +19,7 @@ public class CategoryController {
     @Autowired
     MappingService mappingService;
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public CategoryDto getCategory(@PathVariable("id") String id) {
         return mappingService.mapTo(categoryService.findCategory(id), CategoryDto.class);
     }
