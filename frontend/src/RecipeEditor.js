@@ -54,6 +54,10 @@ const RecipeEditor = props => {
       setRecipeCategory(loadedRecipe.category);
       setRecipeIngredients(loadedRecipe.ingredients);
       setRecipeSteps(loadedRecipe.steps);
+      if (loadedRecipe.image != null) {
+        setRecipeImage(loadedRecipe.image)
+        setRecipeImageSelected(true)
+      }
       setRecipeValid(true)
     } else {
       recipe.name = ""
@@ -108,6 +112,22 @@ const RecipeEditor = props => {
 
   const navigate = useNavigate();
 
+  const [recipeImage, setRecipeImage] = useState(null);
+  const [recipeImageSelected, setRecipeImageSelected] = useState(false);
+  const selectFile = (event) => {
+    // Assuming only image
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    var url = reader.readAsDataURL(file);
+
+    reader.onloadend = function (e) {
+      recipe.image = reader.result;
+      setRecipeImage(reader.result);
+    };
+
+    setRecipeImageSelected(true);
+  };
+
   function redirectNewRecipe(id) {
     navigate("/recipe/" + id);
   }
@@ -158,7 +178,6 @@ const RecipeEditor = props => {
                                props={props}
                                type="category"/>
         </Stack>
-
 
         <Typography>Ingredients:</Typography>
         {recipeIngredients.length > 0 &&
@@ -330,7 +349,6 @@ const RecipeEditor = props => {
               />
             </Tooltip>
 
-
             <IconButton
               edge="end"
               color="inherit"
@@ -346,6 +364,27 @@ const RecipeEditor = props => {
             </IconButton>
           </Stack>
         }
+
+        {!recipeImageSelected ?
+          <input type="file" name="file" onChange={selectFile} />
+          :
+          <div>
+            <img src={recipe.image} />
+            <IconButton
+              color="inherit"
+              aria-label="menu"
+              onClick={() => {
+                recipe.image = null
+                setRecipeImage(null)
+                setRecipeImageSelected(false)
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
+        }
+
+        <div/>
 
         <Button variant="contained"
                 disabled={!recipeValid}

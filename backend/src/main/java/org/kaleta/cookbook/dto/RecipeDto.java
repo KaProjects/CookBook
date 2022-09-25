@@ -19,7 +19,7 @@ public class RecipeDto {
 
     private Category category;
 
-    private byte[] image;
+    private String image;
 
     private List<Ingredient> ingredients = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class RecipeDto {
                 "\nid='" + id + '\'' +
                 "\nname='" + name + '\'' +
                 "\ncategory='" + category + '\'' +
-                "\nimage=" + Arrays.toString(image) +
+                "\nimage=" + image +
                 "\ningredients=" + ingredients +
                 "\nsteps=" + steps +
                 "\n}";

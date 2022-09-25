@@ -116,6 +116,13 @@ const Recipe = props => {
           </ListItem>
         )}
         </List>
+
+        <div/>
+        <Divider variant="fullWidth" component="div"/>
+        <div/>
+
+        <img src={recipe.image} />
+
       </div>}
     </>
   );
