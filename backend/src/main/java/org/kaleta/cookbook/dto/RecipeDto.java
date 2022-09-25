@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -17,13 +16,13 @@ public class RecipeDto {
 
     private String name;
 
-    private Category category;
+    private CategoryDto category;
 
     private String image;
 
-    private List<Ingredient> ingredients = new ArrayList<>();
+    private List<RecipeIngredientDto> ingredients = new ArrayList<>();
 
-    private List<Step> steps = new ArrayList<>();
+    private List<RecipeStepDto> steps = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -40,25 +39,7 @@ public class RecipeDto {
     @Getter
     @Setter
     @EqualsAndHashCode
-    public static class Category {
-
-        private String id;
-
-        private String name;
-
-        @Override
-        public String toString() {
-            return "Category{" +
-                    "id='" + id + '\'' +
-                    ", name='" + name + '\'' +
-                    '}';
-        }
-    }
-
-    @Getter
-    @Setter
-    @EqualsAndHashCode
-    public static class Step {
+    public static class RecipeStepDto {
 
         private Integer number;
 
@@ -79,7 +60,7 @@ public class RecipeDto {
     @Getter
     @Setter
     @EqualsAndHashCode
-    public static class Ingredient {
+    public static class RecipeIngredientDto {
 
         private String id;
 
