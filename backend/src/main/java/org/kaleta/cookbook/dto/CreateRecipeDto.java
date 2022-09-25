@@ -17,7 +17,7 @@ public class CreateRecipeDto {
 
     private String categoryId;
 
-    private byte[] image;
+    private String image;
 
     private List<CreateRecipeStepDto> steps = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class CreateRecipeDto {
         return "\nCreateRecipe{" +
                 "\nname='" + name + '\'' +
                 "\ncategoryId='" + categoryId + '\'' +
-                "\nimage=" + Arrays.toString(image) +
+                "\nimage=" + image +
                 "\nsteps=" + steps +
                 "\ningredients=" + ingredients +
                 "\n}";
