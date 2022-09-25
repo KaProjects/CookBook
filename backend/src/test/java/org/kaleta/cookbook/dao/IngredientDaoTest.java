@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -61,7 +62,7 @@ public class IngredientDaoTest {
     }
 
     @Test
-    public void testCreateIngredient() {
+    public void createIngredient() {
         Ingredient ingredient = new Ingredient();
         ingredient.setName("New Ingredient");
 
@@ -72,11 +73,16 @@ public class IngredientDaoTest {
     }
 
     @Test
-    public void testGetIngredientRecipes() {
+    public void getIngredientRecipes() {
         Set<Recipe> recipeSet = ingredientDao.getIngredientRecipes(ingredientA.getId());
 
         assertThat(recipeSet).contains(recipeA).hasSize(1);
         assertThat(recipeSet.iterator().next().getRecipeIngredientList()).contains(recipeIngredientA).hasSize(1);
         assertThat(recipeSet.iterator().next().getRecipeIngredientList().get(0).getIngredient()).isEqualTo(ingredientA);
+    }
+
+    @Test
+    public void getIngredientList() {
+        fail("not implemented");
     }
 }
