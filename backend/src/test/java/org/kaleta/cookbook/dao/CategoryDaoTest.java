@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -50,7 +51,7 @@ public class CategoryDaoTest {
     }
 
     @Test
-    public void testCreateCategory() {
+    public void createCategory() {
         Category category = new Category();
         category.setName("New Category");
 
@@ -61,11 +62,14 @@ public class CategoryDaoTest {
     }
 
     @Test
-    public void testGetCategoryRecipes() {
+    public void getCategoryRecipes() {
         Set<Recipe> recipeSet = categoryDao.getCategoryRecipes(categoryA.getId());
 
         assertThat(recipeSet).contains(recipeA).contains(recipeB).hasSize(2);
         assertThat(recipeSet.stream().anyMatch(r -> r.getCategory().equals(categoryA))).isTrue();
     }
-
+    @Test
+    public void getCategoryList() {
+        fail("not implemented");
+    }
 }
