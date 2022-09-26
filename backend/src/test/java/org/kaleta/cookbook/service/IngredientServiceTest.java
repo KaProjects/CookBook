@@ -2,9 +2,7 @@ package org.kaleta.cookbook.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kaleta.cookbook.dao.CategoryDao;
 import org.kaleta.cookbook.dao.IngredientDao;
-import org.kaleta.cookbook.entity.Category;
 import org.kaleta.cookbook.entity.Ingredient;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,7 +12,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class IngredientServiceTest {

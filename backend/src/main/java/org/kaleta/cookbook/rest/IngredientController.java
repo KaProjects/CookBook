@@ -1,8 +1,6 @@
 package org.kaleta.cookbook.rest;
 
-import org.kaleta.cookbook.dto.CategoryDto;
 import org.kaleta.cookbook.dto.IngredientDto;
-import org.kaleta.cookbook.service.CategoryService;
 import org.kaleta.cookbook.service.IngredientService;
 import org.kaleta.cookbook.service.MappingService;
 import org.springframework.beans.factory.annotation.Autowired;
