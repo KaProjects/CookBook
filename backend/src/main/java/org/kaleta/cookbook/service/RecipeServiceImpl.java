@@ -1,6 +1,5 @@
 package org.kaleta.cookbook.service;
 
-import org.kaleta.cookbook.dao.IngredientDao;
 import org.kaleta.cookbook.dao.RecipeDao;
 import org.kaleta.cookbook.entity.EntityListItem;
 import org.kaleta.cookbook.entity.Recipe;

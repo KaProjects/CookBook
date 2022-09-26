@@ -11,11 +11,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @EnableSwagger2
