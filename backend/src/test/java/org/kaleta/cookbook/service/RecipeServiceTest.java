@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +50,7 @@ public class RecipeServiceTest {
 
     @Test
     public void listAllRecipes() {
-        when(recipeDao.findAll()).thenReturn(List.of(recipeA, recipeB));
+        when(recipeDao.findAll()).thenReturn(Arrays.asList(recipeA, recipeB));
 
         List<Recipe> result = recipeService.listAllRecipes();
 

@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +51,7 @@ public class CategoryServiceTest {
 
     @Test
     public void listAllCategories() {
-        when(categoryDao.findAll()).thenReturn(List.of(categoryA, categoryB));
+        when(categoryDao.findAll()).thenReturn(Arrays.asList(categoryA, categoryB));
 
         List<Category> result = categoryService.listAllCategories();
 

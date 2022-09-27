@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +38,7 @@ public class IngredientServiceTest {
 
     @Test
     public void listAllIngredients() {
-        when(ingredientDao.findAll()).thenReturn(List.of(ingredientA, ingredientB));
+        when(ingredientDao.findAll()).thenReturn(Arrays.asList(ingredientA, ingredientB));
 
         List<Ingredient> result = ingredientService.listAllIngredients();
 
