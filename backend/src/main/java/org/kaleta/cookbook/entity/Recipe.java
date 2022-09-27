@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -21,7 +20,7 @@ public class Recipe  extends AbstractEntity {
     private String name;
 
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     @ManyToOne(fetch = FetchType.EAGER/*, cascade = CascadeType.ALL*/) // TODO: bug1 - EntityNotFoundException: Unable to find
     @JoinColumn(name ="categoryId")
@@ -67,7 +66,7 @@ public class Recipe  extends AbstractEntity {
         return "Recipe{" +
                 "id='" + id + '\'' +
                 " | name='" + name + '\'' +
-                " | image=" + Arrays.toString(image) +
+                " | image=" + image +
                 " | category=" + category.getName() +
                 " | steps=" + stepList +
                 " | recipeIngredientList=" + recipeIngredientList +

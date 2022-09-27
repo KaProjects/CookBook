@@ -1,8 +1,6 @@
 package org.kaleta.cookbook.rest;
 
-import org.kaleta.cookbook.dto.CategoryDto;
 import org.kaleta.cookbook.dto.IngredientDto;
-import org.kaleta.cookbook.service.CategoryService;
 import org.kaleta.cookbook.service.IngredientService;
 import org.kaleta.cookbook.service.MappingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ public class IngredientController {
     @Autowired
     MappingService mappingService;
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public IngredientDto getIngredient(@PathVariable("id") String id) {
         return mappingService.mapTo(ingredientService.findIngredient(id), IngredientDto.class);
     }

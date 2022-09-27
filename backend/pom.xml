@@ -13,7 +13,7 @@
 
     <groupId>org.kaleta</groupId>
     <artifactId>cookbook</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 <!--    <name>demo</name>-->
 <!--    <description>Demo project for Spring Boot</description>-->
 
@@ -92,6 +92,18 @@
             <version>5.5.1</version>
         </dependency>
 
+        <!-- swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
     </dependencies>
 
     <!--<build>-->
@@ -135,7 +147,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--            <plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <!--            <plugin>-->
 <!--                <artifactId>maven-assembly-plugin</artifactId>-->
 <!--                <configuration>-->
 <!--                    <archive>-->

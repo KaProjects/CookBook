@@ -1,6 +1,5 @@
 package org.kaleta.cookbook.dao;
 
-import com.sun.xml.bind.v2.TODO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 
 @RunWith(SpringRunner.class)
@@ -55,7 +55,7 @@ public class RecipeDaoTest {
     }
 
     @Test
-    public void testCreateRecipeWithCategory(){
+    public void createRecipeWithCategory(){
         Recipe recipe = new Recipe();
         recipe.setName("New Recipe");
         recipe.setCategory(categoryB);
@@ -69,7 +69,7 @@ public class RecipeDaoTest {
     }
 
     @Test
-    public void testChangeCategory() {
+    public void changeCategory() {
         Recipe recipe = entityManager.find(Recipe.class, recipeA.getId());
         recipe.getCategory().getRecipeSet().remove(recipe);
         recipe.setCategory(categoryB);
@@ -83,7 +83,7 @@ public class RecipeDaoTest {
     }
 
     @Test
-    public void testAddStep() {
+    public void addStep() {
         Step step = new Step();
         step.setNumber(1);
         step.setText("first step");
@@ -101,19 +101,10 @@ public class RecipeDaoTest {
     }
 
     @Test
-    public void testGetRecipeByName() {
-        Recipe foundRecipe = recipeDao.getByName(recipeA.getName());
-
-        assertThat(foundRecipe).isNotNull();
-        assertThat(foundRecipe).isEqualTo(recipeA);
-    }
-
-
-    @Test
-    public void testAddRecipeIngredient() {
+    public void addRecipeIngredient() {
         RecipeIngredient recipeIngredient = new RecipeIngredient();
         recipeIngredient.setIngredient(ingredientA);
-        recipeIngredient.setQuantity(100);
+        recipeIngredient.setQuantity("100");
         recipeIngredient.setUnit("mg");
         recipeIngredient.setOptional(false);
 
@@ -123,6 +114,28 @@ public class RecipeDaoTest {
 
         assertThat(entityManager.find(Recipe.class, recipeA.getId()).getRecipeIngredientList()).contains(recipeIngredient).hasSize(1);
         assertThat(entityManager.find(RecipeIngredient.class, recipeIngredient.getId()).getRecipe()).isEqualTo(recipeA);
-        assertThat(entityManager.find(Ingredient.class, ingredientA.getId()).getRecipeIngredientSet()).contains(recipeIngredient).hasSize(1);
+        assertThat(entityManager.find(RecipeIngredient.class, recipeIngredient.getId()).getIngredient()).isEqualTo(ingredientA);
+    }
+    @Test
+    public void getByName() {
+        Recipe foundRecipe = recipeDao.getByName(recipeA.getName());
+
+        assertThat(foundRecipe).isNotNull();
+        assertThat(foundRecipe).isEqualTo(recipeA);
+    }
+
+    @Test
+    public void getRecipeList() {
+        fail("not implemented");
+    }
+
+    @Test
+    public void getIngredientRecipeList() {
+        fail("not implemented");
+    }
+
+    @Test
+    public void getCategoryRecipeList() {
+        fail("not implemented");
     }
 }

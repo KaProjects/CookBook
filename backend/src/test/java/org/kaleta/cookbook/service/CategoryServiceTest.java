@@ -1,0 +1,81 @@
+package org.kaleta.cookbook.service;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.kaleta.cookbook.dao.CategoryDao;
+import org.kaleta.cookbook.entity.Category;
+import org.kaleta.cookbook.entity.Recipe;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.*;
+
+
+public class CategoryServiceTest {
+
+    @Mock
+    private CategoryDao categoryDao;
+
+    @InjectMocks
+    private CategoryService categoryService = new CategoryServiceImpl();
+
+    private Category categoryA;
+    private Category categoryB;
+    private Recipe recipeA;
+    private Recipe recipeB;
+
+    @Before
+    public void before(){
+        MockitoAnnotations.initMocks(this);
+
+        categoryA = new Category();
+        categoryA.setName("Category A");
+
+        categoryB = new Category();
+        categoryB.setName("Category B");
+
+        recipeA = new Recipe();
+        recipeA.setName("Recipe A");
+        recipeA.setCategory(categoryA);
+
+        recipeB = new Recipe();
+        recipeB.setName("Recipe B");
+        recipeB.setCategory(categoryA);
+    }
+
+    @Test
+    public void listAllCategories() {
+        when(categoryDao.findAll()).thenReturn(Arrays.asList(categoryA, categoryB));
+
+        List<Category> result = categoryService.listAllCategories();
+
+        assertThat(result).hasSize(2);
+        verify(categoryDao, times(1)).findAll();
+    }
+
+    @Test
+    public void findCategory() {
+        fail("not implemented");
+    }
+
+    @Test
+    public void createCategory() {
+        fail("not implemented");
+    }
+
+    @Test
+    public void getCategoryList() {
+        fail("not implemented");
+    }
+
+    @Test
+    public void deleteCategory() {
+        fail("not implemented");
+    }
+}
