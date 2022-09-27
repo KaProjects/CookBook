@@ -6,13 +6,14 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Menu from "./Menu";
 import Recipe from "./Recipe";
 import RecipeEditor from "./RecipeEditor";
+import { properties } from './properties.js';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      host: "10.0.0.6",
-      port: "7777",
+      host: properties.host,
+      port: properties.port,
       loaded: false,
       showAllRecipes: this.showAllRecipes,
       showIngredientRecipes: this.showIngredientRecipes,

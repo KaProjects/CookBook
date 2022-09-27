@@ -2,8 +2,6 @@ package org.kaleta.cookbook.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-
-
 import org.kaleta.cookbook.entity.EntityListItem;
 
 import java.util.ArrayList;

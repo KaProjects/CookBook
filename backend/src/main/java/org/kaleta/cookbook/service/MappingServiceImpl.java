@@ -1,6 +1,7 @@
 package org.kaleta.cookbook.service;
 
 import org.dozer.Mapper;
+import org.kaleta.cookbook.dto.CategoryDto;
 import org.kaleta.cookbook.dto.RecipeDto;
 import org.kaleta.cookbook.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,13 @@ public class MappingServiceImpl implements MappingService{
         recipeDto.setName(recipe.getName());
         recipeDto.setImage(recipe.getImage());
 
-        RecipeDto.Category category = new RecipeDto.Category();
+        CategoryDto category = new CategoryDto();
         category.setId(recipe.getCategory().getId());
         category.setName(recipe.getCategory().getName());
         recipeDto.setCategory(category);
 
         for (RecipeIngredient recipeIngredient : recipe.getRecipeIngredientList()){
-            RecipeDto.Ingredient ingredient = new RecipeDto.Ingredient();
+            RecipeDto.RecipeIngredientDto ingredient = new RecipeDto.RecipeIngredientDto();
             ingredient.setId(recipeIngredient.getIngredient().getId());
             ingredient.setName(recipeIngredient.getIngredient().getName());
             ingredient.setQuantity(recipeIngredient.getQuantity());
@@ -55,7 +56,7 @@ public class MappingServiceImpl implements MappingService{
             recipeDto.getIngredients().add(ingredient);
         }
         for (Step recipeStep : recipe.getStepList()){
-            RecipeDto.Step step = new RecipeDto.Step();
+            RecipeDto.RecipeStepDto step = new RecipeDto.RecipeStepDto();
             step.setNumber(recipeStep.getNumber());
             step.setText(recipeStep.getText());
             step.setOptional(recipeStep.isOptional());
@@ -75,7 +76,7 @@ public class MappingServiceImpl implements MappingService{
         category.setName(recipeDto.getCategory().getName());
         recipe.setCategory(category);
 
-        for (RecipeDto.Ingredient ingredient : recipeDto.getIngredients()){
+        for (RecipeDto.RecipeIngredientDto ingredient : recipeDto.getIngredients()){
             RecipeIngredient recipeIngredient = new RecipeIngredient();
 
             Ingredient recipeIngredientIngredient = new Ingredient();
@@ -90,7 +91,7 @@ public class MappingServiceImpl implements MappingService{
             recipeIngredient.setOptional(ingredient.isOptional());
             recipe.getRecipeIngredientList().add(recipeIngredient);
         }
-        for (RecipeDto.Step recipeStep : recipeDto.getSteps()){
+        for (RecipeDto.RecipeStepDto recipeStep : recipeDto.getSteps()){
             Step step = new Step();
             step.setNumber(recipeStep.getNumber());
             step.setText(recipeStep.getText());
