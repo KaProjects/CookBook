@@ -1,10 +1,6 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import {List, ListItem, ListItemText} from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
-import {IconButton, Link} from "@material-ui/core";
-import EditIcon from '@mui/icons-material/Edit';
-import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const useStyles = makeStyles((theme) => ({
   list: {
