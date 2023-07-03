@@ -9,7 +9,7 @@ import org.kaleta.entity.Recipe;
 import java.util.List;
 
 @ApplicationScoped
-public class Service {
+public class RecipeService {
 
     @Inject
     RecipeDao recipeDao;
