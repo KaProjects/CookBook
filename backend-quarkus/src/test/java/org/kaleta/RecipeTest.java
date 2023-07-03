@@ -358,4 +358,32 @@ public class RecipeTest {
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("recipes.size()", is(0));
     }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByCategory() {
+        String cook = "user";
+        String category = "Polievky";
+        given().when()
+                .get("/list/" + cook + "/recipe?category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(2))
+                .body("recipes[0].name", is("First Recipe"))
+                .body("recipes[0].id", is("1"));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByInvalidCategory() {
+        String cook = "user";
+        String category = "xxxxxxxxxx";
+        given().when()
+                .get("/list/" + cook + "/recipe?category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(0));
+    }
 }
