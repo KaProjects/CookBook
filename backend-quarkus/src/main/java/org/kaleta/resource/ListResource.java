@@ -31,18 +31,17 @@ public class ListResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{cook}/recipe")
     public RecipeListDto getRecipeList(@PathParam("cook") String cook,
-                                       @QueryParam("category") String category) {
-
-        List<EntityListItem> items = new ArrayList<>();
-
-        if (category == null){
-            items.addAll(listService.listRecipes(cook));
-        } else {
-            items.addAll(listService.listRecipes(cook, category));
-        }
+                                       @QueryParam("category") String category,
+                                       @QueryParam("ingredient") String ingredient) {
 
         RecipeListDto dto = new RecipeListDto();
-        dto.getRecipes().addAll(items);
+
+        if (category == null && ingredient == null) {
+            dto.getRecipes().addAll(listService.listRecipes(cook));
+        } else {
+            dto.getRecipes().addAll(listService.listRecipes(cook, category, ingredient));
+        }
+
         return dto;
     }
 }
