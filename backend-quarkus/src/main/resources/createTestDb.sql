@@ -35,6 +35,7 @@ INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('2', 'Ba
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('3', 'Fruitisimo', '100ml', true, '2');
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('4', 'Kachnicka', '1/2', false, '2');
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('5', 'Batatas', '3ks', false, '1');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('6', 'Moloko', '1l', false, '4');
 
 INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('1', 'asfialsfk asd s', 1, false, '1');
 INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('2', '1 asd s', 1, false, '2');

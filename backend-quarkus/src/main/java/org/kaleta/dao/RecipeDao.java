@@ -4,11 +4,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.kaleta.dto.RecipeCreateDto;
 import org.kaleta.entity.Recipe;
 
 import java.util.List;
-import java.util.UUID;
 
 @ApplicationScoped
 public class RecipeDao {

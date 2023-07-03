@@ -300,4 +300,36 @@ public class RecipeTest {
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("size()", is(4));
     }
+
+    @Test
+    @Order(1)
+    public void getMenuForCook(){
+        String cook = "user";
+        given().when()
+                .get("/list/" + cook + "/menu")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("ingredients.size()", is(4))
+                .body("ingredients", hasItem("Batatas"))
+                .body("ingredients", hasItem("Fruitisimo"))
+                .body("ingredients", hasItem("Kachnicka"))
+                .body("ingredients", hasItem("Pomodoro"))
+                .body("categories.size()", is(2))
+                .body("categories", hasItem("Maso"))
+                .body("categories", hasItem("Polievky"));
+    }
+
+    @Test
+    @Order(1)
+    public void getMenuForNonexistentCook(){
+        String cook = "nonexistent";
+        given().when()
+                .get("/list/" + cook + "/menu")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("ingredients.size()", is(0))
+                .body("categories.size()", is(0));
+    }
 }
