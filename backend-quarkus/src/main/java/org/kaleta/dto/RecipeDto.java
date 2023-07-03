@@ -17,49 +17,55 @@ public class RecipeDto {
     private List<StepDto> steps = new ArrayList<>();
     private List<IngredientDto> ingredients = new ArrayList<>();
 
-    public RecipeDto(Recipe recipe) {
-        id = recipe.getId();
-        name = recipe.getName();
-        category = recipe.getCategory();
+    public static RecipeDto from(Recipe recipe) {
+        RecipeDto dto = new RecipeDto();
+        dto.setId(recipe.getId());
+        dto.setName(recipe.getName());
+        dto.setCategory(recipe.getCategory());
+        dto.setImage(recipe.getImage());
         for (Step step : recipe.getSteps()){
-            steps.add(new StepDto(step));
+            dto.getSteps().add(StepDto.from(step));
         }
         for (Ingredient ingredient : recipe.getIngredients()){
-            ingredients.add(new IngredientDto(ingredient));
+            dto.getIngredients().add(IngredientDto.from(ingredient));
         }
+        return dto;
     }
-
     public static List<RecipeDto> list(List<Recipe> recipes){
         List<RecipeDto> recipeDtos = new ArrayList<>();
         for (Recipe recipe : recipes){
-            recipeDtos.add(new RecipeDto(recipe));
+            recipeDtos.add(RecipeDto.from(recipe));
         }
         return recipeDtos;
     }
 
     @Data
-    private static class StepDto {
+    public static class StepDto {
         private Integer number;
         private String text;
         private boolean optional;
 
-        private StepDto(Step step){
-            number = step.getNumber();
-            text = step.getText();
-            optional = step.isOptional();
+        public static StepDto from(Step step) {
+            StepDto dto = new StepDto();
+            dto.setText(step.getText());
+            dto.setNumber(step.getNumber());
+            dto.setOptional(step.isOptional());
+            return dto;
         }
     }
 
     @Data
-    private static class IngredientDto {
+    public static class IngredientDto {
         private String name;
         private String quantity;
         private boolean optional;
 
-        private IngredientDto(Ingredient ingredient){
-            name = ingredient.getName();
-            quantity = ingredient.getQuantity();
-            optional = ingredient.isOptional();
+        public static IngredientDto from(Ingredient ingredient) {
+            IngredientDto dto = new IngredientDto();
+            dto.setName(ingredient.getName());
+            dto.setQuantity(ingredient.getQuantity());
+            dto.setOptional(ingredient.isOptional());
+            return dto;
         }
     }
 }

@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS Step;
 DROP TABLE IF EXISTS Recipe;
 CREATE TABLE Recipe (
         id VARCHAR(36) NOT NULL PRIMARY KEY,
-        uuser TINYTEXT NOT NULL,
+        cook TINYTEXT NOT NULL,
         name TINYTEXT NOT NULL,
         category TINYTEXT NOT NULL,
         image LONGBLOB
@@ -25,10 +25,10 @@ CREATE TABLE Ingredient (
         CONSTRAINT `fk_recipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
 );
 
-INSERT INTO Recipe (id, uuser, name, category) VALUES ('1', 'user', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, uuser, name, category) VALUES ('2', 'user', 'Second Recipe', 'Polievky');
-INSERT INTO Recipe (id, uuser, name, category) VALUES ('3', 'user', 'Third Recipe', 'Maso');
-INSERT INTO Recipe (id, uuser, name, category) VALUES ('4', 'user2', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('1', 'user', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('2', 'user', 'Second Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('3', 'user', 'Third Recipe', 'Maso');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('4', 'user2', 'First Recipe', 'Polievky');
 
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('1', 'Pomodoro', '4ks', false, '2');
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('2', 'Batatas', '2ks', false, '2');
