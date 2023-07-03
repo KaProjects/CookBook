@@ -1,6 +1,6 @@
 CREATE TABLE Recipe (
         id VARCHAR(36) NOT NULL PRIMARY KEY,
-        user TINYTEXT NOT NULL,
+        cook TINYTEXT NOT NULL,
         name TINYTEXT NOT NULL,
         category TINYTEXT NOT NULL,
         image LONGBLOB
