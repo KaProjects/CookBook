@@ -63,7 +63,7 @@ const Recipe = props => {
 
 
         <Typography variant="h5" component="h5">
-          category: {recipe.category.name}
+          category: {recipe.category}
         </Typography>
 
         <div/>

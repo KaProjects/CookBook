@@ -27,7 +27,7 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/menu");
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/user/menu");
     // console.log(response);
     this.setState({categories: response.data.categories});
     this.setState({ingredients: response.data.ingredients});
@@ -36,14 +36,14 @@ class App extends Component {
 
   showAllRecipes = () => async () => {
     this.setState({selectedMenu: 0})
-    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/all");
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/user/recipe");
     // console.log(response);
     this.setState({recipes: response.data.recipes});
   }
 
   showIngredientRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
-    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/ingredient/"+id);
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/user/recipe?ingredient="+id);
     // console.log(response);
     this.setState({recipes: response.data.recipes});
 
@@ -51,7 +51,7 @@ class App extends Component {
 
   showCategoryRecipes = (id) => async () => {
     this.setState({selectedMenu: id})
-    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/recipe/category/"+id);
+    const response = await axios.get("http://" + this.state.host + ":" + this.state.port + "/list/user/recipe?category="+id);
     // console.log(response);
     this.setState({recipes: response.data.recipes});
   }
