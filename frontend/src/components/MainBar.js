@@ -3,6 +3,7 @@ import {AppBar, Box, Divider, IconButton, Link, Toolbar} from "@material-ui/core
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const useStyles = makeStyles((theme) => ({
   menuList: {

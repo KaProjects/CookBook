@@ -17,6 +17,8 @@ import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import EditIcon from "@mui/icons-material/Edit";
 import {Stack} from "@mui/material";
+import {useData} from "../fetch";
+import Loader from "../components/Loader";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -26,31 +28,20 @@ const useStyles = makeStyles((theme) => ({
 
 const Recipe = props => {
   const classes = useStyles();
-  const { id } = useParams();
-  const editRef = "/recipe/" + id + "/edit";
 
-  const [recipe, setRecipe] = useState(null);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(async () => {
-    const response = await axios.get("http://" + props.host + ":" + props.port + "/recipe/" + id);
-    setRecipe(response.data);
-    setLoaded(true)
-  }, []);
+  const {data, loaded, error} = useData("/recipe/" + props.selectedRecipeId)
 
   return (
     <>
       {!loaded &&
-      <div style={{ position: "absolute", top: "50%", left: "50%"}}>
-        <CircularProgress />
-      </div>
+          <Loader error ={error}/>
       }
-      {loaded && recipe != null && <div>
+      {loaded && <div>
         <Stack direction="row" spacing={2}>
           <Typography variant="h2" component="h2">
-            {recipe.name}
+            {data.name}
           </Typography>
-          <Link href={editRef} underline="none" color="inherit" >
+          <Link href={"/recipe/edit"} underline="none" color="inherit" >
             <IconButton
               edge="end"
               color="inherit"
@@ -63,7 +54,7 @@ const Recipe = props => {
 
 
         <Typography variant="h5" component="h5">
-          category: {recipe.category}
+          category: {data.category}
         </Typography>
 
         <div/>
@@ -71,7 +62,7 @@ const Recipe = props => {
         <div/>
 
         <List dense >
-          {recipe.ingredients.map((ingredient) =>
+          {data.ingredients.map((ingredient) =>
             <div key={ingredient.id}>
               {!ingredient.optional &&
                 <ListItem component="div">
@@ -84,7 +75,7 @@ const Recipe = props => {
                 </ListItem>}
             </div>
           )}
-          {recipe.ingredients.map((ingredient) =>
+          {data.ingredients.map((ingredient) =>
             <div key={ingredient.id}>
               {ingredient.optional &&
               <ListItem component="div">
@@ -104,7 +95,7 @@ const Recipe = props => {
         <div/>
 
         <List dense >
-        {recipe.steps.map((step) =>
+        {data.steps.map((step) =>
           <ListItem component="div" key={step.number}>
             <ListItemIcon>
               {!step.optional && <AutoFixHighIcon/>}
@@ -121,7 +112,7 @@ const Recipe = props => {
         <Divider variant="fullWidth" component="div"/>
         <div/>
 
-        <img src={recipe.image} />
+        <img src={data.image} />
 
       </div>}
     </>
