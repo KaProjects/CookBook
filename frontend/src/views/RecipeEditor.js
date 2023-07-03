@@ -21,7 +21,7 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import {Autocomplete, createFilterOptions, ListItemText, Stack} from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddTaskIcon from '@mui/icons-material/AddTask';
-import AddNameEntityDialog from "./AddNameEntityDialog";
+import AddNameEntityDialog from "../components/AddNameEntityDialog";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const useStyles = makeStyles((theme) => ({

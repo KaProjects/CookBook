@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import './App.css';
 import axios from "axios";
-import MainBar from "./MainBar";
+import MainBar from "./components/MainBar";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Menu from "./Menu";
-import Recipe from "./Recipe";
-import RecipeEditor from "./RecipeEditor";
+import Menu from "./components/Menu";
+import Recipe from "./views/Recipe";
+import RecipeEditor from "./views/RecipeEditor";
 import { properties } from './properties.js';
 
 class App extends Component {
@@ -18,10 +18,13 @@ class App extends Component {
       showAllRecipes: this.showAllRecipes,
       showIngredientRecipes: this.showIngredientRecipes,
       showCategoryRecipes: this.showCategoryRecipes,
-      loadRecipe: this.loadRecipe,
       selectedMenu: -1,
       recipes: [],
       recipe: 0,
+
+
+      setSelectedRecipe: this.setSelectedRecipe.bind(this),
+      selectedRecipeId: "null",
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -56,8 +59,8 @@ class App extends Component {
     this.setState({recipes: response.data.recipes});
   }
 
-  loadRecipe = (recipee) =>  () => {
-    this.setState({recipe: recipee});
+  setSelectedRecipe(recipeId) {
+    this.setState({selectedRecipeId: recipeId});
   }
 
   render() {
@@ -67,7 +70,7 @@ class App extends Component {
         <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<Menu {...this.state}/> }/>
-            <Route exact path="/recipe/:id" element={<Recipe {...this.state}/> }/>
+            <Route exact path="/recipe" element={<Recipe {...this.state}/> }/>
             <Route exact path="/recipe/create" element={<RecipeEditor {...this.state}/> }/>
             <Route exact path="/recipe/:id/edit" element={<RecipeEditor {...this.state}/> }/>
           </Routes>
