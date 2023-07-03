@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.kaleta.entity.Recipe;
 
+import java.util.List;
+
 @ApplicationScoped
 public class RecipeDao {
 
@@ -12,6 +14,12 @@ public class RecipeDao {
     EntityManager em;
 
     public Recipe getRecipe(String id) {
-        return em.find(Recipe.class, id);
+        return em.createQuery("select r from Recipe r where r.id=:id", Recipe.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    public List<Recipe> getRecipes() {
+        return em.createQuery("select r from Recipe r", Recipe.class).getResultList();
     }
 }
