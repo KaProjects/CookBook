@@ -36,4 +36,14 @@ public class ListDao {
                 .forEach(item -> items.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
         return items;
     }
+
+    public List<EntityListItem> recipes(String cook, String category) {
+        List<EntityListItem> items = new ArrayList<>();
+        em.createQuery("SELECT r.id, r.name FROM Recipe r" + whereCook + " AND r.category=:category", Object[].class)
+                .setParameter("cook", cook)
+                .setParameter("category", category)
+                .getResultStream()
+                .forEach(item -> items.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
+        return items;
+    }
 }

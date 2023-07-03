@@ -1,14 +1,15 @@
 package org.kaleta.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.kaleta.dto.MenuListDto;
 import org.kaleta.dto.RecipeListDto;
+import org.kaleta.entity.EntityListItem;
 import org.kaleta.service.ListService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/list")
 public class ListResource {
@@ -29,9 +30,19 @@ public class ListResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{cook}/recipe")
-    public RecipeListDto getRecipeList(@PathParam("cook") String cook) {
+    public RecipeListDto getRecipeList(@PathParam("cook") String cook,
+                                       @QueryParam("category") String category) {
+
+        List<EntityListItem> items = new ArrayList<>();
+
+        if (category == null){
+            items.addAll(listService.listRecipes(cook));
+        } else {
+            items.addAll(listService.listRecipes(cook, category));
+        }
+
         RecipeListDto dto = new RecipeListDto();
-        dto.getRecipes().addAll(listService.listRecipes(cook));
+        dto.getRecipes().addAll(items);
         return dto;
     }
 }
