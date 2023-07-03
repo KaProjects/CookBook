@@ -3,6 +3,7 @@ package org.kaleta.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.kaleta.dao.ListDao;
+import org.kaleta.entity.EntityListItem;
 
 import java.util.List;
 
@@ -19,4 +20,16 @@ public class ListService {
     public List<String> listIngredients(String cook) {
         return listDao.ingredients(cook);
     }
+
+    public List<EntityListItem> listRecipes(String cook){
+        return listDao.recipes(cook);
+    }
+
+//    public List<> listRecipes(String cook, String ingredient){
+//
+//    }
+//
+//    public List<> listRecipes(String cook, String category){
+//
+//    }
 }

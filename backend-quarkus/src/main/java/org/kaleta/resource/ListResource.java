@@ -7,6 +7,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.kaleta.dto.MenuListDto;
+import org.kaleta.dto.RecipeListDto;
 import org.kaleta.service.ListService;
 
 @Path("/list")
@@ -22,6 +23,15 @@ public class ListResource {
         MenuListDto dto = new MenuListDto();
         dto.getIngredients().addAll(listService.listIngredients(cook));
         dto.getCategories().addAll(listService.listCategories(cook));
+        return dto;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{cook}/recipe")
+    public RecipeListDto getRecipeList(@PathParam("cook") String cook) {
+        RecipeListDto dto = new RecipeListDto();
+        dto.getRecipes().addAll(listService.listRecipes(cook));
         return dto;
     }
 }

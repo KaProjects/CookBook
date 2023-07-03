@@ -3,8 +3,11 @@ package org.kaleta.dao;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import org.kaleta.entity.EntityListItem;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ListDao {
@@ -25,7 +28,12 @@ public class ListDao {
                 .getResultList();
     }
 
-//    public List<String> recipes(String cook) {
-//
-//    }
+    public List<EntityListItem> recipes(String cook) {
+        List<EntityListItem> items = new ArrayList<>();
+        em.createQuery("SELECT r.id, r.name FROM Recipe r" + whereCook, Object[].class)
+                .setParameter("cook", cook)
+                .getResultStream()
+                .forEach(item -> items.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
+        return items;
+    }
 }
