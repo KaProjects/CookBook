@@ -378,6 +378,21 @@ public class RecipeTest {
 
     @Test
     @Order(1)
+    public void getRecipesForCookByCategoryWithoutIngredients() {
+        String cook = "user";
+        String category = "Maso";
+        given().when()
+                .get("/list/" + cook + "/recipe?category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(1))
+                .body("recipes[0].name", is("Third Recipe"))
+                .body("recipes[0].id", is("3"));
+    }
+
+    @Test
+    @Order(1)
     public void getRecipesForCookByInvalidCategory() {
         String cook = "user";
         String category = "xxxxxxxxxx";
