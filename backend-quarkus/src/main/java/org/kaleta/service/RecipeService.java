@@ -2,15 +2,27 @@ package org.kaleta.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 import org.kaleta.dao.RecipeDao;
-import org.kaleta.dto.RecipeDto;
+import org.kaleta.entity.Recipe;
+
+import java.util.List;
 
 @ApplicationScoped
 public class RecipeService {
+
     @Inject
     RecipeDao recipeDao;
 
-    public RecipeDto getRecipe(String id) {
-        return new RecipeDto(recipeDao.getRecipe(id));
+    public Recipe getRecipe(String id) {
+        try {
+            return recipeDao.getRecipe(id);
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipeDao.getRecipes();
     }
 }

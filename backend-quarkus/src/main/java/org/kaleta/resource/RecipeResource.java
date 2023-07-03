@@ -1,13 +1,14 @@
 package org.kaleta.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.kaleta.dto.RecipeDto;
+import org.kaleta.entity.Recipe;
 import org.kaleta.service.RecipeService;
+
+import java.util.List;
 
 @Path("/recipe")
 public class RecipeResource {
@@ -17,9 +18,20 @@ public class RecipeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    public List<RecipeDto> getAllRecipes() {
+        List<Recipe> recipes = recipeService.getRecipes();
+        return RecipeDto.list(recipes);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public RecipeDto getRecipe(@PathParam("id") String id) {
-        // TODO: 03.07.2023 check null and return 404 response
-        return recipeService.getRecipe(id);
+        Recipe recipe = recipeService.getRecipe(id);
+        if (recipe == null){
+            throw new NotFoundException("Recipe with id='" + id + "' not found!");
+        } else {
+            return new RecipeDto(recipe);
+        }
     }
 }

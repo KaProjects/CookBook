@@ -10,21 +10,31 @@ import java.util.List;
 
 @Data
 public class RecipeDto {
+    private String id;
     private String name;
     private String category;
     private String image;
-    private List<StepDto> stepList = new ArrayList<>();
-    private List<IngredientDto> ingredientList = new ArrayList<>();
+    private List<StepDto> steps = new ArrayList<>();
+    private List<IngredientDto> ingredients = new ArrayList<>();
 
     public RecipeDto(Recipe recipe) {
+        id = recipe.getId();
         name = recipe.getName();
         category = recipe.getCategory();
-        for (Step step : recipe.getStepList()){
-            stepList.add(new StepDto(step));
+        for (Step step : recipe.getSteps()){
+            steps.add(new StepDto(step));
         }
-        for (Ingredient ingredient : recipe.getIngredientList()){
-            ingredientList.add(new IngredientDto(ingredient));
+        for (Ingredient ingredient : recipe.getIngredients()){
+            ingredients.add(new IngredientDto(ingredient));
         }
+    }
+
+    public static List<RecipeDto> list(List<Recipe> recipes){
+        List<RecipeDto> recipeDtos = new ArrayList<>();
+        for (Recipe recipe : recipes){
+            recipeDtos.add(new RecipeDto(recipe));
+        }
+        return recipeDtos;
     }
 
     @Data

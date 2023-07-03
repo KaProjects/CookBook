@@ -28,10 +28,10 @@ public class Recipe extends AbstractEntity {
 
     @OneToMany(mappedBy="sRecipe", cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
-    private List<Step> stepList = new ArrayList<>();
+    private List<Step> steps = new ArrayList<>();
 
     @OneToMany(mappedBy="iRecipe", cascade = CascadeType.ALL)
     @Setter(AccessLevel.NONE)
-    private List<Ingredient> ingredientList = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
 
 }
