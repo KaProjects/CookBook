@@ -67,12 +67,12 @@ const Menu = props => {
                       </ListItem>
                       <Collapse in={categoriesShown} timeout="auto" unmountOnExit>
                           <List component="nav" aria-label="main mailbox folders" className={classes.nested}>
-                              {props.categories.map((category) =>
+                              {props.categories.map((category, index) =>
                                 <ListItem button
-                                          key={category.id}
-                                          selected={props.selectedMenu === category.id}
-                                          onClick={props.showCategoryRecipes(category.id)}>
-                                    <ListItemText primary={category.name} />
+                                          key={index}
+                                          selected={props.selectedMenu === category}
+                                          onClick={props.showCategoryRecipes(category)}>
+                                    <ListItemText primary={category} />
                                 </ListItem>
                               )}
                           </List>
@@ -84,12 +84,12 @@ const Menu = props => {
                       </ListItem>
                       <Collapse in={ingredientsShown} timeout="auto" unmountOnExit>
                           <List component="nav" aria-label="main mailbox folders" className={classes.nested}>
-                              {props.ingredients.map((ingredient) =>
+                              {props.ingredients.map((ingredient, index) =>
                                 <ListItem button
-                                          key={ingredient.id}
-                                          selected={props.selectedMenu === ingredient.id}
-                                          onClick={props.showIngredientRecipes(ingredient.id)}>
-                                    <ListItemText primary={ingredient.name} />
+                                          key={index}
+                                          selected={props.selectedMenu === ingredient}
+                                          onClick={props.showIngredientRecipes(ingredient)}>
+                                    <ListItemText primary={ingredient} />
                                 </ListItem>
                               )}
                           </List>
