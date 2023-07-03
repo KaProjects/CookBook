@@ -37,11 +37,17 @@ public class ListDao {
         return items;
     }
 
-    public List<EntityListItem> recipes(String cook, String category) {
+    public List<EntityListItem> recipes(String cook, String category, String ingredient) {
+        if (category == null) category = "%";
+        if (ingredient == null) ingredient = "%";
+
         List<EntityListItem> items = new ArrayList<>();
-        em.createQuery("SELECT r.id, r.name FROM Recipe r" + whereCook + " AND r.category=:category", Object[].class)
+        em.createQuery("SELECT DISTINCT r.id, r.name FROM Recipe r INNER JOIN Ingredient i ON r.id=i.iRecipe.id"
+                        + whereCook
+                        + " AND r.category LIKE :category AND i.name LIKE :ingredient", Object[].class)
                 .setParameter("cook", cook)
                 .setParameter("category", category)
+                .setParameter("ingredient", ingredient)
                 .getResultStream()
                 .forEach(item -> items.add(new EntityListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
         return items;

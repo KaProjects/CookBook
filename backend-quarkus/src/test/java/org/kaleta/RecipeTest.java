@@ -17,6 +17,8 @@ import static org.hamcrest.CoreMatchers.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RecipeTest {
 
+    private final Integer recipesNumber = 5;
+
     @Test
     @Order(1)
     public void getRecipe() {
@@ -58,7 +60,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -80,7 +82,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(5));
+                .body("size()", is(recipesNumber + 1));
 
         given().when()
                 .get("/recipe/" + response.getBody().asString())
@@ -120,7 +122,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(6));
+                .body("size()", is(recipesNumber + 2));
 
         given().when()
                 .get("/recipe/" + response.getBody().asString())
@@ -160,7 +162,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -183,7 +185,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -206,7 +208,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -229,7 +231,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -252,7 +254,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -275,7 +277,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -298,7 +300,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(4));
+                .body("size()", is(recipesNumber));
     }
 
     @Test
@@ -385,5 +387,93 @@ public class RecipeTest {
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("recipes.size()", is(0));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByIngredient() {
+        String cook = "user";
+        String ingredient = "Batatas";
+        given().when()
+                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(2))
+                .body("recipes[0].name", is("First Recipe"))
+                .body("recipes[0].id", is("1"));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByInvalidIngredient() {
+        String cook = "user";
+        String ingredient = "xxxxxxxxx";
+        given().when()
+                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(0));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByCategoryAndIngredient() {
+        String cook = "user";
+        String category = "Polievky";
+        String ingredient = "Fruitisimo";
+        given().when()
+                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(1))
+                .body("recipes[0].name", is("Second Recipe"))
+                .body("recipes[0].id", is("2"));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByInvalidCategoryAndIngredient() {
+        String cook = "user";
+        String category = "xxxx";
+        String ingredient = "yyyy";
+        given().when()
+                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(0));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByCategoryWithSpace() {
+        String cook = "hellboy";
+        String category = "Kuracie Maso";
+        given().when()
+                .get("/list/" + cook + "/recipe?category=" + category)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(1))
+                .body("recipes[0].name", is("aaaa"))
+                .body("recipes[0].id", is("5"));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCookByIngredientWithSpace() {
+        String cook = "hellboy";
+        String ingredient = "Mucho Gusto";
+        given().when()
+                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(1))
+                .body("recipes[0].name", is("aaaa"))
+                .body("recipes[0].id", is("5"));
     }
 }

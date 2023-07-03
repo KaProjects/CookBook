@@ -25,12 +25,7 @@ public class ListService {
         return listDao.recipes(cook);
     }
 
-    public List<EntityListItem> listRecipes(String cook, String category){
-        return listDao.recipes(cook, category);
+    public List<EntityListItem> listRecipes(String cook, String category, String ingredient){
+        return listDao.recipes(cook, category, ingredient);
     }
-
-//    public List<> listRecipes(String cook, String ingredient){
-//
-//    }
-
 }
