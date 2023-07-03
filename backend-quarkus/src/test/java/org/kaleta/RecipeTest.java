@@ -332,4 +332,30 @@ public class RecipeTest {
                 .body("ingredients.size()", is(0))
                 .body("categories.size()", is(0));
     }
+
+    @Test
+    @Order(1)
+    public void getRecipesForCook() {
+        String cook = "user";
+        given().when()
+                .get("/list/" + cook + "/recipe")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(3))
+                .body("recipes[0].name", is("First Recipe"))
+                .body("recipes[0].id", is("1"));
+    }
+
+    @Test
+    @Order(1)
+    public void getRecipesForNonexistentCook(){
+        String cook = "nonexistent";
+        given().when()
+                .get("/list/" + cook + "/recipe")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("recipes.size()", is(0));
+    }
 }
