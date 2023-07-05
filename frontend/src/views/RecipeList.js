@@ -1,47 +1,46 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import {List, ListItem, ListItemText} from "@mui/material";
-
-const useStyles = makeStyles((theme) => ({
-  list: {
-    // width: "100%",
-    backgroundColor: "rgb(201, 76, 76)",
-  },
-  item: {
-    // width: 1000,
-    // alignItems: "center",
-    // backgroundColor: "rgb(201, 76, 76)",
-    // color: "black",
-  },
-}));
+import {useNavigate} from "react-router";
+import {useData} from "../fetch";
+import Loader from "../components/Loader";
 
 const RecipeList = props => {
-  const classes = useStyles();
 
-  // function handleClick(id) {
-  //   history.push("/recipe/"+id)
-  // }
+  const navigate = useNavigate();
+
+  const showRecipe = (recipeId) => () => {
+    props.setSelectedRecipe(recipeId);
+    navigate('/recipe');
+  }
+
+  const {data, loaded, error} = useData("/list/" + props.user + "/recipe"
+      + (props.categoryFilter !== null ? "?category=" + props.categoryFilter : "")
+      + (props.ingredientFilter !== null ? "?ingredient=" + props.ingredientFilter : ""))
+
 
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      className={classes.list}
-    >
-      {props.recipes.length > 0 && props.recipes.map((recipe, index) => (
-        <>
-          <ListItem className={classes.item} button
-                    key={index}
-
-            // onClick={props.loadRecipe(recipe.id) }
-                    onClick={() => props.loadRecipe(recipe.id)}
+      <>
+        {!loaded &&
+            <Loader error ={error}/>
+        }
+        {loaded &&
+          <List component="nav"
+                aria-labelledby="nested-list-subheader"
+                style={{}}
           >
-            <ListItemText  primary={recipe.name} />
-          </ListItem>
-        </>
-      ))}
-
-    </List>
+              {data.recipes.length > 0 && data.recipes.map((recipe, index) => (
+                  <>
+                    <ListItem style={{marginLeft: "2px", boxShadow: "0 0 8px 0", marginBottom: "4px", backgroundColor: "rgb(201, 76, 76)"}}
+                              button
+                              key={index}
+                              onClick={showRecipe(recipe.id)}>
+                      <ListItemText primary={recipe.name}/>
+                    </ListItem>
+                  </>
+              ))}
+          </List>
+        }
+      </>
   );
 }
 

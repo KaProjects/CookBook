@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import './App.css';
 import axios from "axios";
 import MainBar from "./components/MainBar";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Menu from "./components/Menu";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Recipe from "./views/Recipe";
 import RecipeEditor from "./views/RecipeEditor";
-import { properties } from './properties.js';
+import {properties} from './properties.js';
+import RecipeList from "./views/RecipeList";
 
 class App extends Component {
   constructor(props) {
@@ -25,6 +25,9 @@ class App extends Component {
 
       setSelectedRecipe: this.setSelectedRecipe.bind(this),
       selectedRecipeId: "null",
+      user: "user",
+      categoryFilter: null,
+      ingredientFilter: null,
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -69,7 +72,7 @@ class App extends Component {
         <MainBar {...this.state} />
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<Menu {...this.state}/> }/>
+            <Route exact path="/" element={<RecipeList {...this.state}/> }/>
             <Route exact path="/recipe" element={<Recipe {...this.state}/> }/>
             <Route exact path="/recipe/create" element={<RecipeEditor {...this.state}/> }/>
             <Route exact path="/recipe/:id/edit" element={<RecipeEditor {...this.state}/> }/>
