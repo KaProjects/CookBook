@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {Collapse, Link, List, ListItem, ListItemText} from "@material-ui/core";
+import {CircularProgress, Collapse, List, ListItem, ListItemText} from "@material-ui/core";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import {CircularProgress} from "@material-ui/core";
 import {Box, Grid} from "@mui/material";
-import {useNavigate} from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     menuList: {
@@ -28,15 +26,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Menu = props => {
-    const navigate = useNavigate();
-
-    const showRecipe = (recipeId) => () => {
-        props.setSelectedRecipe(recipeId);
-        navigate('/recipe', { replace: true });
-    }
-
-
-
 
     const classes = useStyles();
 
@@ -107,23 +96,6 @@ const Menu = props => {
                       </Collapse>
                   </List>
 
-              </Grid>
-              <Grid item xs>
-                  <List
-                    component="nav"
-                    aria-labelledby="nested-list-subheader"
-                    className={classes.recipeList}
-                  >
-                      {props.recipes.length > 0 && props.recipes.map((recipe, index) => (
-                            <ListItem className={classes.item} button
-                                      key={index}
-                                      onClick={showRecipe(recipe.id)}
-                            >
-                                <ListItemText  primary={recipe.name} />
-                            </ListItem>
-
-                      ))}
-                  </List>
               </Grid>
             </Grid>
           </Box>
