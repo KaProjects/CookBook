@@ -15,12 +15,12 @@ import java.util.List;
 public class RecipeResource {
 
     @Inject
-    RecipeService recipeService;
+    RecipeService service;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<RecipeDto> getAllRecipes() {
-        List<Recipe> recipes = recipeService.getRecipes();
+        List<Recipe> recipes = service.getRecipes();
         return RecipeDto.list(recipes);
     }
 
@@ -28,7 +28,7 @@ public class RecipeResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public RecipeDto getRecipe(@PathParam("id") String id) {
-        Recipe recipe = recipeService.getRecipe(id);
+        Recipe recipe = service.getRecipe(id);
         if (recipe == null){
             throw ErrorResponse.notFound("Recipe with id='" + id + "' not found!");
         } else {
@@ -41,7 +41,7 @@ public class RecipeResource {
     @Produces(MediaType.TEXT_PLAIN)
     public Response createRecipe(RecipeCreateDto recipeCreateDto){
         try {
-            String newId = recipeService.createRecipe(Recipe.from(recipeCreateDto));
+            String newId = service.createRecipe(Recipe.from(recipeCreateDto));
             return Response
                     .status(201)
                     .type(MediaType.TEXT_PLAIN)

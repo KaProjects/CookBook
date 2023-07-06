@@ -1,4 +1,4 @@
-package org.kaleta;
+package org.kaleta.test;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.Header;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.kaleta.dto.RecipeCreateDto;
+import org.kaleta.dto.RecipeDto;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
@@ -18,6 +19,25 @@ import static org.hamcrest.CoreMatchers.*;
 public class RecipeTest {
 
     private final Integer recipesNumber = 5;
+
+    private RecipeCreateDto createSampleRecipeCreateDto(){
+        RecipeCreateDto dto = new RecipeCreateDto();
+        dto.setName("new Recipe");
+        dto.setCategory("new Cat");
+        dto.setCook("new User");
+        dto.setImage("new Image");
+        RecipeDto.StepDto stepDto = new RecipeDto.StepDto();
+        stepDto.setNumber(1);
+        stepDto.setText("a step");
+        stepDto.setOptional(false);
+        dto.getSteps().add(stepDto);
+        RecipeDto.IngredientDto ingredientDto = new RecipeDto.IngredientDto();
+        ingredientDto.setName("a ingredient");
+        ingredientDto.setQuantity("4ks");
+        ingredientDto.setOptional(true);
+        dto.getIngredients().add(ingredientDto);
+        return dto;
+    }
 
     @Test
     @Order(1)
@@ -66,7 +86,7 @@ public class RecipeTest {
     @Test
     @Order(4)
     public void createRecipe(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
 
         Response response = given().when()
                 .body(dto)
@@ -105,7 +125,7 @@ public class RecipeTest {
     @Test
     @Order(5)
     public void createRecipeWithoutImage(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.setImage(null);
 
         Response response = given().when()
@@ -145,7 +165,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullName(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.setName(null);
 
         given().when()
@@ -168,7 +188,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullCategory(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.setCategory(null);
 
         given().when()
@@ -191,7 +211,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullCook(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.setCook(null);
 
         given().when()
@@ -214,7 +234,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullStepNumber(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.getSteps().get(0).setNumber(null);
 
         given().when()
@@ -237,7 +257,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullStepText(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.getSteps().get(0).setText(null);
 
         given().when()
@@ -260,7 +280,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullIngredientName(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.getIngredients().get(0).setName(null);
 
         given().when()
@@ -283,7 +303,7 @@ public class RecipeTest {
     @Test
     @Order(1)
     public void createRecipeWithNullIngredientQuantity(){
-        RecipeCreateDto dto = TestHelper.createSampleRecipeCreateDto();
+        RecipeCreateDto dto = createSampleRecipeCreateDto();
         dto.getIngredients().get(0).setQuantity(null);
 
         given().when()
@@ -301,194 +321,5 @@ public class RecipeTest {
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("size()", is(recipesNumber));
-    }
-
-    @Test
-    @Order(1)
-    public void getMenuForCook(){
-        String cook = "user";
-        given().when()
-                .get("/list/" + cook + "/menu")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("ingredients.size()", is(4))
-                .body("ingredients", hasItem("Batatas"))
-                .body("ingredients", hasItem("Fruitisimo"))
-                .body("ingredients", hasItem("Kachnicka"))
-                .body("ingredients", hasItem("Pomodoro"))
-                .body("categories.size()", is(2))
-                .body("categories", hasItem("Maso"))
-                .body("categories", hasItem("Polievky"));
-    }
-
-    @Test
-    @Order(1)
-    public void getMenuForNonexistentCook(){
-        String cook = "nonexistent";
-        given().when()
-                .get("/list/" + cook + "/menu")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("ingredients.size()", is(0))
-                .body("categories.size()", is(0));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCook() {
-        String cook = "user";
-        given().when()
-                .get("/list/" + cook + "/recipe")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(3))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForNonexistentCook(){
-        String cook = "nonexistent";
-        given().when()
-                .get("/list/" + cook + "/recipe")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByCategory() {
-        String cook = "user";
-        String category = "Polievky";
-        given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(2))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByCategoryWithoutIngredients() {
-        String cook = "user";
-        String category = "Maso";
-        given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("Third Recipe"))
-                .body("recipes[0].id", is("3"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByInvalidCategory() {
-        String cook = "user";
-        String category = "xxxxxxxxxx";
-        given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByIngredient() {
-        String cook = "user";
-        String ingredient = "Batatas";
-        given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(2))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByInvalidIngredient() {
-        String cook = "user";
-        String ingredient = "xxxxxxxxx";
-        given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByCategoryAndIngredient() {
-        String cook = "user";
-        String category = "Polievky";
-        String ingredient = "Fruitisimo";
-        given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("Second Recipe"))
-                .body("recipes[0].id", is("2"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByInvalidCategoryAndIngredient() {
-        String cook = "user";
-        String category = "xxxx";
-        String ingredient = "yyyy";
-        given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByCategoryWithSpace() {
-        String cook = "hellboy";
-        String category = "Kuracie Maso";
-        given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("aaaa"))
-                .body("recipes[0].id", is("5"));
-    }
-
-    @Test
-    @Order(1)
-    public void getRecipesForCookByIngredientWithSpace() {
-        String cook = "hellboy";
-        String ingredient = "Mucho Gusto";
-        given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("aaaa"))
-                .body("recipes[0].id", is("5"));
     }
 }
