@@ -5,12 +5,13 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Recipe from "./views/Recipe";
 import RecipeList from "./views/RecipeList";
 import RecipeMenu from "./views/RecipeMenu";
+import Login from "./components/Login";
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: "user",
+            user: null,
             categoryFilter: null,
             ingredientFilter: null,
             selectedRecipeId: null,
@@ -19,6 +20,8 @@ class App extends Component {
             showIngredientRecipes: this.showIngredientRecipes.bind(this),
             showCategoryRecipes: this.showCategoryRecipes.bind(this),
         };
+        this.setUser = this.setUser.bind(this);
+        this.getUser = this.getUser.bind(this);
     }
 
     showAllRecipes() {
@@ -40,7 +43,31 @@ class App extends Component {
         this.setState({selectedRecipeId: recipeId});
     }
 
+    setUser(user){
+        if (user == null){
+            sessionStorage.removeItem('user')
+        } else {
+            sessionStorage.setItem('user', user);
+        }
+        this.setState({user: user})
+    }
+
+    getUser() {
+        if (this.state.user != null) {
+            return this.state.user
+        } else {
+            if (sessionStorage.getItem('user') != null){
+                this.setState({user: sessionStorage.getItem('user')})
+            }
+            return sessionStorage.getItem('user');
+        }
+    }
+
     render() {
+        if (!this.getUser()) {
+            return <Login setUser={this.setUser}/>
+        }
+
         return (
             <BrowserRouter>
                 <MainBar {...this.state} />
