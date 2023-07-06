@@ -24,5 +24,5 @@ export const useData = (path) => {
         dataFetch();
     }, [path]);
 
-    return { data, loaded, error };
+    return {data, loaded, error};
 };
