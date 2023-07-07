@@ -1,16 +1,16 @@
-import React from "react";
-import {List, ListItem, ListItemText} from "@mui/material";
-import {useNavigate} from "react-router";
-import {useData} from "../fetch";
-import Loader from "../components/Loader";
+import React from "react"
+import {List, ListItem, ListItemText} from "@mui/material"
+import {useNavigate} from "react-router"
+import {useData} from "../fetch"
+import Loader from "../components/Loader"
 
-const RecipeList = props => {
+export default function RecipeList(props) {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const showRecipe = (recipeId) => () => {
-        props.setSelectedRecipe(recipeId);
-        navigate('/recipe');
+        props.setSelectedRecipe(recipeId)
+        navigate('/recipe')
     }
 
     const {data, loaded, error} = useData("/list/" + props.user + "/recipe"
@@ -38,7 +38,5 @@ const RecipeList = props => {
                 </List>
             }
         </>
-    );
+    )
 }
-
-export default RecipeList;

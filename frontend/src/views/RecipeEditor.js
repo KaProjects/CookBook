@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate} from "react-router";
-import axios from "axios";
+import React, {useEffect, useState} from 'react'
+import {useNavigate} from "react-router"
+import axios from "axios"
 import {
     Button,
     Divider,
@@ -11,36 +11,37 @@ import {
     TextField,
     Tooltip,
     Typography
-} from "@material-ui/core";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {properties} from "../properties";
-import Loader from "../components/Loader";
-import AutoCompleteInput from "../components/AutoCompleteInput";
-import {CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from "@material-ui/icons";
+} from "@material-ui/core"
+import DiamondIcon from "@mui/icons-material/Diamond"
+import NotListedLocationIcon from "@mui/icons-material/NotListedLocation"
+import AddCircleIcon from '@mui/icons-material/AddCircle'
+import DeleteIcon from '@mui/icons-material/Delete'
+import {properties} from "../properties"
+import Loader from "../components/Loader"
+import AutoCompleteInput from "../components/AutoCompleteInput"
+import {CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from "@material-ui/icons"
+import AddIngredientDialog from "../components/AddIngredientDialog"
 
 
-const RecipeEditor = props => {
-    const navigate = useNavigate();
+export default function RecipeEditor(props) {
+    const navigate = useNavigate()
 
-    const [loaded, setLoaded] = useState(false);
-    const [error, setError] = useState(null);
-    const [recipe, setRecipe] = useState({});
-    const [categories, setCategories] = useState([]);
-    const [ingredients, setIngredients] = useState([]);
+    const [loaded, setLoaded] = useState(false)
+    const [error, setError] = useState(null)
+    const [recipe, setRecipe] = useState({})
+    const [categories, setCategories] = useState([])
+    const [ingredients, setIngredients] = useState([])
 
     const fetchRecipe = async () => {
         axios.get("http://" + properties.host + ":" + properties.port + "/recipe/" + props.selectedRecipeId).then(
             (response) => {
                 const recipe = response.data
 
-                setRecipe(recipe);
-                setRecipeName(recipe.name);
-                setRecipeCategory(recipe.category);
-                setRecipeIngredients(recipe.ingredients);
-                setRecipeSteps(recipe.steps);
+                setRecipe(recipe)
+                setRecipeName(recipe.name)
+                setRecipeCategory(recipe.category)
+                setRecipeIngredients(recipe.ingredients)
+                setRecipeSteps(recipe.steps)
                 if (recipe.image != null) {
                     setRecipeImage(recipe.image)
                     setRecipeImageSelected(true)
@@ -48,12 +49,12 @@ const RecipeEditor = props => {
                 setRecipeValid(true)
 
                 setError(null)
-                setLoaded(true);
+                setLoaded(true)
             }).catch((error) => {
             console.error(error)
             setError(error)
         })
-    };
+    }
 
     const fetchAutocompleteOptions = async () => {
         axios.get("http://" + properties.host + ":" + properties.port + "/list/" + props.user + "/menu").then(
@@ -64,68 +65,76 @@ const RecipeEditor = props => {
             console.error(error)
             setError(error)
         })
-    };
+    }
 
     useEffect(() => {
-        fetchAutocompleteOptions();
+        fetchAutocompleteOptions()
         if (props.selectedRecipeId != null) {
-            fetchRecipe();
+            fetchRecipe()
         } else {
             recipe.name = ""
             setRecipeName(recipe.name)
             recipe.category = ""
             setRecipeCategory(recipe.category)
-            recipe.ingredients = [];
-            setRecipeIngredients(recipe.ingredients);
-            recipe.steps = [];
-            setRecipeSteps(recipe.steps);
-            if (error === null) setLoaded(true);
+            recipe.ingredients = []
+            setRecipeIngredients(recipe.ingredients)
+            recipe.steps = []
+            setRecipeSteps(recipe.steps)
+            if (error === null) setLoaded(true)
         }
-    }, []);
+    }, [])
 
-    const [recipeName, setRecipeName] = useState("");
-    const [recipeCategory, setRecipeCategory] = useState("");
+    const [recipeName, setRecipeName] = useState("")
+    const [recipeCategory, setRecipeCategory] = useState("")
     const onCategoryChange = (newValue) => {
         setRecipeCategory(newValue)
-        recipe.category = newValue;
+        recipe.category = newValue
         setRecipeValid(recipeValidate)
-    };
+    }
 
-    const [recipeIngredients, setRecipeIngredients] = useState([]);
-    const [openAddIngredientDialog, setOpenAddIngredientDialog] = useState(false);
+    const [recipeIngredients, setRecipeIngredients] = useState([])
+    const [openAddIngredientDialog, setOpenAddIngredientDialog] = useState(false)
+    const addIngredient = (newIngredient) => {
+        const rIngredients = [...recipeIngredients]
+        rIngredients.push(newIngredient)
+        setRecipeIngredients(rIngredients)
+        recipe.ingredients = rIngredients
+        if (!ingredients.includes(newIngredient.name)){
+            ingredients.push(newIngredient.name)
+        }
+    }
+    const [recipeSteps, setRecipeSteps] = useState([])
 
-    const [recipeSteps, setRecipeSteps] = useState([]);
 
 
 
 
 
-
-    const [recipeImage, setRecipeImage] = useState(null);
-    const [recipeImageSelected, setRecipeImageSelected] = useState(false);
+    const [recipeImage, setRecipeImage] = useState(null)
+    const [recipeImageSelected, setRecipeImageSelected] = useState(false)
     const selectFile = (event) => {
         // Assuming only image
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        var url = reader.readAsDataURL(file);
+        var file = event.target.files[0]
+        var reader = new FileReader()
+        var url = reader.readAsDataURL(file)
 
         reader.onloadend = function (e) {
-            recipe.image = reader.result;
-            setRecipeImage(reader.result);
-        };
+            recipe.image = reader.result
+            setRecipeImage(reader.result)
+        }
 
-        setRecipeImageSelected(true);
-    };
+        setRecipeImageSelected(true)
+    }
 
-    const [recipeValid, setRecipeValid] = useState(false);
+    const [recipeValid, setRecipeValid] = useState(false)
 
     function recipeValidate() {
-        return recipe.name !== "" && recipe.category !== null && recipe.category !== "";
+        return recipe.name !== "" && recipe.category !== null && recipe.category !== ""
     }
 
     function redirectNewRecipe(id) {
-        props.setSelectedRecipe(id);
-        navigate("/recipe");
+        props.setSelectedRecipe(id)
+        navigate("/recipe")
     }
 
     return (
@@ -140,7 +149,7 @@ const RecipeEditor = props => {
                                value={recipeName}
                                onChange={(event) => {
                                    setRecipeName(event.target.value)
-                                   recipe.name = event.target.value;
+                                   recipe.name = event.target.value
                                    setRecipeValid(recipeValidate)
                                }}
                                style={{margin: "15px 0 0 30px", width: "90%"}}
@@ -149,15 +158,19 @@ const RecipeEditor = props => {
                     <AutoCompleteInput value={recipeCategory}
                                        onInputChange={onCategoryChange}
                                        options={categories}
-                                       style={{margin: "15px 0 0 30px", width: "90%"}}/>
-
-
-
+                                       style={{margin: "15px 0 0 30px", width: "90%"}}
+                                        name="Category"
+                    />
 
                     <Typography style={{margin: "20px 0 0 30px"}}>Ingredients:</Typography>
                     <Divider style={{width: "90%", marginLeft: "30px"}}/>
+
+
+
+
+                    {/*TODO refactor design*/}
                     {recipeIngredients.length > 0 &&
-                        <List dense>
+                        <List dense style={{width: "100%"}}>
                             {recipeIngredients.map((ingredient, index) => (
                                 <ListItem component="div" key={index}>
                                     <ListItemIcon>
@@ -179,99 +192,25 @@ const RecipeEditor = props => {
                                 </ListItem>
                             ))}
                         </List>}
-                    {recipeIngredients.length === 0 &&
-                        <IconButton
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={() => {
-                                // const steps = [...recipeSteps];
-                                // const stepToAdd = {number: 1, text: "", optional: false}
-                                // steps.push(stepToAdd);
-                                // setRecipeSteps(steps);
-                                // recipe.steps = steps;
-                            }}
-                            style={{margin: "0 0 0 30px"}}
-                        >
-                            <AddCircleIcon/>
-                        </IconButton>
-                    }
-
-
-
-                        {/*<Stack direction="row" spacing={0}>*/}
-                        {/*    <IconButton*/}
-                        {/*        color="inherit"*/}
-                        {/*        aria-label="menu"*/}
-                        {/*        onClick={() => {*/}
-                        {/*            // setAddIngredientEnabled(addIngredientValidate())*/}
-                        {/*            // setAddingIngredient(true)*/}
-                        {/*        }}*/}
-                        {/*        style={{margin: "0 0 0 30px"}}*/}
-                        {/*    >*/}
-                        {/*        <AddCircleIcon/>*/}
-                        {/*    </IconButton>*/}
-                        {/*</Stack>*/}
-
-                        {/*<Stack direction="row" spacing={0}>*/}
-                        {/*    <Autocomplete*/}
-                        {/*        disablePortal*/}
-                        {/*        id="combo-box-demo"*/}
-                        {/*        options={ingredients}*/}
-                        {/*        getOptionLabel={(option) => option.name || ""}*/}
-                        {/*        sx={{width: 300}}*/}
-                        {/*        renderInput={(params) => <TextField {...params} component="div" label="Ingredient"/>}*/}
-                        {/*        isOptionEqualToValue={(option, value) => option.id === value.id || value.id === ""}*/}
-                        {/*        value={ingredientToAdd}*/}
-                        {/*        onChange={(event, newValue) => {*/}
-                        {/*            ingredientToAdd.id = newValue == null ? "" : newValue.id;*/}
-                        {/*            ingredientToAdd.name = newValue == null ? "" : newValue.name;*/}
-                        {/*            setAddIngredientEnabled(addIngredientValidate())*/}
-                        {/*        }}*/}
-
-                        {/*    />*/}
-
-                        {/*    <TextField id="outlined-basic" label="Quantity" variant="outlined" component="h2"*/}
-                        {/*               value={ingredientToAdd.quantity}*/}
-                        {/*               onChange={(event) => {*/}
-                        {/*                   ingredientToAdd.quantity = event.target.value;*/}
-                        {/*                   setAddIngredientEnabled(addIngredientValidate())*/}
-                        {/*               }}/>*/}
-                        {/*    <TextField id="outlined-basic" label="Unit" variant="outlined" component="h2"*/}
-                        {/*               value={ingredientToAdd.unit}*/}
-                        {/*               onChange={(event) => {*/}
-                        {/*                   ingredientToAdd.unit = event.target.value;*/}
-                        {/*                   setAddIngredientEnabled(addIngredientValidate())*/}
-                        {/*               }}/>*/}
-
-                        {/*    <Tooltip title="Optional?">*/}
-                        {/*        <Checkbox*/}
-                        {/*            checked={ingredientToAdd.optional}*/}
-                        {/*            onChange={(event, checked) => {*/}
-                        {/*                ingredientToAdd.optional = checked;*/}
-                        {/*            }}*/}
-                        {/*            inputProps={{'aria-label': 'controlled'}}*/}
-                        {/*        />*/}
-                        {/*    </Tooltip>*/}
-
-
-                        {/*    <IconButton*/}
-                        {/*        edge="end"*/}
-                        {/*        color="inherit"*/}
-                        {/*        aria-label="menu"*/}
-                        {/*        disabled={!addIngredientEnabled}*/}
-                        {/*        onClick={() => {*/}
-                        {/*            recipe.ingredients.push(ingredientToAdd)*/}
-                        {/*            setIngredientToAdd({id: "", name: ""})*/}
-                        {/*            setAddingIngredient(false)*/}
-                        {/*        }}*/}
-                        {/*    >*/}
-                        {/*        <AddTaskIcon/>*/}
-                        {/*    </IconButton>*/}
-                        {/*</Stack>*/}
 
 
 
 
+
+                    <IconButton
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => setOpenAddIngredientDialog(true)}
+                        style={{margin: "0 0 0 30px"}}
+                    >
+                        <AddCircleIcon/>
+                    </IconButton>
+                    <AddIngredientDialog
+                        open={openAddIngredientDialog}
+                        setOpen={setOpenAddIngredientDialog}
+                        addIngredient={addIngredient}
+                        ingredients={ingredients}
+                    />
 
                     <Typography style={{margin: "10px 0 0 30px"}}>Steps:</Typography>
                     <Divider style={{width: "90%", marginLeft: "30px"}}/>
@@ -291,8 +230,8 @@ const RecipeEditor = props => {
                                         key={step.number}
                                         fullWidth
                                         onChange={(event) => {
-                                            const steps = [...recipeSteps];
-                                            steps[index].text = event.target.value;
+                                            const steps = [...recipeSteps]
+                                            steps[index].text = event.target.value
                                             setRecipeSteps(steps)
                                             recipe.steps = steps
                                         }}
@@ -301,10 +240,10 @@ const RecipeEditor = props => {
                                         color="inherit"
                                         aria-label="menu"
                                         onClick={() => {
-                                            const steps = [...recipeSteps];
+                                            const steps = [...recipeSteps]
                                             steps.at(index).optional = !steps.at(index).optional
-                                            setRecipeSteps(steps);
-                                            recipe.steps = steps;
+                                            setRecipeSteps(steps)
+                                            recipe.steps = steps
                                         }}
                                         style={{marginRight: "-10px"}}
                                     >
@@ -316,11 +255,11 @@ const RecipeEditor = props => {
                                         color="inherit"
                                         aria-label="menu"
                                         onClick={() => {
-                                            const steps = [...recipeSteps];
+                                            const steps = [...recipeSteps]
                                             steps.splice(index, 1)
                                             steps.map((step, index) => step.number = index + 1)
-                                            setRecipeSteps(steps);
-                                            recipe.steps = steps;
+                                            setRecipeSteps(steps)
+                                            recipe.steps = steps
                                         }}
                                         style={{marginRight: "-10px"}}
                                     >
@@ -332,12 +271,12 @@ const RecipeEditor = props => {
                                         color="inherit"
                                         aria-label="menu"
                                         onClick={() => {
-                                            const steps = [...recipeSteps];
+                                            const steps = [...recipeSteps]
                                             const stepToAdd = {number: -1, text: "", optional: false}
-                                            steps.splice(index + 1, 0, stepToAdd);
+                                            steps.splice(index + 1, 0, stepToAdd)
                                             steps.map((step, index) => step.number = index + 1)
-                                            setRecipeSteps(steps);
-                                            recipe.steps = steps;
+                                            setRecipeSteps(steps)
+                                            recipe.steps = steps
                                         }}
                                         style={{marginRight: "-15px"}}
                                     >
@@ -353,11 +292,11 @@ const RecipeEditor = props => {
                             color="inherit"
                             aria-label="menu"
                             onClick={() => {
-                                const steps = [...recipeSteps];
+                                const steps = [...recipeSteps]
                                 const stepToAdd = {number: 1, text: "", optional: false}
-                                steps.push(stepToAdd);
-                                setRecipeSteps(steps);
-                                recipe.steps = steps;
+                                steps.push(stepToAdd)
+                                setRecipeSteps(steps)
+                                recipe.steps = steps
                             }}
                             style={{margin: "0 0 0 30px"}}
                         >
@@ -369,7 +308,7 @@ const RecipeEditor = props => {
 
 
 
-
+                    {/*TODO refactor design*/}
                     {!recipeImageSelected ?
                         <input type="file" name="file" onChange={selectFile}/>
                         :
@@ -390,7 +329,7 @@ const RecipeEditor = props => {
                     }
 
                     <div/>
-
+                    {/*TODO refactor design*/}
                     <Button variant="contained"
                             disabled={!recipeValid}
                             onClick={async () => {
@@ -404,7 +343,7 @@ const RecipeEditor = props => {
                                     .catch((reason) => {
                                         alert(reason)
                                         setLoaded(true)
-                                    });
+                                    })
 
                             }}
                     >
@@ -414,7 +353,5 @@ const RecipeEditor = props => {
                     <p/>
                 </div>}
         </>
-    );
+    )
 }
-
-export default RecipeEditor;
