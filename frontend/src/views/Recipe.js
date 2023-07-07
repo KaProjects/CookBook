@@ -1,6 +1,5 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Divider, IconButton, Link, List, ListItem, ListItemIcon, Typography} from "@material-ui/core";
+import {Divider, IconButton, List, ListItem, ListItemIcon, Typography} from "@material-ui/core";
 import DiamondIcon from '@mui/icons-material/Diamond';
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
@@ -8,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import {Stack} from "@mui/material";
 import {useData} from "../fetch";
 import Loader from "../components/Loader";
+import {Link} from "react-router-dom";
 
 
 const Recipe = props => {
@@ -24,7 +24,7 @@ const Recipe = props => {
                     <Typography variant="h2" component="h2">
                         {data.name}
                     </Typography>
-                    <Link href={"/recipe/edit"} underline="none" color="inherit">
+                    <Link to="/edit" underline="none" color="inherit">
                         <IconButton
                             edge="end"
                             color="inherit"
