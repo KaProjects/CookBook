@@ -6,6 +6,7 @@ import Recipe from "./views/Recipe";
 import RecipeList from "./views/RecipeList";
 import RecipeMenu from "./views/RecipeMenu";
 import Login from "./components/Login";
+import RecipeEditor from "./views/RecipeEditor";
 
 class App extends Component {
     constructor(props) {
@@ -75,8 +76,8 @@ class App extends Component {
                     <Route exact path="/" element={<RecipeList {...this.state}/>}/>
                     <Route exact path="/menu" element={<RecipeMenu {...this.state}/>}/>
                     <Route exact path="/recipe" element={<Recipe {...this.state}/>}/>
-                    {/*<Route exact path="/recipe/create" element={<RecipeEditor {...this.state}/> }/>*/}
-                    {/*<Route exact path="/recipe/:id/edit" element={<RecipeEditor {...this.state}/> }/>*/}
+                    <Route exact path="/create" element={<RecipeEditor {...this.state}/> }/>
+                    <Route exact path="/edit" element={<RecipeEditor {...this.state}/> }/>
                 </Routes>
             </BrowserRouter>
         );

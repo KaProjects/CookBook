@@ -42,8 +42,9 @@ const RecipeMenu = props => {
         navigate('/');
     };
 
-    const handleCreateRecipe = () => {
-
+    const handleCreateRecipe = () => () => {
+        props.setSelectedRecipe(null);
+        navigate('/create');
     }
 
     const list = {paddingRight: "8px", display: "block"}
