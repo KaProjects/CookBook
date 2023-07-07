@@ -3,8 +3,7 @@ import {useNavigate} from "react-router";
 import axios from "axios";
 import {
     Button,
-    Checkbox,
-    CircularProgress,
+    Divider,
     IconButton,
     List,
     ListItem,
@@ -15,16 +14,13 @@ import {
 } from "@material-ui/core";
 import DiamondIcon from "@mui/icons-material/Diamond";
 import NotListedLocationIcon from "@mui/icons-material/NotListedLocation";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import {Autocomplete, Stack} from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {properties} from "../properties";
 import Loader from "../components/Loader";
-import { createFilterOptions } from '@mui/material/Autocomplete';
+import AutoCompleteInput from "../components/AutoCompleteInput";
+import {CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from "@material-ui/icons";
 
-const filter = createFilterOptions();
 
 const RecipeEditor = props => {
     const navigate = useNavigate();
@@ -83,33 +79,27 @@ const RecipeEditor = props => {
             setRecipeIngredients(recipe.ingredients);
             recipe.steps = [];
             setRecipeSteps(recipe.steps);
-            setLoaded(true);
+            if (error === null) setLoaded(true);
         }
     }, []);
 
     const [recipeName, setRecipeName] = useState("");
     const [recipeCategory, setRecipeCategory] = useState("");
-
+    const onCategoryChange = (newValue) => {
+        setRecipeCategory(newValue)
+        recipe.category = newValue;
+        setRecipeValid(recipeValidate)
+    };
 
     const [recipeIngredients, setRecipeIngredients] = useState([]);
-    const [addingIngredient, setAddingIngredient] = useState(false);
-    const [ingredientToAdd, setIngredientToAdd] = useState({id: "", name: ""});
-    const [addIngredientEnabled, setAddIngredientEnabled] = useState(false);
-
-    function addIngredientValidate() {
-        return ingredientToAdd.id !== "" && ingredientToAdd.quantity != null && ingredientToAdd.quantity !== ''
-            && ingredientToAdd.unit != null && ingredientToAdd.unit !== '';
-    }
+    const [openAddIngredientDialog, setOpenAddIngredientDialog] = useState(false);
 
     const [recipeSteps, setRecipeSteps] = useState([]);
-    const [addingStep, setAddingStep] = useState(false);
-    const [stepToAdd, setStepToAdd] = useState({});
 
-    const [recipeValid, setRecipeValid] = useState(false);
 
-    function recipeValidate() {
-        return recipe.name !== "" && recipe.category !== null && recipe.category !== "";
-    }
+
+
+
 
     const [recipeImage, setRecipeImage] = useState(null);
     const [recipeImageSelected, setRecipeImageSelected] = useState(false);
@@ -127,310 +117,302 @@ const RecipeEditor = props => {
         setRecipeImageSelected(true);
     };
 
+    const [recipeValid, setRecipeValid] = useState(false);
+
+    function recipeValidate() {
+        return recipe.name !== "" && recipe.category !== null && recipe.category !== "";
+    }
+
     function redirectNewRecipe(id) {
         props.setSelectedRecipe(id);
         navigate("/recipe");
     }
-
-    const autocompleteOption = {width: "600px", margin: "0px 0px 1px 0px", boxShadow: "0 0 1px 0", backgroundColor: "rgb(255,255,255)"}
 
     return (
         <>
             {!loaded &&
                 <Loader error={error}/>
             }
-            {loaded && <div style={{backgroundColor: "lightblue", maxWidth: "600px", marginRight: "auto", marginLeft:"auto"}}>
+            {loaded &&
+                <div style={{backgroundColor: "lightblue", maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
 
-                <TextField label="Name" variant="outlined" component="h2"
-                           value={recipeName}
-                           onChange={(event) => {
-                               setRecipeName(event.target.value)
-                               recipe.name = event.target.value;
-                               setRecipeValid(recipeValidate)
-                           }}
-                           style={{ margin: "10px 0 0 0", width: "90%", left: "50%", transform: "translate(-50%, 0)"}}
-                />
+                    <TextField label="Name" variant="outlined" component="h2"
+                               value={recipeName}
+                               onChange={(event) => {
+                                   setRecipeName(event.target.value)
+                                   recipe.name = event.target.value;
+                                   setRecipeValid(recipeValidate)
+                               }}
+                               style={{margin: "15px 0 0 30px", width: "90%"}}
+                    />
 
-                <Autocomplete
-                    value={recipeCategory}
-                    onChange={(event, newValue) => {
-                        if (typeof newValue === 'string') {
-                            setRecipeCategory(newValue)
-                            recipe.category = newValue;
-                            setRecipeValid(recipeValidate)
-                        } else if (newValue && newValue.inputValue) {
-                            // Create a new value from the user input
-                            setRecipeCategory(newValue.inputValue)
-                            recipe.category = newValue.inputValue;
-                            setRecipeValid(recipeValidate)
-                        } else {
-                            setRecipeCategory(newValue)
-                            recipe.category = newValue;
-                            setRecipeValid(recipeValidate)
-                        }
-                    }}
-                    filterOptions={(options, params) => {
-                        const filtered = filter(options, params);
-
-                        const { inputValue } = params;
-                        // Suggest the creation of a new value
-                        const isExisting = options.some((option) => inputValue === option.title);
-                        if (inputValue !== '' && !isExisting) {
-                            filtered.push({
-                                inputValue,
-                                title: `Add "${inputValue}"`,
-                            });
-                        }
-
-                        return filtered;
-                    }}
-                    selectOnFocus
-                    clearOnBlur
-                    handleHomeEndKeys
-                    options={categories}
-                    getOptionLabel={(option) => {
-                        // Value selected with enter, right from the input
-                        if (typeof option === 'string') {
-                            return option;
-                        }
-                        // Add "xxx" option created dynamically
-                        if (option.inputValue) {
-                            return option.inputValue;
-                        }
-                        // Regular option
-                        return option.title;
-                    }}
-                    renderOption={(props, option) => <Typography {...props} style={autocompleteOption}>{option.title === undefined ? option : option.title}</Typography>}
-                    freeSolo
-                    renderInput={(params) => <TextField {...params} component="div" label="Category"/>}
-                    style={{margin: "15px 0 0 30px", width: "90%"}}
-                />
+                    <AutoCompleteInput value={recipeCategory}
+                                       onInputChange={onCategoryChange}
+                                       options={categories}
+                                       style={{margin: "15px 0 0 30px", width: "90%"}}/>
 
 
 
 
-                <Typography style={{margin: "20px 0 0 30px"}}>Ingredients:</Typography>
-                {recipeIngredients.length > 0 &&
-                    <List dense>
-                        {recipeIngredients.map((ingredient, index) => (
-                            <ListItem component="div" key={index}>
-                                <ListItemIcon>
-                                    {ingredient.optional ? <NotListedLocationIcon/> : <DiamondIcon/>}
-                                </ListItemIcon>
-                                <Typography key={ingredient.name}>
-                                    {ingredient.name} ({ingredient.quantity}{ingredient.unit})
-                                </Typography>
-                                <ListItemIcon
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={() => {
-                                        recipe.ingredients = recipe.ingredients.filter((v, i) => i !== index)
-                                        setRecipeIngredients(recipe.ingredients)
-                                    }}
-                                >
-                                    <DeleteIcon/>
-                                </ListItemIcon>
-                            </ListItem>
-                        ))}
-                    </List>}
-
-                {!addingIngredient ?
-                    <Stack direction="row" spacing={0}>
+                    <Typography style={{margin: "20px 0 0 30px"}}>Ingredients:</Typography>
+                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+                    {recipeIngredients.length > 0 &&
+                        <List dense>
+                            {recipeIngredients.map((ingredient, index) => (
+                                <ListItem component="div" key={index}>
+                                    <ListItemIcon>
+                                        {ingredient.optional ? <NotListedLocationIcon/> : <DiamondIcon/>}
+                                    </ListItemIcon>
+                                    <Typography key={ingredient.name}>
+                                        {ingredient.name} ({ingredient.quantity}{ingredient.unit})
+                                    </Typography>
+                                    <ListItemIcon
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={() => {
+                                            recipe.ingredients = recipe.ingredients.filter((v, i) => i !== index)
+                                            setRecipeIngredients(recipe.ingredients)
+                                        }}
+                                    >
+                                        <DeleteIcon/>
+                                    </ListItemIcon>
+                                </ListItem>
+                            ))}
+                        </List>}
+                    {recipeIngredients.length === 0 &&
                         <IconButton
                             color="inherit"
                             aria-label="menu"
                             onClick={() => {
-                                setAddIngredientEnabled(addIngredientValidate())
-                                setAddingIngredient(true)
+                                // const steps = [...recipeSteps];
+                                // const stepToAdd = {number: 1, text: "", optional: false}
+                                // steps.push(stepToAdd);
+                                // setRecipeSteps(steps);
+                                // recipe.steps = steps;
                             }}
                             style={{margin: "0 0 0 30px"}}
                         >
                             <AddCircleIcon/>
                         </IconButton>
-                    </Stack>
-                    :
-                    <Stack direction="row" spacing={0}>
-                        <Autocomplete
-                            disablePortal
-                            id="combo-box-demo"
-                            options={ingredients}
-                            getOptionLabel={(option) => option.name || ""}
-                            sx={{width: 300}}
-                            renderInput={(params) => <TextField {...params} component="div" label="Ingredient"/>}
-                            isOptionEqualToValue={(option, value) => option.id === value.id || value.id === ""}
-                            value={ingredientToAdd}
-                            onChange={(event, newValue) => {
-                                ingredientToAdd.id = newValue == null ? "" : newValue.id;
-                                ingredientToAdd.name = newValue == null ? "" : newValue.name;
-                                setAddIngredientEnabled(addIngredientValidate())
-                            }}
-
-                        />
-
-                        <TextField id="outlined-basic" label="Quantity" variant="outlined" component="h2"
-                                   value={ingredientToAdd.quantity}
-                                   onChange={(event) => {
-                                       ingredientToAdd.quantity = event.target.value;
-                                       setAddIngredientEnabled(addIngredientValidate())
-                                   }}/>
-                        <TextField id="outlined-basic" label="Unit" variant="outlined" component="h2"
-                                   value={ingredientToAdd.unit}
-                                   onChange={(event) => {
-                                       ingredientToAdd.unit = event.target.value;
-                                       setAddIngredientEnabled(addIngredientValidate())
-                                   }}/>
-
-                        <Tooltip title="Optional?">
-                            <Checkbox
-                                checked={ingredientToAdd.optional}
-                                onChange={(event, checked) => {
-                                    ingredientToAdd.optional = checked;
-                                }}
-                                inputProps={{'aria-label': 'controlled'}}
-                            />
-                        </Tooltip>
+                    }
 
 
+
+                        {/*<Stack direction="row" spacing={0}>*/}
+                        {/*    <IconButton*/}
+                        {/*        color="inherit"*/}
+                        {/*        aria-label="menu"*/}
+                        {/*        onClick={() => {*/}
+                        {/*            // setAddIngredientEnabled(addIngredientValidate())*/}
+                        {/*            // setAddingIngredient(true)*/}
+                        {/*        }}*/}
+                        {/*        style={{margin: "0 0 0 30px"}}*/}
+                        {/*    >*/}
+                        {/*        <AddCircleIcon/>*/}
+                        {/*    </IconButton>*/}
+                        {/*</Stack>*/}
+
+                        {/*<Stack direction="row" spacing={0}>*/}
+                        {/*    <Autocomplete*/}
+                        {/*        disablePortal*/}
+                        {/*        id="combo-box-demo"*/}
+                        {/*        options={ingredients}*/}
+                        {/*        getOptionLabel={(option) => option.name || ""}*/}
+                        {/*        sx={{width: 300}}*/}
+                        {/*        renderInput={(params) => <TextField {...params} component="div" label="Ingredient"/>}*/}
+                        {/*        isOptionEqualToValue={(option, value) => option.id === value.id || value.id === ""}*/}
+                        {/*        value={ingredientToAdd}*/}
+                        {/*        onChange={(event, newValue) => {*/}
+                        {/*            ingredientToAdd.id = newValue == null ? "" : newValue.id;*/}
+                        {/*            ingredientToAdd.name = newValue == null ? "" : newValue.name;*/}
+                        {/*            setAddIngredientEnabled(addIngredientValidate())*/}
+                        {/*        }}*/}
+
+                        {/*    />*/}
+
+                        {/*    <TextField id="outlined-basic" label="Quantity" variant="outlined" component="h2"*/}
+                        {/*               value={ingredientToAdd.quantity}*/}
+                        {/*               onChange={(event) => {*/}
+                        {/*                   ingredientToAdd.quantity = event.target.value;*/}
+                        {/*                   setAddIngredientEnabled(addIngredientValidate())*/}
+                        {/*               }}/>*/}
+                        {/*    <TextField id="outlined-basic" label="Unit" variant="outlined" component="h2"*/}
+                        {/*               value={ingredientToAdd.unit}*/}
+                        {/*               onChange={(event) => {*/}
+                        {/*                   ingredientToAdd.unit = event.target.value;*/}
+                        {/*                   setAddIngredientEnabled(addIngredientValidate())*/}
+                        {/*               }}/>*/}
+
+                        {/*    <Tooltip title="Optional?">*/}
+                        {/*        <Checkbox*/}
+                        {/*            checked={ingredientToAdd.optional}*/}
+                        {/*            onChange={(event, checked) => {*/}
+                        {/*                ingredientToAdd.optional = checked;*/}
+                        {/*            }}*/}
+                        {/*            inputProps={{'aria-label': 'controlled'}}*/}
+                        {/*        />*/}
+                        {/*    </Tooltip>*/}
+
+
+                        {/*    <IconButton*/}
+                        {/*        edge="end"*/}
+                        {/*        color="inherit"*/}
+                        {/*        aria-label="menu"*/}
+                        {/*        disabled={!addIngredientEnabled}*/}
+                        {/*        onClick={() => {*/}
+                        {/*            recipe.ingredients.push(ingredientToAdd)*/}
+                        {/*            setIngredientToAdd({id: "", name: ""})*/}
+                        {/*            setAddingIngredient(false)*/}
+                        {/*        }}*/}
+                        {/*    >*/}
+                        {/*        <AddTaskIcon/>*/}
+                        {/*    </IconButton>*/}
+                        {/*</Stack>*/}
+
+
+
+
+
+                    <Typography style={{margin: "10px 0 0 30px"}}>Steps:</Typography>
+                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+                    {recipeSteps.length > 0 &&
+                        <List dense style={{width: "100%"}}>
+                            {recipeSteps.map((step, index) => (
+                                <ListItem component="div" key={index} style={{marginLeft: "20px", width: "95%"}}>
+
+                                    <ListItemIcon style={{marginRight: "-30px"}}>
+                                        {step.number}.
+                                    </ListItemIcon>
+                                    <TextField
+                                        component="h2"
+                                        multiline
+                                        maxRows={3}
+                                        value={step.text}
+                                        key={step.number}
+                                        fullWidth
+                                        onChange={(event) => {
+                                            const steps = [...recipeSteps];
+                                            steps[index].text = event.target.value;
+                                            setRecipeSteps(steps)
+                                            recipe.steps = steps
+                                        }}
+                                    />
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={() => {
+                                            const steps = [...recipeSteps];
+                                            steps.at(index).optional = !steps.at(index).optional
+                                            setRecipeSteps(steps);
+                                            recipe.steps = steps;
+                                        }}
+                                        style={{marginRight: "-10px"}}
+                                    >
+                                        <Tooltip title="unchecked is optional">
+                                            {step.optional ? <CheckBoxOutlineBlankOutlined/> : <CheckBoxOutlined/>}
+                                        </Tooltip>
+                                    </IconButton>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={() => {
+                                            const steps = [...recipeSteps];
+                                            steps.splice(index, 1)
+                                            steps.map((step, index) => step.number = index + 1)
+                                            setRecipeSteps(steps);
+                                            recipe.steps = steps;
+                                        }}
+                                        style={{marginRight: "-10px"}}
+                                    >
+                                        <Tooltip title="delete this step">
+                                            <DeleteIcon/>
+                                        </Tooltip>
+                                    </IconButton>
+                                    <IconButton
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={() => {
+                                            const steps = [...recipeSteps];
+                                            const stepToAdd = {number: -1, text: "", optional: false}
+                                            steps.splice(index + 1, 0, stepToAdd);
+                                            steps.map((step, index) => step.number = index + 1)
+                                            setRecipeSteps(steps);
+                                            recipe.steps = steps;
+                                        }}
+                                        style={{marginRight: "-15px"}}
+                                    >
+                                        <Tooltip title="add one step below">
+                                            <AddCircleIcon/>
+                                        </Tooltip>
+                                    </IconButton>
+                                </ListItem>
+                            ))}
+                        </List>}
+                    {recipeSteps.length === 0 &&
                         <IconButton
-                            edge="end"
                             color="inherit"
                             aria-label="menu"
-                            disabled={!addIngredientEnabled}
                             onClick={() => {
-                                recipe.ingredients.push(ingredientToAdd)
-                                setIngredientToAdd({id: "", name: ""})
-                                setAddingIngredient(false)
-                            }}
-                        >
-                            <AddTaskIcon/>
-                        </IconButton>
-                    </Stack>
-                }
-
-                <Typography style={{margin: "10px 0 0 30px"}}>Steps:</Typography>
-
-                {/*TODO add step prida n-ty step s "" value */}
-                {/*TODO all steps editovatelne kedykolvek */}
-                {/*TODO delete last step */}
-
-                {recipeSteps.length > 0 &&
-                    <List dense>
-                        {recipeSteps.map((step, index) => (
-                            <ListItem component="div" key={index}>
-                                <ListItemIcon>
-                                    {step.optional ? <NotListedLocationIcon/> : <AutoFixHighIcon/>}
-                                </ListItemIcon>
-                                <Typography key={step.number}>
-                                    {step.number}. {step.text}
-                                </Typography>
-                                <ListItemIcon
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={() => {
-                                        recipe.steps = recipe.steps.filter((v, i) => i !== index)
-                                        recipe.steps.map((step, index) => step.number = index + 1)
-                                        setRecipeSteps(recipe.steps)
-                                    }}
-                                >
-                                    <DeleteIcon/>
-                                </ListItemIcon>
-                            </ListItem>
-                        ))}
-                    </List>}
-
-                {!addingStep ?
-                    <Stack direction="row" spacing={0}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={() => {
-                                // setAddIngredientEnabled(addIngredientValidate())
-                                setAddingStep(true)
+                                const steps = [...recipeSteps];
+                                const stepToAdd = {number: 1, text: "", optional: false}
+                                steps.push(stepToAdd);
+                                setRecipeSteps(steps);
+                                recipe.steps = steps;
                             }}
                             style={{margin: "0 0 0 30px"}}
                         >
                             <AddCircleIcon/>
                         </IconButton>
-                    </Stack>
-                    :
-                    <Stack direction="row" spacing={0}>
-                        <TextField id="outlined-basic" label="Text" variant="outlined" component="h2"
-                                   value={stepToAdd.text}
-                                   fullWidth
-                                   onChange={(event) => {
-                                       stepToAdd.text = event.target.value;
-                                       // setAddIngredientEnabled(addIngredientValidate())
-                                   }}/>
+                    }
 
-                        <Tooltip title="Optional?">
-                            <Checkbox
-                                checked={stepToAdd.optional}
-                                onChange={(event, checked) => {
-                                    stepToAdd.optional = checked;
+                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+
+
+
+
+                    {!recipeImageSelected ?
+                        <input type="file" name="file" onChange={selectFile}/>
+                        :
+                        <div>
+                            <img src={recipe.image}/>
+                            <IconButton
+                                color="inherit"
+                                aria-label="menu"
+                                onClick={() => {
+                                    recipe.image = null
+                                    setRecipeImage(null)
+                                    setRecipeImageSelected(false)
                                 }}
-                                inputProps={{'aria-label': 'controlled'}}
-                            />
-                        </Tooltip>
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </div>
+                    }
 
-                        <IconButton
-                            edge="end"
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={() => {
-                                stepToAdd.number = recipe.steps.length + 1
-                                recipe.steps.push(stepToAdd)
-                                setStepToAdd({})
-                                setAddingStep(false)
+                    <div/>
+
+                    <Button variant="contained"
+                            disabled={!recipeValid}
+                            onClick={async () => {
+                                setLoaded(false)
+                                console.log(recipe)
+                                await axios.post("http://" + props.host + ":" + props.port + "/recipe/", recipe)
+                                    .then((response) => {
+                                        console.log(response.data)
+                                        redirectNewRecipe(response.data)
+                                    })
+                                    .catch((reason) => {
+                                        alert(reason)
+                                        setLoaded(true)
+                                    });
+
                             }}
-                        >
-                            <AddTaskIcon/>
-                        </IconButton>
-                    </Stack>
-                }
+                    >
+                        {recipe.id == null ? "Create Recipe" : "Save Recipe"}
+                    </Button>
 
-                {!recipeImageSelected ?
-                    <input type="file" name="file" onChange={selectFile}/>
-                    :
-                    <div>
-                        <img src={recipe.image}/>
-                        <IconButton
-                            color="inherit"
-                            aria-label="menu"
-                            onClick={() => {
-                                recipe.image = null
-                                setRecipeImage(null)
-                                setRecipeImageSelected(false)
-                            }}
-                        >
-                            <DeleteIcon/>
-                        </IconButton>
-                    </div>
-                }
-
-                <div/>
-
-                <Button variant="contained"
-                        disabled={!recipeValid}
-                        onClick={async () => {
-                            setLoaded(false)
-                            console.log(recipe)
-                            await axios.post("http://" + props.host + ":" + props.port + "/recipe/", recipe)
-                                .then((response) => {
-                                    console.log(response.data)
-                                    redirectNewRecipe(response.data)
-                                })
-                                .catch((reason) => {
-                                    alert(reason)
-                                    setLoaded(true)
-                                });
-
-                        }}
-                >
-                    {recipe.id == null ? "Create Recipe" : "Save Changes"}
-                </Button>
-
-                <p/>
-            </div>}
+                    <p/>
+                </div>}
         </>
     );
 }
