@@ -1,16 +1,16 @@
-import React from 'react';
-import {Divider, IconButton, List, ListItem, ListItemIcon, Typography} from "@material-ui/core";
-import DiamondIcon from '@mui/icons-material/Diamond';
-import NotListedLocationIcon from '@mui/icons-material/NotListedLocation';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import EditIcon from "@mui/icons-material/Edit";
-import {Stack} from "@mui/material";
-import {useData} from "../fetch";
-import Loader from "../components/Loader";
-import {Link} from "react-router-dom";
+import React from 'react'
+import {Divider, IconButton, List, ListItem, ListItemIcon, Typography} from "@material-ui/core"
+import DiamondIcon from '@mui/icons-material/Diamond'
+import NotListedLocationIcon from '@mui/icons-material/NotListedLocation'
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
+import EditIcon from "@mui/icons-material/Edit"
+import {Stack} from "@mui/material"
+import {useData} from "../fetch"
+import Loader from "../components/Loader"
+import {Link} from "react-router-dom"
 
 
-const Recipe = props => {
+export default function Recipe(props) {
 
     const {data, loaded, error} = useData("/recipe/" + props.selectedRecipeId)
 
@@ -100,7 +100,5 @@ const Recipe = props => {
 
             </div>}
         </>
-    );
+    )
 }
-
-export default Recipe;

@@ -1,8 +1,8 @@
-import {Alert, CircularProgress} from "@mui/material";
-import React from "react";
+import {Alert, CircularProgress} from "@mui/material"
+import React from "react"
 
 
-const Loader = props => {
+export default function Loader(props) {
 
     return (
         <div style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}>
@@ -12,5 +12,3 @@ const Loader = props => {
         </div>
     )
 }
-
-export default Loader;

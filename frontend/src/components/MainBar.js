@@ -1,16 +1,17 @@
-import React from "react";
-import {AppBar, IconButton, Toolbar} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
-import {useNavigate} from "react-router";
-import {Box} from "@mui/material";
+import React from "react"
+import {AppBar, IconButton, Toolbar} from "@material-ui/core"
+import Typography from "@material-ui/core/Typography"
+import MenuIcon from "@mui/icons-material/Menu"
+import {useNavigate} from "react-router"
+import {Box} from "@mui/material"
 
-const MainBar = props => {
-    const navigate = useNavigate();
+export default function MainBar(props) {
+    const navigate = useNavigate()
 
     const handleMenuClick = () => {
         navigate("/menu")
-    };
+    }
+
     return (
         <AppBar position="static">
             <Toolbar variant="dense">
@@ -32,9 +33,7 @@ const MainBar = props => {
                 </IconButton>
             </Toolbar>
         </AppBar>
-    );
+    )
 }
-
-export default MainBar;
 
 

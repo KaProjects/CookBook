@@ -1,50 +1,50 @@
-import {Collapse, List, ListItem, ListItemText} from "@material-ui/core";
-import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import React, {useState} from "react";
-import {useNavigate} from "react-router";
-import Loader from "../components/Loader";
-import {useData} from "../fetch";
+import {Collapse, List, ListItem, ListItemText} from "@material-ui/core"
+import {ExpandLess, ExpandMore} from "@material-ui/icons"
+import React, {useState} from "react"
+import {useNavigate} from "react-router"
+import Loader from "../components/Loader"
+import {useData} from "../fetch"
 
 
-const RecipeMenu = props => {
-    const navigate = useNavigate();
+export default function RecipeMenu(props) {
+    const navigate = useNavigate()
 
-    const {data, loaded, error} = useData("/list/" + props.user + "/menu");
+    const {data, loaded, error} = useData("/list/" + props.user + "/menu")
 
-    const [categoriesShown, setCategoriesShown] = useState(false);
+    const [categoriesShown, setCategoriesShown] = useState(false)
     const handleCategoriesClick = () => () => {
-        setCategoriesShown(!categoriesShown);
-    };
+        setCategoriesShown(!categoriesShown)
+    }
 
-    const [ingredientsShown, setIngredientShown] = useState(false);
+    const [ingredientsShown, setIngredientShown] = useState(false)
     const handleIngredientsClick = () => () => {
-        setIngredientShown(!ingredientsShown);
-    };
+        setIngredientShown(!ingredientsShown)
+    }
 
     const handleShowAllRecipes = () => () => {
-        props.showAllRecipes();
-        redirectToRecipes();
+        props.showAllRecipes()
+        redirectToRecipes()
     }
 
     const handleShowIngredientRecipes = (ingredient) => () => {
-        props.showIngredientRecipes(ingredient);
-        redirectToRecipes();
+        props.showIngredientRecipes(ingredient)
+        redirectToRecipes()
     }
 
     const handleShowCategoryRecipes = (category) => () => {
-        props.showCategoryRecipes(category);
-        redirectToRecipes();
+        props.showCategoryRecipes(category)
+        redirectToRecipes()
     }
 
     const redirectToRecipes = () => {
-        setIngredientShown(false);
-        setCategoriesShown(false);
-        navigate('/');
-    };
+        setIngredientShown(false)
+        setCategoriesShown(false)
+        navigate('/')
+    }
 
     const handleCreateRecipe = () => () => {
-        props.setSelectedRecipe(null);
-        navigate('/create');
+        props.setSelectedRecipe(null)
+        navigate('/create')
     }
 
     const list = {paddingRight: "8px", display: "block"}
@@ -130,4 +130,3 @@ const RecipeMenu = props => {
         </>
     )
 }
-export default RecipeMenu;
