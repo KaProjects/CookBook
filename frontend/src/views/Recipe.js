@@ -81,11 +81,12 @@ const Recipe = props => {
                     {data.steps.map((step) =>
                         <ListItem component="div" key={step.number}>
                             <ListItemIcon>
+                                {step.number}
                                 {!step.optional && <AutoFixHighIcon/>}
                                 {step.optional && <NotListedLocationIcon/>}
                             </ListItemIcon>
                             <Typography key={step.number}>
-                                {step.number}. {step.text}
+                                {step.text}
                             </Typography>
                         </ListItem>
                     )}
