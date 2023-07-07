@@ -8,7 +8,11 @@ const filter = createFilterOptions()
 
 export default function AutoCompleteInput({value, onInputChange, options, style, name}) {
 
-    const autocompleteOption = {width: "600px", margin: "0px 0px 1px 0px", boxShadow: "0 0 1px 0", backgroundColor: "rgb(255,255,255)"}
+    const optionStyle = {width: "600px", margin: "0px 0px 1px 0px", boxShadow: "0 0 1px 0", backgroundColor: "rgb(255,255,255)"}
+
+    function isValid(){
+        return value != null && value !== ""
+    }
 
     return (
         <Autocomplete
@@ -54,9 +58,9 @@ export default function AutoCompleteInput({value, onInputChange, options, style,
                 // Regular option
                 return option.title
             }}
-            renderOption={(props, option) => <Typography {...props} style={autocompleteOption}>{option.title === undefined ? option : option.title}</Typography>}
+            renderOption={(props, option) => <Typography {...props} style={optionStyle}>{option.title === undefined ? option : option.title}</Typography>}
             freeSolo
-            renderInput={(params) => <TextField {...params} component="div" label={name}/>}
+            renderInput={(params) => <TextField {...params} component="div" label={name} error={!isValid()}/>}
             style={style}
         />
     )
