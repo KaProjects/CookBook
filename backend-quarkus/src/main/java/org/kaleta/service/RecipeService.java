@@ -29,4 +29,8 @@ public class RecipeService {
     public String createRecipe(Recipe recipe) {
         return recipeDao.create(recipe);
     }
+
+    public void updateRecipe(Recipe recipe) {
+        recipeDao.update(recipe);
+    }
 }
