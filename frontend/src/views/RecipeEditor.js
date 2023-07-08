@@ -20,8 +20,8 @@ export default function RecipeEditor(props) {
     const [ingredients, setIngredients] = useState([])
 
     const fetchRecipe = async () => {
-        axios.get("http://" + properties.host + ":" + properties.port + "/recipe/" + props.selectedRecipeId).then(
-            (response) => {
+        axios.get("http://" + properties.host + ":" + properties.port + "/recipe/" + props.selectedRecipeId)
+            .then((response) => {
                 const recipe = response.data
 
                 setRecipe(recipe)
@@ -36,21 +36,23 @@ export default function RecipeEditor(props) {
 
                 setError(null)
                 setLoaded(true)
-            }).catch((error) => {
-            console.error(error)
-            setError(error)
-        })
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(error)
+            })
     }
 
     const fetchAutocompleteOptions = async () => {
-        axios.get("http://" + properties.host + ":" + properties.port + "/list/" + props.user + "/menu").then(
-            (response) => {
+        axios.get("http://" + properties.host + ":" + properties.port + "/list/" + props.user + "/menu")
+            .then((response) => {
                 setCategories(response.data.categories)
                 setIngredients(response.data.ingredients)
-            }).catch((error) => {
-            console.error(error)
-            setError(error)
-        })
+            })
+            .catch((error) => {
+                console.error(error)
+                setError(error)
+            })
     }
 
     useEffect(() => {
@@ -102,6 +104,24 @@ export default function RecipeEditor(props) {
 
     function validateRecipeName() {
         return recipe.name != null && recipe.name !== ""
+    }
+
+    const postRecipe = async () => {
+        console.log(recipe)
+        setLoaded(false)
+        if (recipe.id == null) {
+            recipe.cook = props.user
+            axios.post("http://" + properties.host + ":" + properties.port + "/recipe", recipe)
+                .then((response) => {
+                    redirectNewRecipe(response.data)
+                })
+                .catch((reason) => {
+                    alert(reason)
+                    setLoaded(true)
+                })
+        } else {
+            //    TODO post edit
+        }
     }
 
     function redirectNewRecipe(id) {
@@ -356,7 +376,6 @@ export default function RecipeEditor(props) {
                         :
                         <>
                             <img src={recipeImage}
-                                 // style={{maxWidth: "400px", maxHeight: "200px", margin: "0 0 0 0", position: "absolute", left: "50%", transform: "translate(-50%, 0)"}}
                                 style={{display: "block", marginLeft: "auto", marginRight: "auto", maxWidth: "400px", maxHeight: "200px"}}
                             />
                             <IconButton
@@ -374,37 +393,13 @@ export default function RecipeEditor(props) {
                         </>
                     }
 
-
-
-
-
-
-
-                    {/*TODO refactor design*/}
-                    {/*<div style={{width: "90%", margin: "10px 0 0 30px"}}/>*/}
-                    {/*<Button variant="contained"*/}
-                    {/*        disabled={!recipeValid}*/}
-                    {/*        onClick={async () => {*/}
-                    {/*            setLoaded(false)*/}
-                    {/*            console.log(recipe)*/}
-                    {/*            await axios.post("http://" + props.host + ":" + props.port + "/recipe/", recipe)*/}
-                    {/*                .then((response) => {*/}
-                    {/*                    console.log(response.data)*/}
-                    {/*                    redirectNewRecipe(response.data)*/}
-                    {/*                })*/}
-                    {/*                .catch((reason) => {*/}
-                    {/*                    alert(reason)*/}
-                    {/*                    setLoaded(true)*/}
-                    {/*                })*/}
-
-                    {/*        }}*/}
-                    {/*>*/}
-                    {/*    {recipe.id == null ? "Create Recipe" : "Save Recipe"}*/}
-                    {/*</Button>*/}
-
-
-
-
+                    <Button variant="contained"
+                        disabled={!recipeValid}
+                        onClick={() => postRecipe()}
+                        style={{display: "block", margin: "10px auto 0 auto", backgroundColor: "rgb(1,121,1)", color: "white"}}
+                    >
+                        {recipe.id == null ? "Create Recipe" : "Save Recipe"}
+                    </Button>
 
                 </div>
             }
