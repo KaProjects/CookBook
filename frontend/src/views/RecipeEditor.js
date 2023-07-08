@@ -120,7 +120,14 @@ export default function RecipeEditor(props) {
                     setLoaded(true)
                 })
         } else {
-            //    TODO post edit
+            axios.put("http://" + properties.host + ":" + properties.port + "/recipe", recipe)
+                .then(() => {
+                    redirectNewRecipe(recipe.id)
+                })
+                .catch((reason) => {
+                    alert(reason)
+                    setLoaded(true)
+                })
         }
     }
 
@@ -396,7 +403,9 @@ export default function RecipeEditor(props) {
                     <Button variant="contained"
                         disabled={!recipeValid}
                         onClick={() => postRecipe()}
-                        style={{display: "block", margin: "10px auto 0 auto", backgroundColor: "rgb(1,121,1)", color: "white"}}
+                        style={recipeValid
+                            ? {display: "block", margin: "10px auto 0 auto", backgroundColor: "rgb(1,121,1)", color: "white"}
+                            : {display: "block", margin: "10px auto 0 auto", backgroundColor: "grey", color: "white"}}
                     >
                         {recipe.id == null ? "Create Recipe" : "Save Recipe"}
                     </Button>
