@@ -36,7 +36,7 @@ public class Recipe extends AbstractEntity {
     @Setter(AccessLevel.NONE)
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    public static Recipe from(RecipeCreateDto dto){
+    public static Recipe from(RecipeCreateDto dto) {
         Recipe recipe = new Recipe();
         recipe.setName(dto.getName());
         recipe.setCook(dto.getCook());

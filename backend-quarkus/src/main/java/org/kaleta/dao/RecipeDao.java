@@ -29,4 +29,10 @@ public class RecipeDao {
         em.persist(recipe);
         return recipe.getId();
     }
+
+    @Transactional
+    public void update(Recipe recipe) {
+        em.remove(em.find(Recipe.class, recipe.getId()));
+        em.merge(recipe);
+    }
 }

@@ -6,7 +6,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.kaleta.dto.RecipeCreateDto;
 import org.kaleta.dto.RecipeDto;
+import org.kaleta.entity.Ingredient;
 import org.kaleta.entity.Recipe;
+import org.kaleta.entity.Step;
 import org.kaleta.service.RecipeService;
 
 import java.util.List;
@@ -46,6 +48,45 @@ public class RecipeResource {
                     .status(201)
                     .type(MediaType.TEXT_PLAIN)
                     .entity(newId).build();
+        } catch (Exception exception) {
+            throw ErrorResponse.badRequest(exception.getMessage());
+        }
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateRecipe(RecipeDto dto){
+        Recipe recipe = service.getRecipe(dto.getId());
+        if (recipe == null){
+            throw ErrorResponse.notFound("Recipe with id='" + dto.getId() + "' not found!");
+        }
+
+        recipe.setName(dto.getName());
+        recipe.setCategory(dto.getCategory());
+        recipe.setImage(dto.getImage());
+
+        recipe.getIngredients().clear();
+        for (RecipeDto.IngredientDto ingredientDto : dto.getIngredients()){
+            Ingredient ingredient = new Ingredient();
+            ingredient.setIRecipe(recipe);
+            ingredient.setName(ingredientDto.getName());
+            ingredient.setQuantity(ingredientDto.getQuantity());
+            ingredient.setOptional(ingredientDto.isOptional());
+            recipe.getIngredients().add(ingredient);
+        }
+
+        recipe.getSteps().clear();
+        for (RecipeDto.StepDto stepDto : dto.getSteps()){
+            Step step = new Step();
+            step.setSRecipe(recipe);
+            step.setNumber(stepDto.getNumber());
+            step.setText(stepDto.getText());
+            step.setOptional(stepDto.isOptional());
+            recipe.getSteps().add(step);
+        }
+
+        try {
+            service.updateRecipe(recipe);
         } catch (Exception exception) {
             throw ErrorResponse.badRequest(exception.getMessage());
         }
