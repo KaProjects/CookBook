@@ -31,7 +31,6 @@ export default function RecipeEditor(props) {
                 setRecipeSteps(recipe.steps)
                 if (recipe.image != null) {
                     setRecipeImage(recipe.image)
-                    setRecipeImageSelected(true)
                 }
                 setRecipeValid(true)
 
@@ -75,22 +74,17 @@ export default function RecipeEditor(props) {
     const [recipeCategory, setRecipeCategory] = useState("")
     const [recipeIngredients, setRecipeIngredients] = useState([])
     const [recipeSteps, setRecipeSteps] = useState([])
-
-
     const [recipeImage, setRecipeImage] = useState(null)
-    const [recipeImageSelected, setRecipeImageSelected] = useState(false)
-    const selectFile = (event) => {
-        // Assuming only image
-        var file = event.target.files[0]
-        var reader = new FileReader()
-        var url = reader.readAsDataURL(file)
+
+    const selectImageFile = (event) => {
+        const file = event.target.files[0]
+        const reader = new FileReader()
+        const url = reader.readAsDataURL(file)
 
         reader.onloadend = function (e) {
-            recipe.image = reader.result
             setRecipeImage(reader.result)
+            recipe.image = reader.result
         }
-
-        setRecipeImageSelected(true)
     }
 
     const [recipeValid, setRecipeValid] = useState(false)
@@ -350,54 +344,63 @@ export default function RecipeEditor(props) {
                     }
 
                     <Divider style={{width: "90%", marginLeft: "30px"}}/>
-
-
-
-
-                    {/*TODO refactor design*/}
-                    {!recipeImageSelected ?
-                        <input type="file" name="file" onChange={selectFile}/>
+                    {recipeImage == null ?
+                        <>
+                            <input
+                                type="file" name="file" accept="image/*"
+                                onChange={selectImageFile}
+                                style={{margin: "10px 0 0 30px", position: "absolute", left: "50%", transform: "translate(-50%, 0)"}}
+                            />
+                            <Divider style={{width: "90%", margin: "40px 0 0 30px"}}/>
+                        </>
                         :
-                        <div>
-                            <img src={recipe.image}/>
+                        <>
+                            <img src={recipeImage}
+                                 // style={{maxWidth: "400px", maxHeight: "200px", margin: "0 0 0 0", position: "absolute", left: "50%", transform: "translate(-50%, 0)"}}
+                                style={{display: "block", marginLeft: "auto", marginRight: "auto", maxWidth: "400px", maxHeight: "200px"}}
+                            />
                             <IconButton
                                 color="inherit"
                                 aria-label="menu"
                                 onClick={() => {
-                                    recipe.image = null
                                     setRecipeImage(null)
-                                    setRecipeImageSelected(false)
+                                    recipe.image = null
                                 }}
+                                style={{float: "right", marginRight: "20px", marginBottom: "-50px", bottom: "50px"}}
                             >
                                 <DeleteIcon/>
                             </IconButton>
-                        </div>
+                            <Divider style={{width: "90%", margin: "0 0 0 30px"}}/>
+                        </>
                     }
 
-                    <div/>
+
+
+
 
 
 
                     {/*TODO refactor design*/}
-                    <Button variant="contained"
-                            disabled={!recipeValid}
-                            onClick={async () => {
-                                setLoaded(false)
-                                console.log(recipe)
-                                await axios.post("http://" + props.host + ":" + props.port + "/recipe/", recipe)
-                                    .then((response) => {
-                                        console.log(response.data)
-                                        redirectNewRecipe(response.data)
-                                    })
-                                    .catch((reason) => {
-                                        alert(reason)
-                                        setLoaded(true)
-                                    })
+                    {/*<div style={{width: "90%", margin: "10px 0 0 30px"}}/>*/}
+                    {/*<Button variant="contained"*/}
+                    {/*        disabled={!recipeValid}*/}
+                    {/*        onClick={async () => {*/}
+                    {/*            setLoaded(false)*/}
+                    {/*            console.log(recipe)*/}
+                    {/*            await axios.post("http://" + props.host + ":" + props.port + "/recipe/", recipe)*/}
+                    {/*                .then((response) => {*/}
+                    {/*                    console.log(response.data)*/}
+                    {/*                    redirectNewRecipe(response.data)*/}
+                    {/*                })*/}
+                    {/*                .catch((reason) => {*/}
+                    {/*                    alert(reason)*/}
+                    {/*                    setLoaded(true)*/}
+                    {/*                })*/}
 
-                            }}
-                    >
-                        {recipe.id == null ? "Create Recipe" : "Save Recipe"}
-                    </Button>
+                    {/*        }}*/}
+                    {/*>*/}
+                    {/*    {recipe.id == null ? "Create Recipe" : "Save Recipe"}*/}
+                    {/*</Button>*/}
 
 
 
