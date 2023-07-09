@@ -1,16 +1,13 @@
-import React from "react"
+import React, {useState} from "react"
 import {AppBar, IconButton, Toolbar} from "@material-ui/core"
 import Typography from "@material-ui/core/Typography"
 import MenuIcon from "@mui/icons-material/Menu"
-import {useNavigate} from "react-router"
-import {Box} from "@mui/material"
+import {Box, SwipeableDrawer} from "@mui/material"
+import RecipeMenu from "../views/RecipeMenu";
 
 export default function MainBar(props) {
-    const navigate = useNavigate()
 
-    const handleMenuClick = () => {
-        navigate("/menu")
-    }
+    const [openDrawer, setOpenDrawer] = useState(false)
 
     return (
         <AppBar position="static">
@@ -29,11 +26,19 @@ export default function MainBar(props) {
                     edge="start"
                     color="inherit"
                     aria-label="menu"
-                    onClick={handleMenuClick}
+                    onClick={() => setOpenDrawer(true)}
                 >
                     <MenuIcon/>
                 </IconButton>
             </Toolbar>
+            <SwipeableDrawer
+                anchor="right"
+                open={openDrawer}
+                onClose={() => setOpenDrawer(false)}
+                PaperProps={{style: {minWidth: '250px', backgroundColor: "rgb(221,255,208)"}}}
+            >
+                <RecipeMenu props={props} closeDrawer={() => setOpenDrawer(false)}/>
+            </SwipeableDrawer>
         </AppBar>
     )
 }
