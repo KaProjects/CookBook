@@ -3,7 +3,6 @@ import MainBar from "./components/MainBar"
 import {BrowserRouter, Route, Routes} from "react-router-dom"
 import Recipe from "./views/Recipe"
 import RecipeList from "./views/RecipeList"
-import RecipeMenu from "./views/RecipeMenu"
 import Login from "./views/Login"
 import RecipeEditor from "./views/RecipeEditor"
 import LoginShortcut from "./views/LoginShortcut";
@@ -82,7 +81,6 @@ class App extends Component {
                 <Routes>
                     <Route exact path="/login/:user" element={<LoginShortcut setUser={this.setUser}/>}/>
                     <Route exact path="/" element={<RecipeList {...this.state}/>}/>
-                    <Route exact path="/menu" element={<RecipeMenu {...this.state}/>}/>
                     <Route exact path="/recipe" element={<Recipe {...this.state}/>}/>
                     <Route exact path="/create" element={<RecipeEditor {...this.state}/> }/>
                     <Route exact path="/edit" element={<RecipeEditor {...this.state}/> }/>

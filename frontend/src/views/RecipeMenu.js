@@ -6,7 +6,7 @@ import Loader from "../components/Loader"
 import {useData} from "../fetch"
 
 
-export default function RecipeMenu(props) {
+export default function RecipeMenu({props, closeDrawer}) {
     const navigate = useNavigate()
 
     const {data, loaded, error} = useData("/list/" + props.user + "/menu")
@@ -39,27 +39,26 @@ export default function RecipeMenu(props) {
     const redirectToRecipes = () => {
         setIngredientShown(false)
         setCategoriesShown(false)
+        closeDrawer()
         navigate('/')
     }
 
     const handleCreateRecipe = () => () => {
         props.setSelectedRecipe(null)
+        closeDrawer()
         navigate('/create')
     }
 
     const list = {paddingRight: "8px", display: "block"}
     const item = {margin: "0px 2px 4px 4px", width: "100%", boxShadow: "0 0 8px 0", backgroundColor: "rgb(113,201,76)"}
     const nestedList = {
-        paddingRight: "8px",
         display: "block",
-        margin: "-4px -4px 4px 4px",
-        boxShadow: "0 0 2px 0",
-        backgroundColor: "rgb(176,227,155)"
+        margin: "-10px 0 -5px 0",
     }
     const nestedItem = {
-        margin: "0px 2px 4px 4px",
+        margin: "0 0 2px 4px",
         width: "100%",
-        boxShadow: "0 0 8px 0",
+        boxShadow: "0 0 4px 0",
         backgroundColor: "rgb(162,225,136)"
     }
 
