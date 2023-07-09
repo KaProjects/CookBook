@@ -404,8 +404,8 @@ export default function RecipeEditor(props) {
                         disabled={!recipeValid}
                         onClick={() => postRecipe()}
                         style={recipeValid
-                            ? {display: "block", margin: "10px auto 0 auto", backgroundColor: "rgb(1,121,1)", color: "white"}
-                            : {display: "block", margin: "10px auto 0 auto", backgroundColor: "grey", color: "white"}}
+                            ? {display: "block", margin: "10px auto 50px auto", backgroundColor: "rgb(1,121,1)", color: "white"}
+                            : {display: "block", margin: "10px auto 50px auto", backgroundColor: "grey", color: "white"}}
                     >
                         {recipe.id == null ? "Create Recipe" : "Save Recipe"}
                     </Button>
