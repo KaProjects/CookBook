@@ -6,10 +6,10 @@ import Loader from "../components/Loader"
 import {useData} from "../fetch"
 
 
-export default function RecipeMenu({props, closeDrawer}) {
+export default function RecipeMenu({props, closeDrawer, flag}) {
     const navigate = useNavigate()
 
-    const {data, loaded, error} = useData("/list/" + props.user + "/menu", props.selectedRecipeId)
+    const {data, loaded, error} = useData("/list/" + props.user + "/menu", flag)
 
     const [categoriesShown, setCategoriesShown] = useState(false)
     const handleCategoriesClick = () => () => {
