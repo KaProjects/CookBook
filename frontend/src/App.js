@@ -6,6 +6,7 @@ import RecipeList from "./views/RecipeList"
 import RecipeMenu from "./views/RecipeMenu"
 import Login from "./views/Login"
 import RecipeEditor from "./views/RecipeEditor"
+import LoginShortcut from "./views/LoginShortcut";
 
 class App extends Component {
     constructor(props) {
@@ -65,13 +66,21 @@ class App extends Component {
 
     render() {
         if (!this.getUser()) {
-            return <Login setUser={this.setUser}/>
+            return (
+                <BrowserRouter>
+                <Login setUser={this.setUser}/>
+                    <Routes>
+                        <Route exact path="/login/:user" element={<LoginShortcut setUser={this.setUser}/>}/>
+                    </Routes>
+                </BrowserRouter>
+            )
         }
 
         return (
             <BrowserRouter>
                 <MainBar {...this.state} />
                 <Routes>
+                    <Route exact path="/login/:user" element={<LoginShortcut setUser={this.setUser}/>}/>
                     <Route exact path="/" element={<RecipeList {...this.state}/>}/>
                     <Route exact path="/menu" element={<RecipeMenu {...this.state}/>}/>
                     <Route exact path="/recipe" element={<Recipe {...this.state}/>}/>
