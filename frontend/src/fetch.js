@@ -2,7 +2,7 @@ import {useEffect, useState} from "react"
 import axios from "axios"
 import {properties} from "./properties"
 
-export const useData = (path) => {
+export const useData = (path, deps = null) => {
 
     const [data, setData] = useState(null)
     const [loaded, setLoaded] = useState(false)
@@ -22,7 +22,7 @@ export const useData = (path) => {
         }
 
         dataFetch()
-    }, [path])
+    }, [path, deps])
 
     return {data, loaded, error}
 }

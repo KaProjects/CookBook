@@ -9,7 +9,7 @@ import {useData} from "../fetch"
 export default function RecipeMenu({props, closeDrawer}) {
     const navigate = useNavigate()
 
-    const {data, loaded, error} = useData("/list/" + props.user + "/menu")
+    const {data, loaded, error} = useData("/list/" + props.user + "/menu", props.selectedRecipeId)
 
     const [categoriesShown, setCategoriesShown] = useState(false)
     const handleCategoriesClick = () => () => {
@@ -44,6 +44,8 @@ export default function RecipeMenu({props, closeDrawer}) {
     }
 
     const handleCreateRecipe = () => () => {
+        setIngredientShown(false)
+        setCategoriesShown(false)
         props.setSelectedRecipe(null)
         closeDrawer()
         navigate('/create')
@@ -51,16 +53,8 @@ export default function RecipeMenu({props, closeDrawer}) {
 
     const list = {paddingRight: "8px", display: "block"}
     const item = {margin: "0px 2px 4px 4px", width: "100%", boxShadow: "0 0 8px 0", backgroundColor: "rgb(113,201,76)"}
-    const nestedList = {
-        display: "block",
-        margin: "-10px 0 -5px 0",
-    }
-    const nestedItem = {
-        margin: "0 0 2px 4px",
-        width: "100%",
-        boxShadow: "0 0 4px 0",
-        backgroundColor: "rgb(162,225,136)"
-    }
+    const nestedList = {display: "block", margin: "-10px 0 -5px 0"}
+    const nestedItem = {margin: "0 0 2px 4px", width: "100%", boxShadow: "0 0 4px 0", backgroundColor: "rgb(162,225,136)"}
 
     return (
         <>

@@ -22,6 +22,7 @@ class App extends Component {
         }
         this.setUser = this.setUser.bind(this)
         this.getUser = this.getUser.bind(this)
+        this.PageNotFound = this.PageNotFound.bind(this)
     }
 
     showAllRecipes() {
@@ -63,13 +64,22 @@ class App extends Component {
         }
     }
 
+    PageNotFound() {
+        return (
+            <div style={{position: "absolute", top: "25%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                <h2>404 Page not found</h2>
+            </div>
+        );
+    }
+
     render() {
         if (!this.getUser()) {
             return (
                 <BrowserRouter>
-                <Login setUser={this.setUser}/>
                     <Routes>
+                        <Route exact path="/" element={<Login setUser={this.setUser}/>}/>
                         <Route exact path="/login/:user" element={<LoginShortcut setUser={this.setUser}/>}/>
+                        <Route path="*" element={this.PageNotFound()} />
                     </Routes>
                 </BrowserRouter>
             )
@@ -84,6 +94,7 @@ class App extends Component {
                     <Route exact path="/recipe" element={<Recipe {...this.state}/>}/>
                     <Route exact path="/create" element={<RecipeEditor {...this.state}/> }/>
                     <Route exact path="/edit" element={<RecipeEditor {...this.state}/> }/>
+                    <Route path="*" element={this.PageNotFound()} />
                 </Routes>
             </BrowserRouter>
         )
