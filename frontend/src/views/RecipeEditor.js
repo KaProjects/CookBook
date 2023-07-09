@@ -81,9 +81,9 @@ export default function RecipeEditor(props) {
     const selectImageFile = (event) => {
         const file = event.target.files[0]
         const reader = new FileReader()
-        const url = reader.readAsDataURL(file)
+        reader.readAsDataURL(file)
 
-        reader.onloadend = function (e) {
+        reader.onloadend = function () {
             setRecipeImage(reader.result)
             recipe.image = reader.result
         }
@@ -107,7 +107,6 @@ export default function RecipeEditor(props) {
     }
 
     const postRecipe = async () => {
-        console.log(recipe)
         setLoaded(false)
         if (recipe.id == null) {
             recipe.cook = props.user
@@ -383,6 +382,7 @@ export default function RecipeEditor(props) {
                         :
                         <>
                             <img src={recipeImage}
+                                 alt="recipe"
                                 style={{display: "block", marginLeft: "auto", marginRight: "auto", maxWidth: "400px", maxHeight: "200px"}}
                             />
                             <IconButton
