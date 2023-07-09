@@ -37,7 +37,7 @@ export default function MainBar(props) {
                 onClose={() => setOpenDrawer(false)}
                 PaperProps={{style: {minWidth: '250px', backgroundColor: "rgb(221,255,208)"}}}
             >
-                <RecipeMenu props={props} closeDrawer={() => setOpenDrawer(false)}/>
+                <RecipeMenu props={props} closeDrawer={() => setOpenDrawer(false)} flag={openDrawer}/>
             </SwipeableDrawer>
         </AppBar>
     )
