@@ -79,15 +79,17 @@ export default function RecipeMenu({props, closeDrawer}) {
                     </ListItem>
                     <Collapse in={categoriesShown} timeout="auto" unmountOnExit>
                         <List style={nestedList}>
-                            {data.categories.map((category, index) =>
-                                <ListItem button
-                                          key={index}
-                                          onClick={handleShowCategoryRecipes(category)}
-                                          style={nestedItem}
-                                >
-                                    <ListItemText primary={category}/>
-                                </ListItem>
-                            )}
+                            {data.categories.slice()
+                                .sort((a,b) => a.localeCompare(b))
+                                .map((category, index) =>
+                                    <ListItem button
+                                              key={index}
+                                              onClick={handleShowCategoryRecipes(category)}
+                                              style={nestedItem}
+                                    >
+                                        <ListItemText primary={category}/>
+                                    </ListItem>
+                                )}
                         </List>
                     </Collapse>
 
@@ -100,15 +102,17 @@ export default function RecipeMenu({props, closeDrawer}) {
                     </ListItem>
                     <Collapse in={ingredientsShown} timeout="auto" unmountOnExit>
                         <List style={nestedList}>
-                            {data.ingredients.map((ingredient, index) =>
-                                <ListItem button
-                                          key={index}
-                                          onClick={handleShowIngredientRecipes(ingredient)}
-                                          style={nestedItem}
-                                >
-                                    <ListItemText primary={ingredient}/>
-                                </ListItem>
-                            )}
+                            {data.ingredients.slice()
+                                .sort((a,b) => a.localeCompare(b))
+                                .map((ingredient, index) =>
+                                    <ListItem button
+                                              key={index}
+                                              onClick={handleShowIngredientRecipes(ingredient)}
+                                              style={nestedItem}
+                                    >
+                                        <ListItemText primary={ingredient}/>
+                                    </ListItem>
+                                )}
                         </List>
                     </Collapse>
 
