@@ -24,7 +24,7 @@ export default function Recipe(props) {
                 <Loader error={error}/>
             }
             {loaded &&
-                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto", backgroundColor: "lightblue"}}>
+                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
 
                     <Stack direction="row" spacing={2}>
                         <Typography variant="h3" component="h3"
@@ -75,28 +75,29 @@ export default function Recipe(props) {
                         )}
                     </List>
 
-                    <Divider variant="fullWidth" component="div" style={{color: "grey"}}>Steps</Divider>
+                    <Divider variant="fullWidth" component="div"
+                             style={{color: "grey", marginLeft: "15px", width: "95%"}}>
+                        Steps
+                    </Divider>
 
                     <List>
                         {data.steps.map((step, index) =>
                             <ListItem component="div" key={index}>
-                                <ListItemIcon style={{marginTop: "0", marginBottom: "auto"}}>
+                                <ListItemIcon style={{margin: "0 0 auto 5px"}}>
                                     {step.number}
                                     {!step.optional && <AutoFixHighIcon/>}
                                     {step.optional && <NotListedLocationIcon/>}
                                 </ListItemIcon>
-                                <Typography>
+                                <Typography style={{marginLeft: "-5px"}}>
                                     {step.text}
                                 </Typography>
                             </ListItem>
                         )}
                     </List>
 
-                    <Divider variant="fullWidth" component="div"/>
+                    <Divider variant="fullWidth" component="div" style={{marginLeft: "15px", width: "95%"}}/>
 
-                    <img src={data.image}
-                         style={{width: "100%"}}
-                    />
+                    <img src={data.image} style={{width: "100%"}}/>
 
                 </div>
             }

@@ -20,6 +20,8 @@ export default function MainBar(props) {
                     component="div"
                 >
                     {props.user}'s CookBook
+                    {props.categoryFilter != null ? " - " + props.categoryFilter : ""}
+                    {props.ingredientFilter != null ? " - " + props.ingredientFilter : ""}
                 </Typography>
                 <Box sx={{flexGrow: 1}}/>
                 <IconButton

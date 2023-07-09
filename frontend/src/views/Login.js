@@ -1,10 +1,10 @@
 import PropTypes from "prop-types"
 import {useData} from "../fetch"
-import Loader from "./Loader"
+import Loader from "../components/Loader"
 import React from "react"
 import FaceIcon from '@mui/icons-material/Face'
 import {Fab} from "@mui/material"
-import {Face4} from "@mui/icons-material";
+import {Face4} from "@mui/icons-material"
 
 
 export default function Login({setUser}) {
