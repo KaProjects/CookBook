@@ -11,7 +11,7 @@ CREATE TABLE Step (
         number TINYINT NOT NULL,
         optional BOOLEAN,
         recipeId VARCHAR(36) NOT NULL,
-        CONSTRAINT `fk_StepRecipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
+        CONSTRAINT `fk_stepRecipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
 );
 CREATE TABLE Ingredient (
         id VARCHAR(36) NOT NULL PRIMARY KEY,
@@ -19,5 +19,5 @@ CREATE TABLE Ingredient (
         quantity VARCHAR(30) NOT NULL,
         optional BOOLEAN,
         recipeId VARCHAR(36) NOT NULL,
-        CONSTRAINT `fk_recipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
+        CONSTRAINT `fk_ingredientRecipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
 );
