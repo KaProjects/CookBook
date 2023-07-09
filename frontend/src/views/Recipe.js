@@ -97,7 +97,7 @@ export default function Recipe(props) {
 
                     <Divider variant="fullWidth" component="div" style={{marginLeft: "15px", width: "95%"}}/>
 
-                    <img src={data.image} style={{width: "100%"}} alt="recipe"/>
+                    {data.image != null && <img src={data.image} style={{width: "100%"}} alt="recipe"/>}
 
                 </div>
             }
