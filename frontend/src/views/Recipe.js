@@ -81,7 +81,7 @@ export default function Recipe(props) {
                     </Divider>
 
                     <List>
-                        {data.steps.map((step, index) =>
+                        {data.steps.sort((a,b) => a.number - b.number).map((step, index) =>
                             <ListItem component="div" key={index}>
                                 <ListItemIcon style={{margin: "0 0 auto 5px"}}>
                                     {step.number}
@@ -97,7 +97,7 @@ export default function Recipe(props) {
 
                     <Divider variant="fullWidth" component="div" style={{marginLeft: "15px", width: "95%"}}/>
 
-                    <img src={data.image} style={{width: "100%"}}/>
+                    <img src={data.image} style={{width: "100%"}} alt="recipe"/>
 
                 </div>
             }

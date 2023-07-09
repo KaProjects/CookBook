@@ -28,7 +28,7 @@ export default function RecipeEditor(props) {
                 setRecipeName(recipe.name)
                 setRecipeCategory(recipe.category)
                 setRecipeIngredients(recipe.ingredients)
-                setRecipeSteps(recipe.steps)
+                setRecipeSteps(recipe.steps.sort((a,b) => a.number - b.number))
                 if (recipe.image != null) {
                     setRecipeImage(recipe.image)
                 }
