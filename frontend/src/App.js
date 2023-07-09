@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
-import './App.css';
-import MainBar from "./components/MainBar";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Recipe from "./views/Recipe";
-import RecipeList from "./views/RecipeList";
-import RecipeMenu from "./views/RecipeMenu";
-import Login from "./components/Login";
-import RecipeEditor from "./views/RecipeEditor";
+import React, {Component} from 'react'
+import MainBar from "./components/MainBar"
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import Recipe from "./views/Recipe"
+import RecipeList from "./views/RecipeList"
+import RecipeMenu from "./views/RecipeMenu"
+import Login from "./views/Login"
+import RecipeEditor from "./views/RecipeEditor"
 
 class App extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             user: null,
             categoryFilter: null,
@@ -20,9 +19,9 @@ class App extends Component {
             showAllRecipes: this.showAllRecipes.bind(this),
             showIngredientRecipes: this.showIngredientRecipes.bind(this),
             showCategoryRecipes: this.showCategoryRecipes.bind(this),
-        };
-        this.setUser = this.setUser.bind(this);
-        this.getUser = this.getUser.bind(this);
+        }
+        this.setUser = this.setUser.bind(this)
+        this.getUser = this.getUser.bind(this)
     }
 
     showAllRecipes() {
@@ -41,14 +40,14 @@ class App extends Component {
     }
 
     setSelectedRecipe(recipeId) {
-        this.setState({selectedRecipeId: recipeId});
+        this.setState({selectedRecipeId: recipeId})
     }
 
     setUser(user){
         if (user == null){
             sessionStorage.removeItem('user')
         } else {
-            sessionStorage.setItem('user', user);
+            sessionStorage.setItem('user', user)
         }
         this.setState({user: user})
     }
@@ -60,7 +59,7 @@ class App extends Component {
             if (sessionStorage.getItem('user') != null){
                 this.setState({user: sessionStorage.getItem('user')})
             }
-            return sessionStorage.getItem('user');
+            return sessionStorage.getItem('user')
         }
     }
 
@@ -80,8 +79,8 @@ class App extends Component {
                     <Route exact path="/edit" element={<RecipeEditor {...this.state}/> }/>
                 </Routes>
             </BrowserRouter>
-        );
+        )
     }
 }
 
-export default App;
+export default App

@@ -152,7 +152,7 @@ export default function RecipeEditor(props) {
                             recipe.name = event.target.value
                             setRecipeValid(validateRecipe)
                         }}
-                        style={{margin: "15px 0 0 30px", width: "90%"}}
+                        style={{margin: "15px 0 0 18px", width: "93%"}}
                         error={!validateRecipeName()}
                     />
 
@@ -164,16 +164,16 @@ export default function RecipeEditor(props) {
                             setRecipeValid(validateRecipe)
                         }}
                         options={categories}
-                        style={{margin: "15px 0 0 30px", width: "90%"}}
+                        style={{margin: "15px 0 0 25px", width: "91%"}}
                         name="Category"
                     />
 
-                    <Typography style={{margin: "20px 0 0 30px", fontWeight: "bold"}}>Ingredients:</Typography>
-                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+                    <Typography style={{margin: "20px 0 0 25px", fontWeight: "bold"}}>Ingredients:</Typography>
+                    <Divider style={{width: "91%", marginLeft: "25px", backgroundColor: "darkgrey"}}/>
                     {recipeIngredients.length > 0 &&
                         <List dense style={{width: "100%"}}>
                             {recipeIngredients.map((ingredient, index) => (
-                                <ListItem component="div" key={index} style={{marginLeft: "20px", width: "95%"}}>
+                                <ListItem component="div" key={index} style={{marginLeft: "15px", width: "95%"}}>
 
                                     <AutoCompleteInput
                                         value={ingredient.name}
@@ -276,12 +276,12 @@ export default function RecipeEditor(props) {
                         </IconButton>
                     }
 
-                    <Typography style={{margin: "10px 0 0 30px", fontWeight: "bold"}}>Steps:</Typography>
-                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+                    <Typography style={{margin: "10px 0 0 25px", fontWeight: "bold"}}>Steps:</Typography>
+                    <Divider style={{width: "91%", marginLeft: "25px", backgroundColor: "darkgrey"}}/>
                     {recipeSteps.length > 0 &&
                         <List dense style={{width: "100%"}}>
                             {recipeSteps.map((step, index) => (
-                                <ListItem component="div" key={index} style={{marginLeft: "20px", width: "95%"}}>
+                                <ListItem component="div" key={index} style={{marginLeft: "15px", width: "95%"}}>
 
                                     <TextField
                                         component="h2"
@@ -370,7 +370,7 @@ export default function RecipeEditor(props) {
                         </IconButton>
                     }
 
-                    <Divider style={{width: "90%", marginLeft: "30px"}}/>
+                    <Divider style={{width: "91%", marginLeft: "25px", backgroundColor: "darkgrey"}}/>
                     {recipeImage == null ?
                         <>
                             <input
@@ -378,7 +378,7 @@ export default function RecipeEditor(props) {
                                 onChange={selectImageFile}
                                 style={{margin: "10px 0 0 30px", position: "absolute", left: "50%", transform: "translate(-50%, 0)"}}
                             />
-                            <Divider style={{width: "90%", margin: "40px 0 0 30px"}}/>
+                            <Divider style={{width: "91%", margin: "40px 0 0 25px", backgroundColor: "darkgrey"}}/>
                         </>
                         :
                         <>
@@ -396,7 +396,7 @@ export default function RecipeEditor(props) {
                             >
                                 <DeleteIcon/>
                             </IconButton>
-                            <Divider style={{width: "90%", margin: "0 0 0 30px"}}/>
+                            <Divider style={{width: "91%", margin: "0 0 0 25px", backgroundColor: "darkgrey"}}/>
                         </>
                     }
 
