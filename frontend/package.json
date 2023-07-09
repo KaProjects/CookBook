@@ -1,6 +1,6 @@
 {
-  "name": "cookbookweb",
-  "version": "1.1",
+  "name": "cookbook",
+  "version": "2.0.0",
   "private": true,
   "homepage": "./",
   "dependencies": {

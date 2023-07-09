@@ -1,7 +1,0 @@
-.gitattributes !filter !diff
-
-frontend/src/properties.js filter=git-crypt diff=git-crypt
-
-backend/src/main/resources/application.properties filter=git-crypt diff=git-crypt
-
-cmdhelper.md filter=git-crypt diff=git-crypt
