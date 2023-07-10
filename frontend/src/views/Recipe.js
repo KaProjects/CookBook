@@ -3,7 +3,7 @@ import DiamondIcon from '@mui/icons-material/Diamond'
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import EditIcon from "@mui/icons-material/Edit"
-import {Divider, IconButton, List, ListItem, ListItemIcon, Stack, Typography} from "@mui/material"
+import {Divider, IconButton, List, ListItem, ListItemIcon, Typography} from "@mui/material"
 import {useData} from "../fetch"
 import Loader from "../components/Loader"
 import {Link} from "react-router-dom"
@@ -23,31 +23,25 @@ export default function Recipe(props) {
                 <Loader error={error}/>
             }
             {loaded &&
-                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
+                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto", backgroundColor: "lightblue"}}>
 
-                    <Stack direction="row" spacing={2}>
-                        {/*<Typography variant={(window.innerWidth < 600) ? "h4": "h3"}*/}
-                        {/*            component={(window.innerWidth < 600) ? "h4": "h3"}*/}
-                        {/*            style={{margin: "5px 0 10px 15px"}}*/}
-                        {/*>*/}
-                        <Typography variant="h4"
-                                    component="h4"
-                                    style={{margin: "5px 0 10px 15px"}}
-                        >
-                            {data.name}
-                        </Typography>
-                        <Link to="/edit" underline="none" color="inherit">
-                            <IconButton
-                                edge="end"
-                                color="inherit"
-                                aria-label="menu"
-                            >
-                                <EditIcon/>
-                            </IconButton>
-                        </Link>
-                    </Stack>
 
-                    <Divider variant="fullWidth" component="div" style={{margin: "5px 0 10px 15px", width: "95%"}}/>
+
+                    <Link to="/edit" underline="none" style={{float: "right", marginLeft: "auto", marginRight: "10px"}}>
+                        <IconButton aria-label="menu">
+                            <EditIcon/>
+                        </IconButton>
+                    </Link>
+
+                    <Typography variant="h4"
+                                component="h4"
+
+                                style={{margin: "5px auto 10px auto", textAlign:"center"}}
+                    >
+                        {data.name}
+                    </Typography>
+
+                    <Divider variant="fullWidth" component="div" style={{margin: "5px 15px 10px 15px"}}/>
 
                     <Typography variant="h5" component="h5"
                                 style={{marginLeft: "20px"}}
@@ -56,7 +50,7 @@ export default function Recipe(props) {
                     </Typography>
 
                     <Divider variant="fullWidth" component="div"
-                             style={{color: "grey", marginLeft: "15px", width: "95%"}}>
+                             style={{color: "grey", margin: "0 15px 0 15px"}}>
                         Ingredients
                     </Divider>
 
@@ -80,7 +74,7 @@ export default function Recipe(props) {
                     </List>
 
                     <Divider variant="fullWidth" component="div"
-                             style={{color: "grey", marginLeft: "15px", width: "95%"}}>
+                             style={{color: "grey", margin: "0 15px 0 15px"}}>
                         Steps
                     </Divider>
 
@@ -99,7 +93,7 @@ export default function Recipe(props) {
                         )}
                     </List>
 
-                    <Divider variant="fullWidth" component="div" style={{marginLeft: "15px", width: "95%"}}/>
+                    <Divider variant="fullWidth" component="div" style={{margin: "0 15px 0 15px"}}/>
 
                     {data.image != null && <img src={data.image} style={{width: "100%"}} alt="recipe"/>}
 
