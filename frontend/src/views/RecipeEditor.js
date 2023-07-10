@@ -284,6 +284,7 @@ export default function RecipeEditor(props) {
 
                                     <TextField
                                         component="h2"
+                                        variant="standard"
                                         multiline
                                         maxRows={3}
                                         value={step.text}
