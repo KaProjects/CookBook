@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {useNavigate} from "react-router"
 import axios from "axios"
-import {Button, Divider, IconButton, List, ListItem, TextField, Tooltip, Typography} from "@material-ui/core"
 import AddCircleIcon from '@mui/icons-material/AddCircle'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {properties} from "../properties"
 import Loader from "../components/Loader"
 import AutoCompleteInput from "../components/AutoCompleteInput"
-import {CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from "@material-ui/icons"
+import {Button, Divider, IconButton, List, ListItem, TextField, Tooltip, Typography} from "@mui/material";
+import {CheckBoxOutlineBlankOutlined, CheckBoxOutlined} from "@mui/icons-material";
 
 
 export default function RecipeEditor(props) {

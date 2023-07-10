@@ -1,10 +1,9 @@
 import React from 'react'
-import {IconButton, List, ListItem, ListItemIcon, Typography} from "@material-ui/core"
 import DiamondIcon from '@mui/icons-material/Diamond'
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
 import EditIcon from "@mui/icons-material/Edit"
-import {Divider, Stack} from "@mui/material"
+import {Divider, IconButton, List, ListItem, ListItemIcon, Stack, Typography} from "@mui/material"
 import {useData} from "../fetch"
 import Loader from "../components/Loader"
 import {Link} from "react-router-dom"
@@ -27,8 +26,13 @@ export default function Recipe(props) {
                 <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
 
                     <Stack direction="row" spacing={2}>
-                        <Typography variant="h3" component="h3"
-                                    style={{marginLeft: "15px", marginBottom: "10px"}}
+                        {/*<Typography variant={(window.innerWidth < 600) ? "h4": "h3"}*/}
+                        {/*            component={(window.innerWidth < 600) ? "h4": "h3"}*/}
+                        {/*            style={{margin: "5px 0 10px 15px"}}*/}
+                        {/*>*/}
+                        <Typography variant="h4"
+                                    component="h4"
+                                    style={{margin: "5px 0 10px 15px"}}
                         >
                             {data.name}
                         </Typography>

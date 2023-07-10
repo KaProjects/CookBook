@@ -1,6 +1,5 @@
 import React from 'react'
-import {Autocomplete} from "@mui/material"
-import {TextField, Typography} from "@material-ui/core"
+import {Autocomplete, TextField, Typography} from "@mui/material"
 import { createFilterOptions } from '@mui/material/Autocomplete'
 import PropTypes from "prop-types"
 
