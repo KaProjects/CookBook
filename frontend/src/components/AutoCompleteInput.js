@@ -59,7 +59,7 @@ export default function AutoCompleteInput({value, onInputChange, options, style,
             }}
             renderOption={(props, option) => <Typography {...props} style={optionStyle}>{option.title === undefined ? option : option.title}</Typography>}
             freeSolo
-            renderInput={(params) => <TextField {...params} component="div" label={name} error={!isValid()}/>}
+            renderInput={(params) => <TextField {...params} component="div" label={name} error={!isValid()} variant="standard"/>}
             style={style}
         />
     )
