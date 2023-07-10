@@ -1,9 +1,9 @@
-import {Collapse, List, ListItem, ListItemText} from "@material-ui/core"
-import {ExpandLess, ExpandMore} from "@material-ui/icons"
 import React, {useState} from "react"
 import {useNavigate} from "react-router"
 import Loader from "../components/Loader"
 import {useData} from "../fetch"
+import {Collapse, List, ListItem, ListItemText} from "@mui/material";
+import {ExpandLess, ExpandMore} from "@mui/icons-material";
 
 
 export default function RecipeMenu({props, closeDrawer, flag}) {

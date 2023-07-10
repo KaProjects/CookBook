@@ -1,8 +1,6 @@
 import React, {useState} from "react"
-import {AppBar, IconButton, Toolbar} from "@material-ui/core"
-import Typography from "@material-ui/core/Typography"
 import MenuIcon from "@mui/icons-material/Menu"
-import {Box, SwipeableDrawer} from "@mui/material"
+import {AppBar, Box, IconButton, SwipeableDrawer, Toolbar, Typography} from "@mui/material"
 import RecipeMenu from "../views/RecipeMenu";
 
 export default function MainBar(props) {
