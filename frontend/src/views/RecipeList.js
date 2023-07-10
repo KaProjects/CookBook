@@ -18,7 +18,7 @@ export default function RecipeList(props) {
         + (props.ingredientFilter !== null ? "?ingredient=" + props.ingredientFilter : ""))
 
     const list = {paddingRight: "8px", display: "block"}
-    const item = {margin: "0px 2px 4px 4px", width: "100%", boxShadow: "0 0 8px 0", backgroundColor: "rgb(253,141,141)"}
+    const item = {margin: "0px 2px 4px 4px", width: "100%", boxShadow: "0 0 8px 0", backgroundColor: props.userConfig ? props.userConfig.recipeItemColor : "rgb(131,186,229)"}
 
     return (
         <>

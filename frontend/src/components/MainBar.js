@@ -10,6 +10,17 @@ export default function MainBar(props) {
     return (
         <AppBar position="static">
             <Toolbar variant="dense">
+                {props.userConfig && props.userConfig.menuAnchor === "left" &&
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => setOpenDrawer(true)}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                }
                 <Typography
                     variant="h6"
                     component="div"
@@ -19,18 +30,20 @@ export default function MainBar(props) {
                     {props.ingredientFilter != null ? " - " + props.ingredientFilter : ""}
                 </Typography>
                 <Box sx={{flexGrow: 1}}/>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    onClick={() => setOpenDrawer(true)}
-                >
-                    <MenuIcon/>
-                </IconButton>
+                {(!props.userConfig || props.userConfig.menuAnchor !== "left") &&
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        onClick={() => setOpenDrawer(true)}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                }
             </Toolbar>
             <SwipeableDrawer
-                anchor="right"
+                anchor={props.userConfig ? props.userConfig.menuAnchor : "right"}
                 open={openDrawer}
                 onClose={() => setOpenDrawer(false)}
                 PaperProps={{style: {minWidth: '250px', backgroundColor: "rgb(221,255,208)"}}}

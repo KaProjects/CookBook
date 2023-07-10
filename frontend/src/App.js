@@ -6,23 +6,32 @@ import RecipeList from "./views/RecipeList"
 import Login from "./views/Login"
 import RecipeEditor from "./views/RecipeEditor"
 import LoginShortcut from "./views/LoginShortcut";
+import axios from "axios";
+import {properties} from "./properties";
 
 class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            user: null,
+            user: sessionStorage.getItem('user'),
+            userConfig: null,
             categoryFilter: null,
             ingredientFilter: null,
-            selectedRecipeId: null,
+            selectedRecipeId: sessionStorage.getItem('recipe'),
             setSelectedRecipe: this.setSelectedRecipe.bind(this),
             showAllRecipes: this.showAllRecipes.bind(this),
             showIngredientRecipes: this.showIngredientRecipes.bind(this),
             showCategoryRecipes: this.showCategoryRecipes.bind(this),
         }
+
         this.setUser = this.setUser.bind(this)
-        this.getUser = this.getUser.bind(this)
         this.PageNotFound = this.PageNotFound.bind(this)
+        this.fetchUserConfig = this.fetchUserConfig.bind(this)
+
+        // to avoid 2 concurrent fetches when using login shortcut
+        if (!window.location.href.includes("/login/")){
+            this.fetchUserConfig(this.state.user)
+        }
     }
 
     showAllRecipes() {
@@ -41,7 +50,28 @@ class App extends Component {
     }
 
     setSelectedRecipe(recipeId) {
+        if (recipeId == null){
+            sessionStorage.removeItem('recipe')
+        } else {
+            sessionStorage.setItem('recipe', recipeId)
+        }
         this.setState({selectedRecipeId: recipeId})
+    }
+
+    fetchUserConfig(user) {
+        if (user) {
+            axios.get("http://" + properties.host + ":" + properties.port + "/user/" + user + "/config")
+                .then((response) => {
+                    this.setState({userConfig: response.data})
+                })
+                .catch((error) => {
+                    console.log(error)
+                    this.setState({userConfig: null})
+                })
+        } else {
+            this.setState({userConfig: null})
+
+        }
     }
 
     setUser(user){
@@ -51,17 +81,7 @@ class App extends Component {
             sessionStorage.setItem('user', user)
         }
         this.setState({user: user})
-    }
-
-    getUser() {
-        if (this.state.user != null) {
-            return this.state.user
-        } else {
-            if (sessionStorage.getItem('user') != null){
-                this.setState({user: sessionStorage.getItem('user')})
-            }
-            return sessionStorage.getItem('user')
-        }
+        this.fetchUserConfig(user)
     }
 
     PageNotFound() {
@@ -73,7 +93,7 @@ class App extends Component {
     }
 
     render() {
-        if (!this.getUser()) {
+        if (!this.state.user) {
             return (
                 <BrowserRouter>
                     <Routes>

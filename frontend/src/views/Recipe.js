@@ -23,9 +23,7 @@ export default function Recipe(props) {
                 <Loader error={error}/>
             }
             {loaded &&
-                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto", backgroundColor: "lightblue"}}>
-
-
+                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
 
                     <Link to="/edit" underline="none" style={{float: "right", marginLeft: "auto", marginRight: "10px"}}>
                         <IconButton aria-label="menu">
@@ -66,9 +64,11 @@ export default function Recipe(props) {
                                 <Typography style={{marginLeft: "-10px"}}>
                                     {ingredient.name}
                                 </Typography>
-                                <Typography style={{marginLeft: "10px"}}>
-                                    ({ingredient.quantity})
-                                </Typography>
+                                {ingredient.quantity &&
+                                    <Typography style={{marginLeft: "10px"}}>
+                                        ({ingredient.quantity})
+                                    </Typography>
+                                }
                             </ListItem>
                         )}
                     </List>
@@ -79,7 +79,7 @@ export default function Recipe(props) {
                     </Divider>
 
                     <List>
-                        {data.steps.sort((a,b) => a.number - b.number).map((step, index) =>
+                        {data.steps.sort((a, b) => a.number - b.number).map((step, index) =>
                             <ListItem component="div" key={index}>
                                 <ListItemIcon style={{margin: "0 0 auto 5px"}}>
                                     {step.number}

@@ -92,18 +92,15 @@ export default function RecipeEditor(props) {
     const [recipeValid, setRecipeValid] = useState(false)
 
     function validateRecipe() {
-        if (!validateRecipeName() || recipe.category == null || recipe.category === "") return false
+        let ingredientsValid = true
         for (const ingredient of recipe.ingredients) {
-            if (ingredient.name == null || ingredient.name === "" || ingredient.quantity == null || ingredient.quantity === "") return false
+            ingredientsValid = ingredientsValid && ingredient.name && ingredient.quantity != null
         }
+        let stepsValid = true
         for (const step of recipe.steps) {
-            if (step.text == null || step.text === "") return false
+            stepsValid = stepsValid && step.text
         }
-        return true
-    }
-
-    function validateRecipeName() {
-        return recipe.name != null && recipe.name !== ""
+        return recipe.name && recipe.category && ingredientsValid && stepsValid
     }
 
     const postRecipe = async () => {
@@ -152,7 +149,7 @@ export default function RecipeEditor(props) {
                             setRecipeValid(validateRecipe)
                         }}
                         style={{margin: "15px 0 0 18px", width: "93%"}}
-                        error={!validateRecipeName()}
+                        error={!recipe.name}
                     />
 
                     <AutoCompleteInput
@@ -203,7 +200,7 @@ export default function RecipeEditor(props) {
                                             setRecipeValid(validateRecipe)
                                         }}
                                         style={{marginLeft: "10px", width: "90px"}}
-                                        error={ingredient.quantity == null || ingredient.quantity === ""}
+                                        error={ingredient.quantity == null}
                                     />
                                     <IconButton
                                         color="inherit"
@@ -286,7 +283,7 @@ export default function RecipeEditor(props) {
                                         component="h2"
                                         variant="standard"
                                         multiline
-                                        maxRows={3}
+                                        maxRows={5}
                                         value={step.text}
                                         key={step.number}
                                         fullWidth
