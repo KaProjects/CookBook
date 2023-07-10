@@ -9,10 +9,6 @@ export default function AutoCompleteInput({value, onInputChange, options, style,
 
     const optionStyle = {width: "600px", margin: "0px 0px 1px 0px", boxShadow: "0 0 1px 0", backgroundColor: "rgb(255,255,255)"}
 
-    function isValid(){
-        return value != null && value !== ""
-    }
-
     return (
         <Autocomplete
             value={value}
@@ -59,7 +55,7 @@ export default function AutoCompleteInput({value, onInputChange, options, style,
             }}
             renderOption={(props, option) => <Typography {...props} style={optionStyle}>{option.title === undefined ? option : option.title}</Typography>}
             freeSolo
-            renderInput={(params) => <TextField {...params} component="div" label={name} error={!isValid()} variant="standard"/>}
+            renderInput={(params) => <TextField {...params} component="div" label={name} error={!value} variant="standard"/>}
             style={style}
         />
     )
