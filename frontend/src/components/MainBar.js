@@ -45,6 +45,7 @@ export default function MainBar(props) {
             <SwipeableDrawer
                 anchor={props.userConfig ? props.userConfig.menuAnchor : "right"}
                 open={openDrawer}
+                onOpen={() => {}}
                 onClose={() => setOpenDrawer(false)}
                 PaperProps={{style: {minWidth: '250px', backgroundColor: "rgb(221,255,208)"}}}
             >

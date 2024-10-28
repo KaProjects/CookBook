@@ -29,9 +29,10 @@ public class UserResource {
     public UserConfigDto getUserSpecificConfigs(@PathParam("user") String user) {
         UserConfigDto userConfigDto = service.getUserConfig(user);
         if (userConfigDto == null) {
-            throw ErrorResponse.notFound("Configs for user='" + user + "' not found!");
+            // default
+            return service.getUserConfig(getUsers().get(0));
         } else {
-            return service.getUserConfig(user);
+            return userConfigDto;
         }
     }
 }
