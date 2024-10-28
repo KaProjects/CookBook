@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 import {useData} from "../fetch"
 import Loader from "../components/Loader"
-import React from "react"
+import React, {useEffect} from "react"
 import FaceIcon from '@mui/icons-material/Face'
 import {Fab} from "@mui/material"
 import {Face4} from "@mui/icons-material"
@@ -10,6 +10,10 @@ import {Face4} from "@mui/icons-material"
 export default function Login({setUser}) {
 
     const {data, loaded, error} = useData("/user")
+
+    useEffect(() => {
+        if (data && data.length === 1) setUser(data[0])
+    }, [data, setUser])
 
     const handleSelectUser = (user) => () => {
         setUser(user)
