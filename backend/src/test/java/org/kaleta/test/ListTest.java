@@ -41,10 +41,10 @@ public class ListTest {
     }
 
     @Test
-    public void getCategoriesWithRecipesForCook() {
+    public void getRecipesForCook() {
         String cook = "user";
         given().when()
-                .get("/list/" + cook + "/category")
+                .get("/list/" + cook + "/category/recipe")
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
@@ -68,10 +68,10 @@ public class ListTest {
     }
 
     @Test
-    public void getCategoriesWithRecipesForNonexistentCook(){
+    public void getRecipesForNonexistentCook(){
         String cook = "nonexistent";
         given().when()
-                .get("/list/" + cook + "/category")
+                .get("/list/" + cook + "/category/recipe")
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
@@ -79,41 +79,21 @@ public class ListTest {
     }
 
     @Test
-    public void getRecipesForCook() {
-        String cook = "user";
-        given().when()
-                .get("/list/" + cook + "/recipe")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(3))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
-    }
-
-    @Test
-    public void getRecipesForNonexistentCook(){
-        String cook = "nonexistent";
-        given().when()
-                .get("/list/" + cook + "/recipe")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
-    }
-
-    @Test
     public void getRecipesForCookByCategory() {
         String cook = "user";
         String category = "Polievky";
         given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
+                .get("/list/" + cook + "/category/recipe?category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(2))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is(category))
+                .body("categories[0].recipes.size()", is(2))
+                .body("categories[0].recipes[0].name", is("First Recipe"))
+                .body("categories[0].recipes[0].id", is("1"))
+                .body("categories[0].recipes[1].name", is("Second Recipe"))
+                .body("categories[0].recipes[1].id", is("2"));
     }
 
     @Test
@@ -121,13 +101,15 @@ public class ListTest {
         String cook = "user";
         String category = "Maso";
         given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
+                .get("/list/" + cook + "/category/recipe?category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("Third Recipe"))
-                .body("recipes[0].id", is("3"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is(category))
+                .body("categories[0].recipes.size()", is(1))
+                .body("categories[0].recipes[0].name", is("Third Recipe"))
+                .body("categories[0].recipes[0].id", is("3"));
     }
 
     @Test
@@ -135,11 +117,11 @@ public class ListTest {
         String cook = "user";
         String category = "xxxxxxxxxx";
         given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
+                .get("/list/" + cook + "/category/recipe?category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
+                .body("categories.size()", is(0));
     }
 
     @Test
@@ -147,13 +129,17 @@ public class ListTest {
         String cook = "user";
         String ingredient = "Batatas";
         given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .get("/list/" + cook + "/category/recipe?ingredient=" + ingredient)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(2))
-                .body("recipes[0].name", is("First Recipe"))
-                .body("recipes[0].id", is("1"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is("Polievky"))
+                .body("categories[0].recipes.size()", is(2))
+                .body("categories[0].recipes[0].name", is("First Recipe"))
+                .body("categories[0].recipes[0].id", is("1"))
+                .body("categories[0].recipes[1].name", is("Second Recipe"))
+                .body("categories[0].recipes[1].id", is("2"));
     }
 
     @Test
@@ -161,11 +147,11 @@ public class ListTest {
         String cook = "user";
         String ingredient = "xxxxxxxxx";
         given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .get("/list/" + cook + "/category/recipe?ingredient=" + ingredient)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
+                .body("categories.size()", is(0));
     }
 
     @Test
@@ -174,13 +160,15 @@ public class ListTest {
         String category = "Polievky";
         String ingredient = "Fruitisimo";
         given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
+                .get("/list/" + cook + "/category/recipe?ingredient=" + ingredient + "&category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("Second Recipe"))
-                .body("recipes[0].id", is("2"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is(category))
+                .body("categories[0].recipes.size()", is(1))
+                .body("categories[0].recipes[0].name", is("Second Recipe"))
+                .body("categories[0].recipes[0].id", is("2"));
     }
 
     @Test
@@ -189,11 +177,11 @@ public class ListTest {
         String category = "xxxx";
         String ingredient = "yyyy";
         given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient + "&category=" + category)
+                .get("/list/" + cook + "/category/recipe?ingredient=" + ingredient + "&category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(0));
+                .body("categories.size()", is(0));
     }
 
     @Test
@@ -201,13 +189,15 @@ public class ListTest {
         String cook = "hellboy";
         String category = "Kuracie Maso";
         given().when()
-                .get("/list/" + cook + "/recipe?category=" + category)
+                .get("/list/" + cook + "/category/recipe?category=" + category)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("aaaa"))
-                .body("recipes[0].id", is("5"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is(category))
+                .body("categories[0].recipes.size()", is(1))
+                .body("categories[0].recipes[0].name", is("aaaa"))
+                .body("categories[0].recipes[0].id", is("5"));
     }
 
     @Test
@@ -215,12 +205,14 @@ public class ListTest {
         String cook = "hellboy";
         String ingredient = "Mucho Gusto";
         given().when()
-                .get("/list/" + cook + "/recipe?ingredient=" + ingredient)
+                .get("/list/" + cook + "/category/recipe?ingredient=" + ingredient)
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("recipes.size()", is(1))
-                .body("recipes[0].name", is("aaaa"))
-                .body("recipes[0].id", is("5"));
+                .body("categories.size()", is(1))
+                .body("categories[0].name", is("Kuracie Maso"))
+                .body("categories[0].recipes.size()", is(1))
+                .body("categories[0].recipes[0].name", is("aaaa"))
+                .body("categories[0].recipes[0].id", is("5"));
     }
 }

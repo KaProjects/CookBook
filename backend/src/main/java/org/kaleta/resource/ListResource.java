@@ -30,27 +30,11 @@ public class ListResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{cook}/recipe")
-    public RecipeListDto getRecipeList(@PathParam("cook") String cook,
-                                       @QueryParam("category") String category,
-                                       @QueryParam("ingredient") String ingredient) {
-
-        RecipeListDto dto = new RecipeListDto();
-
-        if (category == null && ingredient == null) {
-            dto.getRecipes().addAll(service.listRecipes(cook));
-        } else {
-            dto.getRecipes().addAll(service.listRecipes(cook, category, ingredient));
-        }
-
-        return dto;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{cook}/category")
-    public RecipeListByCategoryDto getRecipeListByCategory(@PathParam("cook") String cook) {
-        Map<String, List<RecipeListItem>> categoryMap = service.listRecipesByCategory(cook);
+    @Path("/{cook}/category/recipe")
+    public RecipeListByCategoryDto getRecipeListByCategory(@PathParam("cook") String cook,
+                                                           @QueryParam("category") String category,
+                                                           @QueryParam("ingredient") String ingredient) {
+        Map<String, List<RecipeListItem>> categoryMap = service.listRecipesByCategory(cook, category, ingredient);
         return RecipeListByCategoryDto.from(categoryMap);
     }
 }

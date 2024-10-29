@@ -15,7 +15,9 @@ export default function RecipeList(props) {
         navigate('/recipe')
     }
 
-    const {data, loaded, error} = useData("/list/" + props.user + "/category")
+    const {data, loaded, error} = useData("/list/" + props.user + "/category/recipe"
+        + (props.categoryFilter !== null ? "?category=" + props.categoryFilter : "")
+        + (props.ingredientFilter !== null ? "?ingredient=" + props.ingredientFilter : ""))
 
     return (
         <>
