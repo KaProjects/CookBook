@@ -49,7 +49,7 @@ public class RecipeTest {
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("name", is("Second Recipe"))
                 .body("category", is("Polievky"))
-                .body("image", nullValue())
+                .body("image", any(String.class))
                 .body("steps.size()", is(4))
                 .body("steps[0].number", is(1))
                 .body("steps[0].text", is("1 asd s"))

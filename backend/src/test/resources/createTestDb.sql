@@ -26,7 +26,7 @@ CREATE TABLE Ingredient (
 );
 
 INSERT INTO Recipe (id, cook, name, category) VALUES ('1', 'user', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('2', 'user', 'Second Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category, image) VALUES ('2', 'user', 'Second Recipe', 'Polievky', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2Q==');
 INSERT INTO Recipe (id, cook, name, category) VALUES ('3', 'user', 'Third Recipe', 'Maso');
 INSERT INTO Recipe (id, cook, name, category) VALUES ('4', 'user2', 'First Recipe', 'Polievky');
 INSERT INTO Recipe (id, cook, name, category) VALUES ('5', 'hellboy', 'aaaa', 'Kuracie Maso');

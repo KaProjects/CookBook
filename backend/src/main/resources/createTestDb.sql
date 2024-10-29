@@ -31,6 +31,15 @@ INSERT INTO Recipe (id, cook, name, category) VALUES ('3', 'user', 'Third Recipe
 INSERT INTO Recipe (id, cook, name, category) VALUES ('4', 'user2', 'First Recipe', 'Polievky');
 INSERT INTO Recipe (id, cook, name, category) VALUES ('5', 'hellboy', 'aaaa', 'Kuracie Maso');
 INSERT INTO Recipe (id, cook, name, category) VALUES ('6', 'updater', 'to update', 'updatable');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('7', 'user', '7 Recipe (a la moi)', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('8', 'user', 'Cestoviny s lososom a spenatom', 'Cestoviny');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('9', 'user', 'First Recipe', 'Ranajky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('10', 'user', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('11', 'user', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('12', 'user', 'First Recipe', 'Morske plody');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('13', 'user', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('14', 'user', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('15', 'user', 'First Recipe', 'Polievky');
 
 
 INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('1', 'Pomodoro', '4ks', false, '2');
