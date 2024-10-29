@@ -24,18 +24,10 @@ public class ListService {
         return listDao.ingredients(cook);
     }
 
-    public List<RecipeListItem> listRecipes(String cook){
-        return listDao.recipes(cook);
-    }
-
-    public List<RecipeListItem> listRecipes(String cook, String category, String ingredient){
-        return listDao.recipes(cook, category, ingredient);
-    }
-
-    public Map<String, List<RecipeListItem>> listRecipesByCategory(String cook)
+    public Map<String, List<RecipeListItem>> listRecipesByCategory(String cook, String category, String ingredient)
     {
         Map<String, List<RecipeListItem>> map = new HashMap<>();
-        for (RecipeListItem recipe : this.listRecipes(cook))
+        for (RecipeListItem recipe : listDao.recipes(cook, category, ingredient))
         {
             if (!map.containsKey(recipe.getCategory()))
             {

@@ -27,10 +27,20 @@ public class ListDao {
                 .getResultList();
     }
 
-    public List<RecipeListItem> recipes(String cook) {
+    public List<RecipeListItem> recipes(String cook, String category, String ingredient) {
+        if (category == null) category = "%";
+        if (ingredient == null) ingredient = "%";
+
         List<RecipeListItem> items = new ArrayList<>();
-        em.createQuery("SELECT r.id, r.name, r.category, (r.image IS NOT NULL), (count(s.id) > 0) FROM Recipe r LEFT JOIN Step s ON r.id=s.sRecipe.id" + whereCook + " GROUP BY r.id", Object[].class)
+
+        em.createQuery("SELECT DISTINCT r.id, r.name, r.category, (r.image IS NOT NULL), (count(s.id) > 0) FROM Recipe r LEFT JOIN Ingredient i ON r.id=i.iRecipe.id LEFT JOIN Step s ON r.id=s.sRecipe.id"
+                        + whereCook
+                        + " AND r.category LIKE :category"
+                        + ((ingredient.equals("%")) ? " AND (i.name IS NULL OR i.name LIKE :ingredient)" : " AND i.name=:ingredient")
+                        + " GROUP BY r.id", Object[].class)
                 .setParameter("cook", cook)
+                .setParameter("category", category)
+                .setParameter("ingredient", ingredient)
                 .getResultStream()
                 .forEach(object -> {
                     RecipeListItem item = new RecipeListItem(String.valueOf(object[0]), String.valueOf(object[1]));
@@ -39,32 +49,6 @@ public class ListDao {
                     item.setHasSteps(Boolean.valueOf(String.valueOf(object[4])));
                     items.add(item);
                 });
-        return items;
-    }
-
-    public List<RecipeListItem> recipes(String cook, String category, String ingredient) {
-        if (category == null) category = "%";
-
-        List<RecipeListItem> items = new ArrayList<>();
-
-        if (ingredient == null) {
-            em.createQuery("SELECT r.id, r.name FROM Recipe r"
-                            + whereCook
-                            + " AND r.category LIKE :category", Object[].class)
-                    .setParameter("cook", cook)
-                    .setParameter("category", category)
-                    .getResultStream()
-                    .forEach(item -> items.add(new RecipeListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
-        } else {
-            em.createQuery("SELECT DISTINCT r.id, r.name FROM Recipe r INNER JOIN Ingredient i ON r.id=i.iRecipe.id"
-                            + whereCook
-                            + " AND r.category LIKE :category AND i.name=:ingredient", Object[].class)
-                    .setParameter("cook", cook)
-                    .setParameter("category", category)
-                    .setParameter("ingredient", ingredient)
-                    .getResultStream()
-                    .forEach(item -> items.add(new RecipeListItem(String.valueOf(item[0]), String.valueOf(item[1]))));
-        }
 
         return items;
     }

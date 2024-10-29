@@ -2,45 +2,42 @@ import React, {useState} from "react"
 import MenuIcon from "@mui/icons-material/Menu"
 import {AppBar, Box, IconButton, SwipeableDrawer, Toolbar, Typography} from "@mui/material"
 import RecipeMenu from "../views/RecipeMenu";
+import AddIcon from '@mui/icons-material/Add';
+import {useNavigate} from "react-router"
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 export default function MainBar(props) {
-
+    const navigate = useNavigate()
     const [openDrawer, setOpenDrawer] = useState(false)
+
+    const handleCreateRecipe = () => {
+        props.setSelectedRecipe(null)
+        navigate('/create')
+    }
+
+    const handleShowAllRecipes = () => {
+        props.showAllRecipes()
+        navigate('/')
+    }
 
     return (
         <AppBar position="static">
             <Toolbar variant="dense">
-                {props.userConfig && props.userConfig.menuAnchor === "left" &&
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={() => setOpenDrawer(true)}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                }
-                <Typography
-                    variant="h6"
-                    component="div"
-                >
+                <Typography variant="h6" component="div">
                     {props.user}'s CookBook
                     {props.categoryFilter != null ? " - " + props.categoryFilter : ""}
                     {props.ingredientFilter != null ? " - " + props.ingredientFilter : ""}
                 </Typography>
                 <Box sx={{flexGrow: 1}}/>
-                {(!props.userConfig || props.userConfig.menuAnchor !== "left") &&
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        onClick={() => setOpenDrawer(true)}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                }
+                <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleCreateRecipe}>
+                    <AddIcon/>
+                </IconButton>
+                <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={() => setOpenDrawer(true)}>
+                    <FilterListIcon/>
+                </IconButton>
+                <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleShowAllRecipes}>
+                    <MenuIcon/>
+                </IconButton>
             </Toolbar>
             <SwipeableDrawer
                 anchor={props.userConfig ? props.userConfig.menuAnchor : "right"}
