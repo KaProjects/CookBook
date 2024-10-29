@@ -4,8 +4,13 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.kaleta.dto.MenuListDto;
+import org.kaleta.dto.RecipeListByCategoryDto;
 import org.kaleta.dto.RecipeListDto;
+import org.kaleta.entity.RecipeListItem;
 import org.kaleta.service.ListService;
+
+import java.util.List;
+import java.util.Map;
 
 @Path("/list")
 public class ListResource {
@@ -39,5 +44,13 @@ public class ListResource {
         }
 
         return dto;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{cook}/category")
+    public RecipeListByCategoryDto getRecipeListByCategory(@PathParam("cook") String cook) {
+        Map<String, List<RecipeListItem>> categoryMap = service.listRecipesByCategory(cook);
+        return RecipeListByCategoryDto.from(categoryMap);
     }
 }

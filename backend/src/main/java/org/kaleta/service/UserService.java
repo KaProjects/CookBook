@@ -29,6 +29,6 @@ public class UserService {
     }
 
     public UserConfigDto getUserConfig(String user) {
-        return configs.get(user);
+        return configs.get(user) == null ? new UserConfigDto(UserConfigDto.MenuAnchor.right, "rgb(255,229,103)") : configs.get(user);
     }
 }

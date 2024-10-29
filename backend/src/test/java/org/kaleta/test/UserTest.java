@@ -17,23 +17,16 @@ public class UserTest {
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("size()", is(2))
-                .body("", hasItem("Stanley"))
-                .body("", hasItem("Viktorka"));
+                .body("size()", is(3))
+                .body("", hasItem("user"))
+                .body("", hasItem("user2"))
+                .body("", hasItem("user3"));
     }
 
     @Test
     public void getUserConfigs() {
         given().when()
-                .get("/user/Viktorka/config")
-                .then()
-                .statusCode(200)
-                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
-                .body("menuAnchor", is("left"))
-                .body("recipeItemColor", not(nullValue()));
-
-        given().when()
-                .get("/user/Stanley/config")
+                .get("/user/user2/config")
                 .then()
                 .statusCode(200)
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
@@ -47,8 +40,9 @@ public class UserTest {
         given().when()
                 .get("/user/" + nonExistingUser + "/config")
                 .then()
-                .statusCode(404)
-                .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(containsString(nonExistingUser));
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("menuAnchor", is(not(nullValue())))
+                .body("recipeItemColor", is(not(nullValue())));
     }
 }

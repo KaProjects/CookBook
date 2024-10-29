@@ -41,6 +41,44 @@ public class ListTest {
     }
 
     @Test
+    public void getCategoriesWithRecipesForCook() {
+        String cook = "user";
+        given().when()
+                .get("/list/" + cook + "/category")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("categories.size()", is(2))
+                .body("categories[0].name", is("Maso"))
+                .body("categories[0].recipes.size()", is(1))
+                .body("categories[0].recipes[0].name", is("Third Recipe"))
+                .body("categories[0].recipes[0].id", is("3"))
+                .body("categories[0].recipes[0].hasImage", is(false))
+                .body("categories[0].recipes[0].hasSteps", is(false))
+                .body("categories[1].name", is("Polievky"))
+                .body("categories[1].recipes.size()", is(2))
+                .body("categories[1].recipes[0].name", is("First Recipe"))
+                .body("categories[1].recipes[0].id", is("1"))
+                .body("categories[1].recipes[0].hasImage", is(false))
+                .body("categories[1].recipes[0].hasSteps", is(true))
+                .body("categories[1].recipes[1].name", is("Second Recipe"))
+                .body("categories[1].recipes[1].id", is("2"))
+                .body("categories[1].recipes[1].hasImage", is(true))
+                .body("categories[1].recipes[1].hasSteps", is(true));
+    }
+
+    @Test
+    public void getCategoriesWithRecipesForNonexistentCook(){
+        String cook = "nonexistent";
+        given().when()
+                .get("/list/" + cook + "/category")
+                .then()
+                .statusCode(200)
+                .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
+                .body("categories.size()", is(0));
+    }
+
+    @Test
     public void getRecipesForCook() {
         String cook = "user";
         given().when()
