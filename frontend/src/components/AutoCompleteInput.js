@@ -61,7 +61,7 @@ export default function AutoCompleteInput({value, onInputChange, options, style,
     )
 }
 AutoCompleteInput.propTypes = {
-    value: PropTypes.object.isRequired,
+    value: PropTypes.string.isRequired,
     onInputChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
     name: PropTypes.string.isRequired

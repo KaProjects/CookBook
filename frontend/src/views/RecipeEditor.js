@@ -61,16 +61,18 @@ export default function RecipeEditor(props) {
             fetchRecipe()
         } else {
             recipe.name = null
-            setRecipeName(recipe.name)
+            setRecipeName("")
             recipe.category = null
-            setRecipeCategory(recipe.category)
+            setRecipeCategory("")
             recipe.ingredients = []
-            setRecipeIngredients(recipe.ingredients)
+            setRecipeIngredients([])
             recipe.steps = []
-            setRecipeSteps(recipe.steps)
+            setRecipeSteps([])
+            recipe.image = null
+            setRecipeImage(null)
             if (error === null) setLoaded(true)
         }
-    }, [])
+    }, [props.selectedRecipeId])
 
     const [recipeName, setRecipeName] = useState("")
     const [recipeCategory, setRecipeCategory] = useState("")
@@ -155,7 +157,7 @@ export default function RecipeEditor(props) {
                     <AutoCompleteInput
                         value={recipeCategory}
                         onInputChange={(category) => {
-                            setRecipeCategory(category)
+                            setRecipeCategory(category ? category : "")
                             recipe.category = category
                             setRecipeValid(validateRecipe)
                         }}
@@ -175,7 +177,7 @@ export default function RecipeEditor(props) {
                                         value={ingredient.name}
                                         onInputChange={(name) => {
                                             const rIngredients = [...recipeIngredients]
-                                            rIngredients[index].name = name
+                                            rIngredients[index].name = name ? name : ""
                                             setRecipeIngredients(rIngredients)
                                             recipe.ingredients = rIngredients
                                             if (name != null && !ingredients.includes(name)) {
@@ -239,7 +241,7 @@ export default function RecipeEditor(props) {
                                         aria-label="menu"
                                         onClick={() => {
                                             const rIngredients = [...recipeIngredients]
-                                            const ingredientToAdd = {name: null, quantity: "", optional: false}
+                                            const ingredientToAdd = {name: "", quantity: "", optional: false}
                                             rIngredients.splice(index + 1, 0, ingredientToAdd)
                                             setRecipeIngredients(rIngredients)
                                             recipe.ingredients = rIngredients
@@ -260,7 +262,7 @@ export default function RecipeEditor(props) {
                             aria-label="menu"
                             onClick={() => {
                                 const rIngredients = [...recipeIngredients]
-                                const ingredientToAdd = {name: null, quantity: "", optional: false}
+                                const ingredientToAdd = {name: "", quantity: "", optional: false}
                                 rIngredients.push(ingredientToAdd)
                                 setRecipeIngredients(rIngredients)
                                 recipe.ingredients = rIngredients
