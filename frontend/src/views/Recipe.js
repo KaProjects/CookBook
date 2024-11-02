@@ -1,12 +1,10 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import DiamondIcon from '@mui/icons-material/Diamond'
 import NotListedLocationIcon from '@mui/icons-material/NotListedLocation'
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh'
-import EditIcon from "@mui/icons-material/Edit"
-import {Divider, IconButton, List, ListItem, ListItemIcon, Typography} from "@mui/material"
+import {Divider, List, ListItem, ListItemIcon, Typography} from "@mui/material"
 import {useData} from "../fetch"
 import Loader from "../components/Loader"
-import {Link} from "react-router-dom"
 
 
 export default function Recipe(props) {
@@ -17,38 +15,30 @@ export default function Recipe(props) {
         return (i2.optional ? 0 : 1) - (i1.optional ? 0 : 1)
     }
 
+    const pdfRef = useRef();
+
+    useEffect(() => {
+        if (data) props.setPdfProps(pdfRef, data.name)
+    }, [pdfRef, data])
+
     return (
         <>
             {!loaded &&
                 <Loader error={error}/>
             }
             {loaded &&
-                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}}>
-
-                    <Link to="/edit" underline="none" style={{float: "right", marginLeft: "auto", marginRight: "10px"}}>
-                        <IconButton aria-label="menu">
-                            <EditIcon/>
-                        </IconButton>
-                    </Link>
-
-                    <Typography variant="h4"
-                                component="h4"
-
-                                style={{margin: "5px auto 10px auto", textAlign:"center"}}
-                    >
+                <div style={{maxWidth: "600px", marginRight: "auto", marginLeft: "auto"}} ref={pdfRef}>
+                    <Typography variant="h4" component="h4" style={{margin: "5px auto 10px auto", textAlign:"center"}}>
                         {data.name}
                     </Typography>
 
                     <Divider variant="fullWidth" component="div" style={{margin: "5px 15px 10px 15px"}}/>
 
-                    <Typography variant="h5" component="h5"
-                                style={{marginLeft: "20px"}}
-                    >
+                    <Typography variant="h5" component="h5" style={{marginLeft: "20px"}}>
                         {data.category}
                     </Typography>
 
-                    <Divider variant="fullWidth" component="div"
-                             style={{color: "grey", margin: "0 15px 0 15px"}}>
+                    <Divider variant="fullWidth" component="div" style={{color: "grey", margin: "0 15px 0 15px"}}>
                         Ingredients
                     </Divider>
 
@@ -73,8 +63,7 @@ export default function Recipe(props) {
                         )}
                     </List>
 
-                    <Divider variant="fullWidth" component="div"
-                             style={{color: "grey", margin: "0 15px 0 15px"}}>
+                    <Divider variant="fullWidth" component="div" style={{color: "grey", margin: "0 15px 0 15px"}}>
                         Steps
                     </Divider>
 

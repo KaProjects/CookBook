@@ -5,6 +5,9 @@ import RecipeMenu from "../views/RecipeMenu";
 import AddIcon from '@mui/icons-material/Add';
 import {useNavigate} from "react-router"
 import FilterListIcon from '@mui/icons-material/FilterList';
+import EditIcon from "@mui/icons-material/Edit";
+import DownloadIcon from "@mui/icons-material/Download";
+import generatePDF from "react-to-pdf";
 
 export default function MainBar(props) {
     const navigate = useNavigate()
@@ -13,6 +16,10 @@ export default function MainBar(props) {
     const handleCreateRecipe = () => {
         props.setSelectedRecipe(null)
         navigate('/create')
+    }
+
+    const handleEditRecipe = () => {
+        navigate('/edit')
     }
 
     const handleShowAllRecipes = () => {
@@ -29,6 +36,19 @@ export default function MainBar(props) {
                     {props.ingredientFilter != null ? " - " + props.ingredientFilter : ""}
                 </Typography>
                 <Box sx={{flexGrow: 1}}/>
+                {props.selectedRecipeId &&
+                    <IconButton size="large" edge="start" color="inherit" aria-label="menu"
+                                onClick={() => generatePDF(props.pdfProps.ref, {filename: props.pdfProps.name + '.pdf'})}
+                                disabled={window.location.pathname === '/edit'}>
+                        <DownloadIcon/>
+                    </IconButton>
+                }
+                {props.selectedRecipeId &&
+                    <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleEditRecipe}
+                                disabled={window.location.pathname === '/edit'}>
+                        <EditIcon/>
+                    </IconButton>
+                }
                 <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleCreateRecipe}>
                     <AddIcon/>
                 </IconButton>
