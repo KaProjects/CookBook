@@ -48,6 +48,7 @@ public class RecipeService {
     }
 
     private String compress(String image) {
+        if (image == null) return null;
         String imageData = image.split(",")[1];
         String imagePrefix = image.split(",")[0];
 
