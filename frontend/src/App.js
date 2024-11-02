@@ -37,7 +37,7 @@ class App extends Component {
     }
 
     setPdfProps(ref, name) {
-        this.setState({pdfProps: {ref: ref, name: name.replace(" ", "_")}})
+        this.setState({pdfProps: {ref: ref, name: name.replaceAll(" ", "_")}})
     }
 
     showAllRecipes() {
