@@ -27,11 +27,6 @@ public class UserResource {
     @Path("/{user}/config")
     @Produces(MediaType.APPLICATION_JSON)
     public UserConfigDto getUserSpecificConfigs(@PathParam("user") String user) {
-        UserConfigDto userConfigDto = service.getUserConfig(user);
-        if (userConfigDto == null) {
-            throw ErrorResponse.notFound("Configs for user='" + user + "' not found!");
-        } else {
-            return service.getUserConfig(user);
-        }
+        return service.getUserConfig(user);
     }
 }

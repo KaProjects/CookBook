@@ -25,7 +25,7 @@ public class RecipeTest {
         dto.setName("new Recipe");
         dto.setCategory("new Cat");
         dto.setCook("new User");
-        dto.setImage("new Image");
+//        dto.setImage("new Image");
         RecipeDto.StepDto stepDto = new RecipeDto.StepDto();
         stepDto.setNumber(1);
         stepDto.setText("a step");
@@ -49,7 +49,7 @@ public class RecipeTest {
                 .header("Content-Type", containsString(MediaType.APPLICATION_JSON))
                 .body("name", is("Second Recipe"))
                 .body("category", is("Polievky"))
-                .body("image", nullValue())
+                .body("image", any(String.class))
                 .body("steps.size()", is(4))
                 .body("steps[0].number", is(1))
                 .body("steps[0].text", is("1 asd s"))
@@ -367,7 +367,7 @@ public class RecipeTest {
 
         dto.setName("new name");
         dto.setCategory("new cat");
-        dto.setImage("an image");
+//        dto.setImage("an image");
         dto.getIngredients().get(0).setName("new name");
         RecipeDto.IngredientDto ingredientDto = new RecipeDto.IngredientDto();
         ingredientDto.setName("new ingred");

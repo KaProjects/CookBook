@@ -1,9 +1,11 @@
 package org.kaleta.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.kaleta.dto.UserConfigDto;
+import org.kaleta.entity.Users;
 
-import java.util.Arrays;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,17 +13,22 @@ import java.util.Map;
 @ApplicationScoped
 public class UserService {
 
-    private final List<String> users = Arrays.asList("Stanley", "Viktorka");
     private final Map<String, UserConfigDto> configs = new HashMap<>() {{
         put("Stanley", new UserConfigDto(UserConfigDto.MenuAnchor.right, "rgb(255,229,103)"));
-        put("Viktorka", new UserConfigDto(UserConfigDto.MenuAnchor.left, "rgb(255,215,0)"));
     }};
 
     public List<String> getUsers() {
-        return users;
+        try(InputStream inputStream =Thread.currentThread().getContextClassLoader().getResourceAsStream("users.json")){
+            ObjectMapper mapper = new ObjectMapper();
+            Users users = mapper.readValue(inputStream , Users.class);
+            return users.getUsers();
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public UserConfigDto getUserConfig(String user) {
-        return configs.get(user);
+        return configs.get(user) == null ? new UserConfigDto(UserConfigDto.MenuAnchor.right, "rgb(255,229,103)") : configs.get(user);
     }
 }

@@ -22,6 +22,8 @@ class App extends Component {
             showAllRecipes: this.showAllRecipes.bind(this),
             showIngredientRecipes: this.showIngredientRecipes.bind(this),
             showCategoryRecipes: this.showCategoryRecipes.bind(this),
+            setPdfProps: this.setPdfProps.bind(this),
+            pdfProps: {},
         }
 
         this.setUser = this.setUser.bind(this)
@@ -34,17 +36,24 @@ class App extends Component {
         }
     }
 
+    setPdfProps(ref, name) {
+        this.setState({pdfProps: {ref: ref, name: name.replaceAll(" ", "_")}})
+    }
+
     showAllRecipes() {
+        this.setSelectedRecipe(null)
         this.setState({categoryFilter: null})
         this.setState({ingredientFilter: null})
     }
 
     showIngredientRecipes(ingredient) {
+        this.setSelectedRecipe(null)
         this.setState({categoryFilter: null})
         this.setState({ingredientFilter: ingredient})
     }
 
     showCategoryRecipes(category) {
+        this.setSelectedRecipe(null)
         this.setState({categoryFilter: category})
         this.setState({ingredientFilter: null})
     }

@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import {useNavigate} from "react-router"
 import Loader from "../components/Loader"
 import {useData} from "../fetch"
-import {Collapse, List, ListItem, ListItemText} from "@mui/material";
+import {Collapse, List, ListItemButton, ListItemText} from "@mui/material";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 
 
@@ -16,14 +16,9 @@ export default function RecipeMenu({props, closeDrawer, flag}) {
         setCategoriesShown(!categoriesShown)
     }
 
-    const [ingredientsShown, setIngredientShown] = useState(false)
+    const [ingredientsShown, setIngredientShown] = useState(true)
     const handleIngredientsClick = () => () => {
         setIngredientShown(!ingredientsShown)
-    }
-
-    const handleShowAllRecipes = () => () => {
-        props.showAllRecipes()
-        redirectToRecipes()
     }
 
     const handleShowIngredientRecipes = (ingredient) => () => {
@@ -37,18 +32,10 @@ export default function RecipeMenu({props, closeDrawer, flag}) {
     }
 
     const redirectToRecipes = () => {
-        setIngredientShown(false)
+        setIngredientShown(true)
         setCategoriesShown(false)
         closeDrawer()
         navigate('/')
-    }
-
-    const handleCreateRecipe = () => () => {
-        setIngredientShown(false)
-        setCategoriesShown(false)
-        props.setSelectedRecipe(null)
-        closeDrawer()
-        navigate('/create')
     }
 
     const list = {paddingRight: "8px", display: "block"}
@@ -63,65 +50,37 @@ export default function RecipeMenu({props, closeDrawer, flag}) {
             }
             {loaded &&
                 <List style={list}>
-                    <ListItem button
-                              onClick={handleShowAllRecipes()}
-                              style={item}
-                    >
-                        <ListItemText primary="All Recipes"/>
-                    </ListItem>
-
-                    <ListItem button
-                              onClick={handleCategoriesClick()}
-                              style={item}
-                    >
-                        <ListItemText primary="Categories"/>
-                        {categoriesShown ? <ExpandLess/> : <ExpandMore/>}
-                    </ListItem>
-                    <Collapse in={categoriesShown} timeout="auto" unmountOnExit>
-                        <List style={nestedList}>
-                            {data.categories.slice()
-                                .sort((a,b) => a.localeCompare(b))
-                                .map((category, index) =>
-                                    <ListItem button
-                                              key={index}
-                                              onClick={handleShowCategoryRecipes(category)}
-                                              style={nestedItem}
-                                    >
-                                        <ListItemText primary={category}/>
-                                    </ListItem>
-                                )}
-                        </List>
-                    </Collapse>
-
-                    <ListItem button
-                              onClick={handleIngredientsClick()}
-                              style={item}
-                    >
+                    <ListItemButton style={item} onClick={handleIngredientsClick()}>
                         <ListItemText primary="Ingredients"/>
                         {ingredientsShown ? <ExpandLess/> : <ExpandMore/>}
-                    </ListItem>
+                    </ListItemButton>
                     <Collapse in={ingredientsShown} timeout="auto" unmountOnExit>
                         <List style={nestedList}>
                             {data.ingredients.slice()
                                 .sort((a,b) => a.localeCompare(b))
                                 .map((ingredient, index) =>
-                                    <ListItem button
-                                              key={index}
-                                              onClick={handleShowIngredientRecipes(ingredient)}
-                                              style={nestedItem}
-                                    >
+                                    <ListItemButton style={nestedItem} key={index} onClick={handleShowIngredientRecipes(ingredient)}>
                                         <ListItemText primary={ingredient}/>
-                                    </ListItem>
+                                    </ListItemButton>
                                 )}
                         </List>
                     </Collapse>
 
-                    <ListItem button
-                              onClick={handleCreateRecipe()}
-                              style={item}
-                    >
-                        <ListItemText primary="Create Recipe"/>
-                    </ListItem>
+                    <ListItemButton style={item} onClick={handleCategoriesClick()}>
+                        <ListItemText primary="Categories"/>
+                        {categoriesShown ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItemButton>
+                    <Collapse in={categoriesShown} timeout="auto" unmountOnExit>
+                        <List style={nestedList}>
+                            {data.categories.slice()
+                                .sort((a,b) => a.localeCompare(b))
+                                .map((category, index) =>
+                                    <ListItemButton style={nestedItem} key={index} onClick={handleShowCategoryRecipes(category)}>
+                                        <ListItemText primary={category}/>
+                                    </ListItemButton>
+                                )}
+                        </List>
+                    </Collapse>
                 </List>
             }
         </>
