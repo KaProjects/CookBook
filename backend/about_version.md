@@ -5,6 +5,12 @@
      bump pom.xml version
      bump build deploy sh versions 
 
+## 2.1
+Released: 2.11.2024
+
+    improved users config
+    recipe image compression
+
 ## 2.0
 Released: 9.7.2023
 
