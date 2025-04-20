@@ -69,7 +69,7 @@ class App extends Component {
 
     fetchUserConfig(user) {
         if (user) {
-            axios.get("http://" + properties.host + ":" + properties.port + "/user/" + user + "/config")
+            axios.get(properties.backend + "/user/" + user + "/config")
                 .then((response) => {
                     this.setState({userConfig: response.data})
                 })

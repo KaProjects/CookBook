@@ -20,7 +20,7 @@ export default function RecipeEditor(props) {
     const [ingredients, setIngredients] = useState([])
 
     const fetchRecipe = async () => {
-        axios.get("http://" + properties.host + ":" + properties.port + "/recipe/" + props.selectedRecipeId)
+        axios.get(properties.backend + "/recipe/" + props.selectedRecipeId)
             .then((response) => {
                 const recipe = response.data
 
@@ -44,7 +44,7 @@ export default function RecipeEditor(props) {
     }
 
     const fetchAutocompleteOptions = async () => {
-        axios.get("http://" + properties.host + ":" + properties.port + "/list/" + props.user + "/menu")
+        axios.get(properties.backend + "/list/" + props.user + "/menu")
             .then((response) => {
                 setCategories(response.data.categories)
                 setIngredients(response.data.ingredients)
@@ -109,7 +109,7 @@ export default function RecipeEditor(props) {
         setLoaded(false)
         if (recipe.id == null) {
             recipe.cook = props.user
-            axios.post("http://" + properties.host + ":" + properties.port + "/recipe", recipe)
+            axios.post(properties.backend + "/recipe", recipe)
                 .then((response) => {
                     redirectNewRecipe(response.data)
                 })
@@ -118,7 +118,7 @@ export default function RecipeEditor(props) {
                     setLoaded(true)
                 })
         } else {
-            axios.put("http://" + properties.host + ":" + properties.port + "/recipe", recipe)
+            axios.put(properties.backend + "/recipe", recipe)
                 .then(() => {
                     redirectNewRecipe(recipe.id)
                 })

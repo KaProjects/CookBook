@@ -10,7 +10,7 @@ export const useData = (path, deps = null) => {
 
     useEffect(() => {
         const dataFetch = async () => {
-            axios.get("http://" + properties.host + ":" + properties.port + path).then(
+            axios.get(properties.backend + path).then(
                 (response) => {
                     setData(response.data)
                     setError(null)
