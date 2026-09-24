@@ -1,4 +1,4 @@
-package org.kaleta.test;
+package org.kaleta.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.Header;
@@ -10,13 +10,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.kaleta.dto.RecipeCreateDto;
 import org.kaleta.dto.RecipeDto;
+import org.kaleta.framework.Generator;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RecipeTest {
+public class RecipeEndpointsTest {
 
     private final Integer recipesNumber = 6;
 
@@ -501,5 +502,112 @@ public class RecipeTest {
                 .body("image", is(dto.getImage()))
                 .body("steps.size()", is(0))
                 .body("ingredients.size()", is(0));
+    }
+
+    // The tests below create recipes for their own cook, and run last, so the
+    // recipe counts asserted above are not affected.
+
+    @Test
+    @Order(10)
+    public void createRecipeWithImageStoresCompressedJpeg() {
+        RecipeCreateDto dto = Generator.recipeCreateDto("imageCook");
+        dto.setImage(Generator.imageDataUrl("png", 120, 80));
+
+        String id = given().when()
+                .body(dto)
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .post("/recipe")
+                .then()
+                .statusCode(201)
+                .extract().asString();
+
+        RecipeDto created = given().when()
+                .get("/recipe/" + id)
+                .then()
+                .statusCode(200)
+                .body("name", is(dto.getName()))
+                .body("steps.size()", is(2))
+                .body("ingredients.size()", is(2))
+                .extract().as(RecipeDto.class);
+
+        org.hamcrest.MatcherAssert.assertThat(created.getImage(), startsWith("data:image/png;base64,"));
+        org.hamcrest.MatcherAssert.assertThat(Generator.isJpeg(created.getImage()), is(true));
+        org.hamcrest.MatcherAssert.assertThat(Generator.decodeDataUrl(created.getImage()).getWidth(), is(120));
+
+        given().when()
+                .get("/list/imageCook/category/recipe")
+                .then()
+                .statusCode(200)
+                .body("categories[0].recipes[0].hasImage", is(true))
+                .body("categories[0].recipes[0].hasSteps", is(true));
+    }
+
+    @Test
+    @Order(10)
+    public void createRecipeWithMalformedImage() {
+        RecipeCreateDto dto = Generator.recipeCreateDto("imageCook");
+        dto.setImage("not-a-data-url");
+
+        given().when()
+                .body(dto)
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .post("/recipe")
+                .then()
+                .statusCode(400)
+                .header("Content-Type", containsString(MediaType.TEXT_PLAIN));
+    }
+
+    @Test
+    @Order(11)
+    public void updateRecipeAddsAndRemovesImage() {
+        String id = given().when()
+                .body(Generator.recipeCreateDto("imageCook"))
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .post("/recipe")
+                .then()
+                .statusCode(201)
+                .extract().asString();
+        RecipeDto dto = given().when().get("/recipe/" + id).then().statusCode(200)
+                .body("image", nullValue())
+                .extract().as(RecipeDto.class);
+
+        dto.setImage(Generator.imageDataUrl("png", 32, 32));
+        given().when()
+                .body(dto)
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .put("/recipe")
+                .then()
+                .statusCode(204);
+        String stored = given().when().get("/recipe/" + id).then().statusCode(200)
+                .extract().path("image");
+        org.hamcrest.MatcherAssert.assertThat(Generator.isJpeg(stored), is(true));
+
+        dto.setImage(null);
+        given().when()
+                .body(dto)
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .put("/recipe")
+                .then()
+                .statusCode(204);
+        given().when().get("/recipe/" + id).then().statusCode(200)
+                .body("image", nullValue());
+    }
+
+    @Test
+    @Order(11)
+    public void updateNonexistentRecipe() {
+        RecipeDto dto = new RecipeDto();
+        dto.setId("does-not-exist");
+        dto.setName("x");
+        dto.setCategory("y");
+
+        given().when()
+                .body(dto)
+                .header(new Header("Content-Type", MediaType.APPLICATION_JSON))
+                .put("/recipe")
+                .then()
+                .statusCode(404)
+                .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
+                .body(is("Recipe with id='does-not-exist' not found!"));
     }
 }
