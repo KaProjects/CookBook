@@ -175,7 +175,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Recipe.name"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Recipe.name"));
 
         given().when()
                 .get("/recipe")
@@ -198,7 +198,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Recipe.category"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Recipe.category"));
 
         given().when()
                 .get("/recipe")
@@ -221,7 +221,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Recipe.cook"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Recipe.cook"));
 
         given().when()
                 .get("/recipe")
@@ -244,7 +244,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Step.number"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Step.number"));
 
         given().when()
                 .get("/recipe")
@@ -267,7 +267,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Step.text"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Step.text"));
 
         given().when()
                 .get("/recipe")
@@ -290,7 +290,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Ingredient.name"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Ingredient.name"));
 
         given().when()
                 .get("/recipe")
@@ -313,7 +313,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Ingredient.quantity"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Ingredient.quantity"));
 
         given().when()
                 .get("/recipe")
@@ -446,7 +446,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Recipe.name"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Recipe.name"));
     }
 
     @Test
@@ -467,7 +467,7 @@ public class RecipeTest {
                 .then()
                 .statusCode(400)
                 .header("Content-Type", containsString(MediaType.TEXT_PLAIN))
-                .body(is("not-null property references a null or transient value : org.kaleta.entity.Recipe.category"));
+                .body(is("not-null property references a null or transient value for entity org.kaleta.entity.Recipe.category"));
     }
 
     @Test

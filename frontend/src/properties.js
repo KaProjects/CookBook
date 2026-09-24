@@ -1,3 +1,3 @@
 export const properties = {
-    backend: process.env.REACT_APP_BACKEND_URL
+    backend: "/api",
 }

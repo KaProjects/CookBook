@@ -1,2 +1,6 @@
+.idea
+*.iml
+target
+target-dev
 *.zip
 *.rar
