@@ -1,4 +1,4 @@
-package org.kaleta.test;
+package org.kaleta.rest;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.MediaType;
@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
 @QuarkusTest
-public class ListTest {
+public class ListEndpointsTest {
 
     @Test
     public void getMenuForCook(){
