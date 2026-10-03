@@ -1,0 +1,55 @@
+name: Verify
+
+# Runs the same checks as ./verify.sh locally - backend tests, frontend lint and component tests -
+# on every push and pull request, so a change that breaks them is seen before it is deployed.
+#
+# The git-crypt encrypted files stay encrypted here and nothing needs them: the tests read
+# src/test/resources/users.json, which shadows the encrypted production one.
+
+on:
+  push:
+    branches: [devel, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # actions/checkout v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      # actions/setup-java v6.0.1
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+          cache-dependency-path: backend/pom.xml
+
+      # actions/setup-node v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Run the local quality suite
+        run: ./verify.sh
+
+      - name: Keep the backend coverage report
+        if: always()
+        # actions/upload-artifact v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: backend-coverage
+          path: backend/target/jacoco-report/
+          if-no-files-found: ignore
