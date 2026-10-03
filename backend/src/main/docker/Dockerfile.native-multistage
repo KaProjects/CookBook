@@ -1,3 +1,17 @@
+# The image the native binary runs on, built first so native_smoke.sh can run a binary on exactly
+# what production runs, without building it again: docker build --target runtime-base.
+#
+# Recipe images are processed with java.awt, whose native libraries need freetype and fontconfig
+# at runtime. The Quarkus micro image has neither, and the binary failed on the first upload with
+# "Could not initialize class javax.imageio.ImageIO".
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6 AS runtime-base
+
+RUN microdnf install -y freetype fontconfig \
+    && microdnf clean all
+WORKDIR /work/
+RUN chown 1001:root /work \
+    && chmod "g+rwX" /work
+
 FROM quay.io/quarkus/ubi9-quarkus-mandrel-builder-image:jdk-25 AS build
 
 USER root
@@ -16,12 +30,10 @@ COPY --chown=quarkus:quarkus src/main/ src/main/
 RUN ./mvnw -B clean package -Dnative -Dmaven.test.skip=true \
     -Dquarkus.native.march=compatibility
 
-FROM quay.io/quarkus/ubi9-quarkus-micro-image:2.0
+FROM runtime-base
 
-WORKDIR /work/
-RUN chown 1001:root /work \
-    && chmod "g+rwX" /work
-
+# The JDK libraries java.awt needs are built next to the binary and loaded from beside it.
+COPY --from=build --chown=1001:root /code/target/*.so /work/
 COPY --from=build --chown=1001:root /code/target/*-runner /work/application
 
 EXPOSE 8080

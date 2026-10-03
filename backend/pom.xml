@@ -7,6 +7,7 @@
   <version>2.1.0</version>
   <properties>
     <compiler-plugin.version>3.14.1</compiler-plugin.version>
+    <failsafe.useModulePath>false</failsafe.useModulePath>
     <dev.build.directory>${project.basedir}/target-dev</dev.build.directory>
     <lombok.version>1.18.46</lombok.version>
     <maven.compiler.release>25</maven.compiler.release>
@@ -15,8 +16,8 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>3.33.2.1</quarkus.platform.version>
-    <skipITs>true</skipITs>
     <surefire-plugin.version>3.5.4</surefire-plugin.version>
+    <jacoco-plugin.version>0.8.13</jacoco-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -36,13 +37,46 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-mariadb</artifactId>
+    </dependency>
+    <!-- Recipe images are re-encoded with javax.imageio, which a native image only supports
+         through this extension: without it the native binary fails on the first upload. -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-awt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Services tested on their own, the persistence below them replaced by mocks. -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit-mockito</artifactId>
@@ -53,33 +87,17 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-      <scope>provided</scope>
-    </dependency>
+    <!-- Coverage of the code the @QuarkusTest classes run: a plain JaCoCo agent cannot see it,
+         as Quarkus loads the application through a class loader of its own. -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm</artifactId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jdbc-h2</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-mysql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -125,21 +143,35 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <!-- Coverage of the plain unit tests, written to the file quarkus-jacoco adds the @QuarkusTest
+           coverage to, so target/jacoco-report covers the whole suite. -->
       <plugin>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-plugin.version}</version>
         <executions>
           <execution>
+            <id>default-prepare-agent</id>
             <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
+              <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <systemPropertyVariables>
-                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                <maven.home>${maven.home}</maven.home>
-              </systemPropertyVariables>
+              <exclClassLoaders>*QuarkusClassLoader</exclClassLoaders>
+              <destFile>${project.build.directory}/jacoco-quarkus.exec</destFile>
+              <append>true</append>
+            </configuration>
+          </execution>
+          <!-- Written once every test has run. quarkus-jacoco writes its own report when the
+               test application stops, which can be before the plain unit tests have run. -->
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/jacoco-quarkus.exec</dataFile>
+              <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -170,6 +202,27 @@
             <directory>src/dev/resources</directory>
           </resource>
         </resources>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.5.0</version>
+            <executions>
+              <execution>
+                <id>add-dev-source</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>src/dev/java</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
       </build>
     </profile>
     <profile>
@@ -180,7 +233,6 @@
         </property>
       </activation>
       <properties>
-        <skipITs>false</skipITs>
         <quarkus.native.enabled>true</quarkus.native.enabled>
       </properties>
     </profile>

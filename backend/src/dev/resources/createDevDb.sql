@@ -1,63 +1,55 @@
-DROP TABLE IF EXISTS Ingredient;
-DROP TABLE IF EXISTS Step;
-DROP TABLE IF EXISTS Recipe;
-CREATE TABLE Recipe (
-        id VARCHAR(36) NOT NULL PRIMARY KEY,
-        cook TINYTEXT NOT NULL,
-        name TINYTEXT NOT NULL,
-        category TINYTEXT NOT NULL,
-        image LONGBLOB
-);
-CREATE TABLE Step (
-        id VARCHAR(36) NOT NULL PRIMARY KEY,
-        text TEXT NOT NULL,
-        number TINYINT NOT NULL,
-        optional BOOLEAN,
-        recipeId VARCHAR(36) NOT NULL,
-        CONSTRAINT `fk_stepRecipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
-);
-CREATE TABLE Ingredient (
-        id VARCHAR(36) NOT NULL PRIMARY KEY,
-        name TINYTEXT NOT NULL,
-        quantity VARCHAR(30) NOT NULL,
-        optional BOOLEAN,
-        recipeId VARCHAR(36) NOT NULL,
-        CONSTRAINT `fk_ingredientRecipeId` FOREIGN KEY (recipeId) REFERENCES Recipe(id)
-);
+-- Sample recipes for development. The tables themselves come from sql/createTables.sql.
 
-INSERT INTO Recipe (id, cook, name, category) VALUES ('1', 'Stanley', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category, image) VALUES ('2', 'Stanley', 'Second Recipe', 'Polievky', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2Q==');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('3', 'Stanley', 'Third Recipe', 'Maso');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('4', 'user2', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('5', 'hellboy', 'aaaa', 'Kuracie Maso');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('6', 'updater', 'to update', 'updatable');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('7', 'Stanley', '7 Recipe (a la moi)', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('8', 'Stanley', 'Cestoviny s lososom a spenatom', 'Cestoviny');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('9', 'Stanley', 'First Recipe', 'Ranajky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('10', 'Stanley', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('11', 'Stanley', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('12', 'Stanley', 'First Recipe', 'Morske plody');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('13', 'Stanley', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('14', 'Stanley', 'First Recipe', 'Polievky');
-INSERT INTO Recipe (id, cook, name, category) VALUES ('15', 'Stanley', 'First Recipe', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-01', 'Stanley', 'Kapustnica', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-02', 'Stanley', 'Paradajková polievka', 'Polievky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-03', 'Stanley', 'Bryndzové halušky', 'Hlavné jedlá');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-04', 'Stanley', 'Kuracie na paprike', 'Hlavné jedlá');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-05', 'Stanley', 'Cestoviny s lososom a špenátom', 'Cestoviny');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-06', 'Stanley', 'Palacinky', 'Dezerty');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-07', 'Stanley', 'Ovsená kaša', 'Raňajky');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-08', 'Anna', 'Šošovicový šalát', 'Šaláty');
+INSERT INTO Recipe (id, cook, name, category) VALUES ('dev-recipe-09', 'Anna', 'Bábovka', 'Dezerty');
 
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-01', 'Kyslá kapusta', '500 g', false, 'dev-recipe-01');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-02', 'Klobása', '200 g', false, 'dev-recipe-01');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-03', 'Sušené huby', 'hrsť', true, 'dev-recipe-01');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-04', 'Cibuľa', '1 ks', false, 'dev-recipe-01');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-05', 'Paradajky', '800 g', false, 'dev-recipe-02');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-06', 'Cibuľa', '1 ks', false, 'dev-recipe-02');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-07', 'Bazalka', '', true, 'dev-recipe-02');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-08', 'Zemiaky', '1 kg', false, 'dev-recipe-03');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-09', 'Bryndza', '250 g', false, 'dev-recipe-03');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-10', 'Slanina', '150 g', false, 'dev-recipe-03');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-11', 'Kuracie stehná', '4 ks', false, 'dev-recipe-04');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-12', 'Cibuľa', '2 ks', false, 'dev-recipe-04');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-13', 'Sladká paprika', '2 PL', false, 'dev-recipe-04');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-14', 'Kyslá smotana', '200 ml', false, 'dev-recipe-04');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-15', 'Cestoviny', '400 g', false, 'dev-recipe-05');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-16', 'Losos', '300 g', false, 'dev-recipe-05');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-17', 'Špenát', '200 g', false, 'dev-recipe-05');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-18', 'Smotana na varenie', '200 ml', false, 'dev-recipe-05');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-19', 'Múka', '250 g', false, 'dev-recipe-06');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-20', 'Mlieko', '500 ml', false, 'dev-recipe-06');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-21', 'Vajcia', '2 ks', false, 'dev-recipe-06');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-22', 'Džem', '', true, 'dev-recipe-06');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-23', 'Ovsené vločky', '50 g', false, 'dev-recipe-07');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-24', 'Mlieko', '250 ml', false, 'dev-recipe-07');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-25', 'Šošovica', '250 g', false, 'dev-recipe-08');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-26', 'Cibuľa', '1 ks', false, 'dev-recipe-08');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-27', 'Múka', '300 g', false, 'dev-recipe-09');
+INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('dev-ingr-28', 'Vajcia', '4 ks', false, 'dev-recipe-09');
 
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('1', 'Pomodoro', '4ks', false, '2');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('2', 'Batatas', '2ks', false, '2');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('3', 'Fruitisimo', '100ml', true, '2');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('4', 'Kachnicka', '1/2', false, '2');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('5', 'Batatas', '3ks', false, '1');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('6', 'Moloko', '1l', false, '4');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('7', 'Mucho Gusto', '100kg', false, '5');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('8', 'Wateva', '1t', false, '6');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('9', 'Wateva', '1t', false, '8');
-INSERT INTO Ingredient (id, name, quantity, optional, recipeId) VALUES ('10', 'Wateva', '2t', false, '8');
-
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('1', 'asfialsfk asd s', 1, false, '1');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('2', '1 asd s', 1, false, '2');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('3', '2 asd s', 2, false, '2');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('4', '3 asd s', 3, true, '2');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('5', '4 asd s', 4, false, '2');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('6', 'whateva step', 1, false, '6');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('7', 'whateva step', 1, false, '8');
-INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('8', 'whateva step2', 2, false, '8');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-01', 'Na cibuli opečieme nakrájanú klobásu.', 1, false, 'dev-recipe-01');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-02', 'Pridáme kapustu, zalejeme vodou a varíme hodinu.', 2, false, 'dev-recipe-01');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-03', 'Primiešame namočené huby.', 3, true, 'dev-recipe-01');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-04', 'Cibuľu speníme, pridáme paradajky a dusíme 20 minút.', 1, false, 'dev-recipe-02');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-05', 'Rozmixujeme a dochutíme bazalkou.', 2, false, 'dev-recipe-02');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-06', 'Zemiaky nastrúhame a s múkou vypracujeme cesto.', 1, false, 'dev-recipe-03');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-07', 'Halušky hádžeme do vriacej osolenej vody.', 2, false, 'dev-recipe-03');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-08', 'Zmiešame s bryndzou a posypeme opečenou slaninou.', 3, false, 'dev-recipe-03');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-09', 'Mäso opečieme, pridáme cibuľu a papriku.', 1, false, 'dev-recipe-04');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-10', 'Podlejeme vodou a dusíme do mäkka, zjemníme smotanou.', 2, false, 'dev-recipe-04');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-11', 'Uvaríme cestoviny, losos opečieme so špenátom a zalejeme smotanou.', 1, false, 'dev-recipe-05');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-12', 'Vymiešame hladké cesto a necháme odpočinúť.', 1, false, 'dev-recipe-06');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-13', 'Pečieme na rozpálenej panvici z oboch strán.', 2, false, 'dev-recipe-06');
+INSERT INTO Step (id, text, number, optional, recipeId) VALUES ('dev-step-14', 'Šošovicu uvaríme, scedíme a zmiešame s cibuľou.', 1, false, 'dev-recipe-08');
