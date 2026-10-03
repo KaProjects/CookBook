@@ -8,6 +8,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # already use these ports, so CookBook is offset by two to let all run side by side.
 export PORT="${PORT:-3002}"
 
+# Bind to the loopback interface, as the backend already does. Unset, the development server binds
+# every interface, and because its proxy forwards to the backend from the server side, that puts
+# the whole stack - an API with no authentication - on the local network.
+#
+# Override it when you deliberately want to reach the stack from another device:
+#   HOST=0.0.0.0 ./build_dev.sh
+export HOST="${HOST:-127.0.0.1}"
+
 usage() {
   printf 'Usage: %s\n' "${0##*/}" >&2
   exit 2
