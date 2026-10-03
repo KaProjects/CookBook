@@ -1,0 +1,17 @@
+{
+  "id" : "1",
+  "cook" : "user",
+  "name" : "First Recipe",
+  "category" : "Polievky",
+  "image" : null,
+  "steps" : [ {
+    "number" : 1,
+    "text" : "Boil the water",
+    "optional" : false
+  } ],
+  "ingredients" : [ {
+    "name" : "Batatas",
+    "quantity" : "3ks",
+    "optional" : false
+  } ]
+}

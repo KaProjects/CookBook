@@ -1,0 +1,9 @@
+{
+  "id" : "3",
+  "cook" : "user",
+  "name" : "Third Recipe",
+  "category" : "Maso",
+  "image" : null,
+  "steps" : [ ],
+  "ingredients" : [ ]
+}

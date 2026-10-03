@@ -1,0 +1,41 @@
+{
+  "id" : "2",
+  "cook" : "user",
+  "name" : "Second Recipe",
+  "category" : "Polievky",
+  "image" : "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2Q==",
+  "steps" : [ {
+    "number" : 1,
+    "text" : "Chop",
+    "optional" : false
+  }, {
+    "number" : 2,
+    "text" : "Fry",
+    "optional" : false
+  }, {
+    "number" : 3,
+    "text" : "Garnish",
+    "optional" : true
+  }, {
+    "number" : 4,
+    "text" : "Serve",
+    "optional" : false
+  } ],
+  "ingredients" : [ {
+    "name" : "Pomodoro",
+    "quantity" : "4ks",
+    "optional" : false
+  }, {
+    "name" : "Batatas",
+    "quantity" : "2ks",
+    "optional" : false
+  }, {
+    "name" : "Fruitisimo",
+    "quantity" : "100ml",
+    "optional" : true
+  }, {
+    "name" : "Kachnicka",
+    "quantity" : "1/2",
+    "optional" : false
+  } ]
+}
