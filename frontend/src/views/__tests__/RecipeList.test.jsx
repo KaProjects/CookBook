@@ -45,23 +45,23 @@ describe("RecipeList", () => {
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
-    test("groups the recipes under their categories, in the user's colour", () => {
-        setup("/", {userConfig: {menuAnchor: "right", recipeItemColor: "rgb(1, 2, 3)"}});
-
-        const soups = screen.getByRole("region", {name: "Polievky"});
-        expect(within(soups).getAllByRole("button").map((button) => button.textContent)).toEqual(["Tomato soup", "Onion soup"]);
-        expect(within(screen.getByRole("region", {name: "Maso"})).getByRole("button", {name: "Steak"}))
-            .toHaveStyle({backgroundColor: "rgb(1, 2, 3)"});
-    });
-
-    test("marks the recipes that have no picture or no steps", () => {
+    test("groups the recipes under their categories, with how many there are", () => {
         setup();
 
-        const steak = screen.getByRole("button", {name: "Steak"});
-        expect(within(steak).queryByLabelText("No picture")).not.toBeInTheDocument();
-        expect(within(steak).queryByLabelText("No steps")).not.toBeInTheDocument();
-        expect(within(screen.getByRole("button", {name: /Tomato soup/})).getByLabelText("No picture")).toBeInTheDocument();
-        expect(within(screen.getByRole("button", {name: /Onion soup/})).getByLabelText("No steps")).toBeInTheDocument();
+        const soups = screen.getByRole("region", {name: "Polievky"});
+        expect(within(soups).getByRole("heading", {name: "Polievky"})).toBeInTheDocument();
+        expect(within(soups).getByText("2 recipes")).toBeInTheDocument();
+        expect(within(soups).getAllByRole("button").map((button) => button.textContent)).toEqual(["TTomato soup", "No steps yetOnion soup"]);
+        expect(within(screen.getByRole("region", {name: "Maso"})).getByText("1 recipe")).toBeInTheDocument();
+    });
+
+    test("shows a recipe's thumbnail, or its initial on a tint of the user's colour", () => {
+        const {container} = setup("/", {userConfig: {menuAnchor: "right", recipeItemColor: "rgb(1, 2, 3)"}});
+
+        // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+        expect([...container.querySelectorAll("img")].map((img) => img.getAttribute("src")))
+            .toEqual([expect.stringMatching(/\/recipe\/3\/image\?size=thumbnail$/), expect.stringMatching(/\/recipe\/12\/image\?size=thumbnail$/)]);
+        expect(within(screen.getByRole("button", {name: /Tomato soup/})).getByText("T")).toHaveStyle({backgroundColor: "rgba(1, 2, 3, 0.3)"});
     });
 
     test("opens the recipe clicked", () => {
