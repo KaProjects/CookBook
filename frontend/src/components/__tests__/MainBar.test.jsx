@@ -72,9 +72,19 @@ describe("MainBar", () => {
         expect(screen.getByRole("heading", {name: "Polievky"})).toBeInTheDocument();
     });
 
-    test("names the cookbook on a phone when no category is open", () => {
+    test("names the ingredient filtered by instead of the cookbook on a phone", () => {
         setup("/?ingredient=Soľ");
-        expect(screen.getByRole("heading", {name: "Stanley's CookBook - Soľ"})).toBeInTheDocument();
+        expect(screen.getByRole("heading", {name: "Soľ"})).toBeInTheDocument();
+    });
+
+    test("names the category open rather than the ingredient on a phone", () => {
+        setup("/?ingredient=Soľ&category=Polievky");
+        expect(screen.getByRole("heading", {name: "Polievky"})).toBeInTheDocument();
+    });
+
+    test("names the cookbook on a phone when nothing is open", () => {
+        setup("/");
+        expect(screen.getByRole("heading", {name: "Stanley's CookBook"})).toBeInTheDocument();
     });
 
     test("offers the recipe actions only on a recipe", () => {
