@@ -33,7 +33,7 @@ class RecipeDaoTest
     @Test
     void find_loadsTheRecipeWithItsChildrenStepsInOrder()
     {
-        Recipe recipe = recipeDao.find("2").orElseThrow();
+        Recipe recipe = recipeDao.find(2L).orElseThrow();
 
         assertThat(recipe.getName(), is("Second Recipe"));
         assertThat(recipe.getSteps().stream().map(Step::getText).toList(), contains("Chop", "Fry", "Garnish", "Serve"));
@@ -44,7 +44,7 @@ class RecipeDaoTest
     @Test
     void find_isEmptyForAnUnknownId()
     {
-        assertThat(recipeDao.find("missing").isEmpty(), is(true));
+        assertThat(recipeDao.find(999L).isEmpty(), is(true));
     }
 
     @Test
@@ -60,17 +60,17 @@ class RecipeDaoTest
     void listSummaries_flagsImagesAndSteps()
     {
         assertThat(recipeDao.listSummaries("user", null, null), containsInAnyOrder(
-                new RecipeSummary("1", "First Recipe", "Polievky", false, true),
-                new RecipeSummary("2", "Second Recipe", "Polievky", true, true),
-                new RecipeSummary("3", "Third Recipe", "Maso", false, false)));
+                new RecipeSummary(1L, "First Recipe", "Polievky", false, true),
+                new RecipeSummary(2L, "Second Recipe", "Polievky", true, true),
+                new RecipeSummary(3L, "Third Recipe", "Maso", false, false)));
     }
 
     @Test
     void listSummaries_filtersExactly()
     {
-        assertThat(ids(recipeDao.listSummaries("user", "Maso", null)), contains("3"));
-        assertThat(ids(recipeDao.listSummaries("user", null, "Batatas")), containsInAnyOrder("1", "2"));
-        assertThat(ids(recipeDao.listSummaries("user", "Polievky", "Pomodoro")), contains("2"));
+        assertThat(ids(recipeDao.listSummaries("user", "Maso", null)), contains(3L));
+        assertThat(ids(recipeDao.listSummaries("user", null, "Batatas")), containsInAnyOrder(1L, 2L));
+        assertThat(ids(recipeDao.listSummaries("user", "Polievky", "Pomodoro")), contains(2L));
         assertThat(recipeDao.listSummaries("user", "Polie%", null), is(empty()));
     }
 
@@ -155,7 +155,7 @@ class RecipeDaoTest
         assertThat(entityManager.createQuery("SELECT COUNT(i) FROM Ingredient i WHERE i.name = 'Flour'", Long.class).getSingleResult(), is(0L));
     }
 
-    private static List<String> ids(List<RecipeSummary> summaries)
+    private static List<Long> ids(List<RecipeSummary> summaries)
     {
         return summaries.stream().map(RecipeSummary::id).toList();
     }

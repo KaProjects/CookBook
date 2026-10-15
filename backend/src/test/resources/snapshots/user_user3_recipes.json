@@ -2,7 +2,7 @@
   "categories" : [ {
     "name" : "Kuracie Maso",
     "recipes" : [ {
-      "id" : "5",
+      "id" : 5,
       "name" : "Kuracie",
       "hasImage" : false,
       "hasSteps" : false

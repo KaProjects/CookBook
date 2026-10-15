@@ -8,10 +8,10 @@ jest.mock("../../fetch", () => ({useData: jest.fn()}));
 
 const list = {
     categories: [
-        {name: "Maso", recipes: [{id: "3", name: "Steak", hasImage: true, hasSteps: true}]},
+        {name: "Maso", recipes: [{id: 3, name: "Steak", hasImage: true, hasSteps: true}]},
         {name: "Polievky", recipes: [
-            {id: "1", name: "Tomato soup", hasImage: false, hasSteps: true},
-            {id: "a/b", name: "Onion soup", hasImage: true, hasSteps: false},
+            {id: 1, name: "Tomato soup", hasImage: false, hasSteps: true},
+            {id: 12, name: "Onion soup", hasImage: true, hasSteps: false},
         ]},
     ],
 };
@@ -64,7 +64,7 @@ describe("RecipeList", () => {
 
         fireEvent.click(screen.getByRole("button", {name: /Onion soup/}));
 
-        expect(screen.getByTestId("location")).toHaveTextContent("/recipe/a%2Fb");
+        expect(screen.getByTestId("location")).toHaveTextContent("/recipe/12");
     });
 
     test("says so when there are no recipes", () => {

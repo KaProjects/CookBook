@@ -10,6 +10,6 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
  * allows for a class registered for it.
  */
 @RegisterForReflection
-public record RecipeSummary(String id, String name, String category, boolean hasImage, boolean hasSteps)
+public record RecipeSummary(Long id, String name, String category, boolean hasImage, boolean hasSteps)
 {
 }

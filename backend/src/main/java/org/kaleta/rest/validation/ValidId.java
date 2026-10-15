@@ -3,9 +3,8 @@ package org.kaleta.rest.validation;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,12 +12,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** An entity ID: a UUID, or one of the short IDs the older rows were created with. */
+/** An entity ID: a positive number within the INT UNSIGNED range of the ID columns. */
 @Documented
 @Constraint(validatedBy = {})
-@NotBlank
-@Size(max = 36)
-@Pattern(regexp = "[A-Za-z0-9-]+")
+@Positive
+@Max(4294967295L)
 @ReportAsSingleViolation
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)

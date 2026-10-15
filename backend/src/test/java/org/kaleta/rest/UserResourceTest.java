@@ -68,7 +68,7 @@ class UserResourceTest
                 .body("categories[0].recipes[0].hasImage", is(false))
                 .body("categories[0].recipes[0].hasSteps", is(false))
                 .body("categories[1].recipes.name", contains("First Recipe", "Second Recipe"))
-                .body("categories[1].recipes[1].id", is("2"))
+                .body("categories[1].recipes[1].id", is(2))
                 .body("categories[1].recipes[1].hasImage", is(true))
                 .body("categories[1].recipes[1].hasSteps", is(true));
     }
@@ -79,7 +79,7 @@ class UserResourceTest
         given().queryParam("category", "Polievky").when().get("/user/user/recipes").then()
                 .statusCode(200)
                 .body("categories.name", contains("Polievky"))
-                .body("categories[0].recipes.id", contains("1", "2"));
+                .body("categories[0].recipes.id", contains(1, 2));
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserResourceTest
     {
         given().queryParam("category", "Kuracie Maso").when().get("/user/user3/recipes").then()
                 .statusCode(200)
-                .body("categories[0].recipes.id", contains("5"));
+                .body("categories[0].recipes.id", contains(5));
     }
 
     @Test
@@ -96,9 +96,9 @@ class UserResourceTest
         given().queryParam("ingredient", "Batatas").when().get("/user/user/recipes").then()
                 .statusCode(200)
                 .body("categories.name", contains("Polievky"))
-                .body("categories[0].recipes.id", contains("1", "2"));
+                .body("categories[0].recipes.id", contains(1, 2));
         given().queryParam("ingredient", "Pomodoro").when().get("/user/user/recipes").then()
-                .body("categories[0].recipes.id", contains("2"));
+                .body("categories[0].recipes.id", contains(2));
     }
 
     @Test
@@ -107,7 +107,7 @@ class UserResourceTest
         given().queryParam("category", "Polievky").queryParam("ingredient", "Pomodoro")
                 .when().get("/user/user/recipes").then()
                 .body("categories", hasSize(1))
-                .body("categories[0].recipes.id", contains("2"));
+                .body("categories[0].recipes.id", contains(2));
         given().queryParam("category", "Maso").queryParam("ingredient", "Pomodoro")
                 .when().get("/user/user/recipes").then()
                 .body("categories", is(empty()));

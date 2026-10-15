@@ -129,7 +129,7 @@ if status != 201:
     failures.append(f"POST /recipe: {status} {body[:300]}")
 else:
     created = json.loads(body)
-    stored = json.loads(call("GET", "/recipe/" + created["id"])[2])
+    stored = json.loads(call("GET", "/recipe/" + str(created["id"]))[2])
     jpeg = base64.b64decode(stored["image"].split(",", 1)[1])
     if not stored["image"].startswith("data:image/jpeg;base64,") or jpeg[:2] != b"\xff\xd8":
         failures.append("the uploaded image was not stored as a JPEG")
@@ -137,7 +137,7 @@ else:
         failures.append(f"the created recipe reads back differently: {stored}")
     update = {key: stored[key] for key in ("name", "category", "image", "steps", "ingredients")}
     update["name"] = "Uhorkový šalát"
-    status, _, body = call("PUT", "/recipe/" + created["id"], update)
+    status, _, body = call("PUT", "/recipe/" + str(created["id"]), update)
     if status != 200 or json.loads(body)["image"] != stored["image"]:
         failures.append(f"PUT /recipe: {status} {body[:300]}")
     listing = json.loads(call("GET", "/user/writer/recipes")[2])

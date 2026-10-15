@@ -32,7 +32,7 @@ public class RecipeListDto
     @RegisterForReflection
     public static class Item
     {
-        private String id;
+        private Long id;
         private String name;
         private boolean hasImage;
         private boolean hasSteps;

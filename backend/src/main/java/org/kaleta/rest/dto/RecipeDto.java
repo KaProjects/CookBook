@@ -10,7 +10,7 @@ import java.util.List;
 @RegisterForReflection
 public class RecipeDto
 {
-    private String id;
+    private Long id;
     private String cook;
     private String name;
     private String category;

@@ -40,7 +40,7 @@ public class RecipeService
     @Inject
     UserService userService;
 
-    public RecipeDto get(String id)
+    public RecipeDto get(Long id)
     {
         return toDto(find(id));
     }
@@ -60,7 +60,7 @@ public class RecipeService
      * save made it a little worse each time.
      */
     @Transactional
-    public RecipeDto update(String id, RecipeUpdateDto dto)
+    public RecipeDto update(Long id, RecipeUpdateDto dto)
     {
         Recipe recipe = find(id);
         String image = dto.getImage() == null || dto.getImage().equals(recipe.getImage())
@@ -74,7 +74,7 @@ public class RecipeService
 
     /** Deletes the recipe with its steps, ingredients and picture. */
     @Transactional
-    public void delete(String id)
+    public void delete(Long id)
     {
         recipeDao.delete(find(id));
     }
@@ -99,7 +99,7 @@ public class RecipeService
                 .toList());
     }
 
-    private Recipe find(String id)
+    private Recipe find(Long id)
     {
         return recipeDao.find(id).orElseThrow(() -> new ResourceNotFoundException("Recipe '" + id + "' does not exist."));
     }

@@ -7,7 +7,7 @@ import {renderPage} from "../../testUtils";
 jest.mock("../../fetch", () => ({useData: jest.fn()}));
 
 const recipe = {
-    id: "2",
+    id: 2,
     name: "Tomato soup",
     category: "Polievky",
     ingredients: [
@@ -32,9 +32,9 @@ function setup(data = recipe) {
 describe("Recipe", () => {
     test("reads the recipe in the address", () => {
         useData.mockReturnValue({data: null, loaded: false, error: null});
-        renderPage(<Recipe/>, {path: "/recipe/:id", at: "/recipe/a%2Fb"});
+        renderPage(<Recipe/>, {path: "/recipe/:id", at: "/recipe/42"});
 
-        expect(useData).toHaveBeenCalledWith("/recipe/a%2Fb");
+        expect(useData).toHaveBeenCalledWith("/recipe/42");
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 

@@ -47,11 +47,11 @@ describe("MainBar", () => {
     });
 
     test("edits the recipe being read", () => {
-        setup("/recipe/a%20b");
+        setup("/recipe/12");
 
         fireEvent.click(screen.getByRole("button", {name: "Edit recipe"}));
 
-        expect(screen.getByTestId("location")).toHaveTextContent("/recipe/a%20b/edit");
+        expect(screen.getByTestId("location")).toHaveTextContent("/recipe/12/edit");
     });
 
     test("downloads the recipe page as a PDF named after the recipe", () => {

@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,6 +60,7 @@ class RecipeServiceTest
     void get_mapsTheRecipeWithStepsInOrder()
     {
         Recipe recipe = Generator.recipe("cook", "Soup", "Soups");
+        recipe.setId(42L);
         recipe.setImage("img");
         Generator.step(recipe, 2, "boil");
         Generator.step(recipe, 1, "chop");
@@ -79,10 +81,10 @@ class RecipeServiceTest
     @Test
     void get_unknownRecipeIsNotFound()
     {
-        when(recipeDao.find("missing")).thenReturn(Optional.empty());
+        when(recipeDao.find(999L)).thenReturn(Optional.empty());
 
-        assertThat(assertThrows(ResourceNotFoundException.class, () -> recipeService.get("missing")).getMessage(),
-                is("Recipe 'missing' does not exist."));
+        assertThat(assertThrows(ResourceNotFoundException.class, () -> recipeService.get(999L)).getMessage(),
+                is("Recipe '999' does not exist."));
     }
 
     @Test
@@ -91,6 +93,11 @@ class RecipeServiceTest
         RecipeCreateDto dto = Generator.createDto("cook");
         dto.setName("  Soup ");
         dto.getIngredients().set(0, new IngredientDto(" Salt ", " 1 pinch ", false));
+
+        doAnswer(invocation -> {
+            invocation.<Recipe>getArgument(0).setId(7L);
+            return null;
+        }).when(recipeDao).create(any());
 
         RecipeDto created = recipeService.create(dto);
 
@@ -104,7 +111,7 @@ class RecipeServiceTest
         assertThat(recipe.getIngredients().get(0).getQuantity(), is("1 pinch"));
         recipe.getSteps().forEach(step -> assertThat(step.getRecipe(), is(sameInstance(recipe))));
         recipe.getIngredients().forEach(ingredient -> assertThat(ingredient.getRecipe(), is(sameInstance(recipe))));
-        assertThat(created.getId(), is(recipe.getId()));
+        assertThat(created.getId(), is(7L));
         verify(imageService, never()).toJpeg(any());
     }
 
@@ -132,6 +139,7 @@ class RecipeServiceTest
     void update_replacesTheChildrenAndSaves()
     {
         Recipe recipe = Generator.recipe("cook", "Old", "Old category");
+        recipe.setId(42L);
         Generator.step(recipe, 1, "old step");
         Generator.ingredient(recipe, "Old ingredient", "1");
         when(recipeDao.find(recipe.getId())).thenReturn(Optional.of(recipe));
@@ -152,6 +160,7 @@ class RecipeServiceTest
     void update_onlyConvertsANewImage()
     {
         Recipe recipe = Generator.recipe("cook", "Soup", "Soups");
+        recipe.setId(42L);
         recipe.setImage("data:image/jpeg;base64,stored");
         when(recipeDao.find(recipe.getId())).thenReturn(Optional.of(recipe));
         when(recipeDao.save(recipe)).thenReturn(recipe);
@@ -174,9 +183,9 @@ class RecipeServiceTest
     @Test
     void update_unknownRecipeIsNotFound()
     {
-        when(recipeDao.find("missing")).thenReturn(Optional.empty());
+        when(recipeDao.find(999L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> recipeService.update("missing", Generator.updateDto()));
+        assertThrows(ResourceNotFoundException.class, () -> recipeService.update(999L, Generator.updateDto()));
         verify(recipeDao, never()).save(any());
     }
 
@@ -184,6 +193,7 @@ class RecipeServiceTest
     void delete_deletesTheRecipeFound()
     {
         Recipe recipe = Generator.recipe("cook", "Soup", "Soups");
+        recipe.setId(42L);
         when(recipeDao.find(recipe.getId())).thenReturn(Optional.of(recipe));
 
         recipeService.delete(recipe.getId());
@@ -194,9 +204,9 @@ class RecipeServiceTest
     @Test
     void delete_unknownRecipeIsNotFound()
     {
-        when(recipeDao.find("missing")).thenReturn(Optional.empty());
+        when(recipeDao.find(999L)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> recipeService.delete("missing"));
+        assertThrows(ResourceNotFoundException.class, () -> recipeService.delete(999L));
         verify(recipeDao, never()).delete(any());
     }
 
@@ -218,17 +228,17 @@ class RecipeServiceTest
     void list_groupsByCategoryInOrder()
     {
         when(recipeDao.listSummaries("cook", null, null)).thenReturn(List.of(
-                new RecipeSummary("1", "Paradajková", "Polievky", false, true),
-                new RecipeSummary("2", "Guláš", "Hlavné jedlá", true, true),
-                new RecipeSummary("3", "Kapustnica", "Polievky", true, false)));
+                new RecipeSummary(1L, "Paradajková", "Polievky", false, true),
+                new RecipeSummary(2L, "Guláš", "Hlavné jedlá", true, true),
+                new RecipeSummary(3L, "Kapustnica", "Polievky", true, false)));
 
         RecipeListDto list = recipeService.list("cook", null, null);
 
         verify(userService).requireUser("cook");
         assertThat(list.getCategories().stream().map(RecipeListDto.Category::getName).toList(), contains("Hlavné jedlá", "Polievky"));
         assertThat(list.getCategories().get(1).getRecipes(), contains(
-                new RecipeListDto.Item("3", "Kapustnica", true, false),
-                new RecipeListDto.Item("1", "Paradajková", false, true)));
+                new RecipeListDto.Item(3L, "Kapustnica", true, false),
+                new RecipeListDto.Item(1L, "Paradajková", false, true)));
     }
 
     @Test

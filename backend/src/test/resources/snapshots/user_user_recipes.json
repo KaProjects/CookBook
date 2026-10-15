@@ -2,7 +2,7 @@
   "categories" : [ {
     "name" : "Maso",
     "recipes" : [ {
-      "id" : "3",
+      "id" : 3,
       "name" : "Third Recipe",
       "hasImage" : false,
       "hasSteps" : false
@@ -10,12 +10,12 @@
   }, {
     "name" : "Polievky",
     "recipes" : [ {
-      "id" : "1",
+      "id" : 1,
       "name" : "First Recipe",
       "hasImage" : false,
       "hasSteps" : true
     }, {
-      "id" : "2",
+      "id" : 2,
       "name" : "Second Recipe",
       "hasImage" : true,
       "hasSteps" : true
