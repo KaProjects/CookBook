@@ -13,7 +13,6 @@ import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import RecipeMenu from "./RecipeMenu";
 import {useWideScreen} from "../hooks/useWideScreen";
 import {useAppState} from "../state/appState";
-import {colors} from "../theme/colors";
 
 const BarButton = ({title, onClick, children, edge = false, sx}) => (
     <Tooltip title={title}>
@@ -56,10 +55,10 @@ export default function MainBar() {
     // other buttons at the right, where the thumb is.
     const wide = useWideScreen();
     const listing = useMatch("/");
-    // On a phone the bar names the category being looked at instead of the cookbook: the one open
-    // in the list, or the one of the recipe shown.
-    const category = wide ? null
-        : listing ? searchParams.get("category")
+    // On a phone the bar names what is being looked at instead of the cookbook: the category open
+    // in the list, else the ingredient it is filtered by, or the category of the recipe shown.
+    const phoneTitle = wide ? null
+        : listing ? searchParams.get("category") ?? searchParams.get("ingredient")
         : viewing ? shownRecipe?.category ?? null
         : null;
 
@@ -75,7 +74,7 @@ export default function MainBar() {
             <Toolbar variant="dense">
                 {wide && allRecipes}
                 <Typography variant="h6" component="h1">
-                    {category ?? <>{user}'s CookBook{filter !== null && " - " + filter}</>}
+                    {phoneTitle ?? <>{user}'s CookBook{filter !== null && " - " + filter}</>}
                 </Typography>
                 <Box sx={{flexGrow: 1}}/>
                 {viewing && shownRecipe &&
@@ -110,7 +109,7 @@ export default function MainBar() {
                 open={drawerOpen}
                 onOpen={() => setDrawerOpen(true)}
                 onClose={() => setDrawerOpen(false)}
-                slotProps={{paper: {style: {minWidth: "250px", backgroundColor: colors.menuBackground}}}}
+                slotProps={{paper: {sx: {width: {xs: "85vw", sm: 360}}}}}
             >
                 <RecipeMenu open={drawerOpen} onClose={() => setDrawerOpen(false)}/>
             </SwipeableDrawer>
