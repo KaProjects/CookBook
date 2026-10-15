@@ -181,6 +181,26 @@ class RecipeServiceTest
     }
 
     @Test
+    void delete_deletesTheRecipeFound()
+    {
+        Recipe recipe = Generator.recipe("cook", "Soup", "Soups");
+        when(recipeDao.find(recipe.getId())).thenReturn(Optional.of(recipe));
+
+        recipeService.delete(recipe.getId());
+
+        verify(recipeDao).delete(recipe);
+    }
+
+    @Test
+    void delete_unknownRecipeIsNotFound()
+    {
+        when(recipeDao.find("missing")).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> recipeService.delete("missing"));
+        verify(recipeDao, never()).delete(any());
+    }
+
+    @Test
     void getMenu_sortsTheSlovakWay()
     {
         when(recipeDao.listCategories("cook")).thenReturn(List.of("Šaláty", "Polievky", "Cestoviny", "Čaje"));

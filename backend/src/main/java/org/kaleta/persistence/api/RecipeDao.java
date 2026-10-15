@@ -24,6 +24,11 @@ public interface RecipeDao
     Recipe save(Recipe recipe);
 
     /**
+     * deletes the recipe together with its steps and ingredients
+     */
+    void delete(Recipe recipe);
+
+    /**
      * @return the distinct categories of the cook's recipes
      */
     List<String> listCategories(String cook);

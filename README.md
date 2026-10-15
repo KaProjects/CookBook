@@ -92,6 +92,7 @@ unexpected failure was logged under.
 | GET | `/recipe/{id}` | a recipe with its steps and ingredients |
 | POST | `/recipe` | creates a recipe, `201` with the stored recipe |
 | PUT | `/recipe/{id}` | replaces a recipe's name, category, picture, steps and ingredients |
+| DELETE | `/recipe/{id}` | deletes a recipe with its steps, ingredients and picture, `204` |
 
 Pictures travel as base64 data URLs. The backend stores them as JPEG, scaled
 down to 1600 px at most; a picture sent back unchanged is not re-encoded.

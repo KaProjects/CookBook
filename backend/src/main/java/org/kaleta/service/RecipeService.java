@@ -72,6 +72,13 @@ public class RecipeService
         return toDto(recipeDao.save(recipe));
     }
 
+    /** Deletes the recipe with its steps, ingredients and picture. */
+    @Transactional
+    public void delete(String id)
+    {
+        recipeDao.delete(find(id));
+    }
+
     public MenuDto getMenu(String cook)
     {
         userService.requireUser(cook);

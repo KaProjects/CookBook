@@ -261,6 +261,31 @@ class RecipeResourceTest
     }
 
     @Test
+    void delete_removesTheRecipeFromItsCooksList()
+    {
+        RecipeDto recipe = create(Generator.createDto(COOK));
+
+        given().when().delete("/recipe/" + recipe.getId()).then().statusCode(204);
+
+        assertNotFound("/recipe/" + recipe.getId());
+        given().when().get("/user/" + COOK + "/recipes").then()
+                .body("categories.recipes.flatten().id", not(org.hamcrest.Matchers.hasItem(recipe.getId())));
+    }
+
+    @Test
+    void delete_unknownRecipeIsNotFound()
+    {
+        assertProblem(given().when().delete("/recipe/does-not-exist").then(), 404, "Not Found")
+                .body("detail", is("Recipe 'does-not-exist' does not exist."));
+    }
+
+    @Test
+    void delete_malformedIdIsInvalid()
+    {
+        assertProblem(given().when().delete("/recipe/not an id!").then(), 400, "Bad Request");
+    }
+
+    @Test
     void update_validatesTheRecipe()
     {
         RecipeUpdateDto dto = Generator.updateDto();
