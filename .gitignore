@@ -5,3 +5,6 @@ target-dev
 *.zip
 *.rar
 .DS_Store
+
+# Local development data, never committed.
+backend/dev-data/

@@ -9,8 +9,24 @@ export const DEFAULT_APP_STATE = {
     user: "Stanley",
     userConfig: DEFAULT_USER_CONFIG,
     selectUser: () => {},
-    pdfTarget: null,
-    setPdfTarget: () => {},
+    shownRecipe: null,
+    setShownRecipe: () => {},
+};
+
+/**
+ * Makes the screen wide (the desktop layout) or narrow (the phone layout). jsdom has no
+ * matchMedia, which MUI reads as narrow; call resetScreen() after each test that sets it.
+ */
+export const setScreenWide = (wide) => {
+    window.matchMedia = (query) => ({
+        matches: wide, media: query, onchange: null,
+        addListener: () => {}, removeListener: () => {},
+        addEventListener: () => {}, removeEventListener: () => {}, dispatchEvent: () => false,
+    });
+};
+
+export const resetScreen = () => {
+    delete window.matchMedia;
 };
 
 /** Shows where the app has navigated to, as "path?query". */

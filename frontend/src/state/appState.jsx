@@ -11,7 +11,8 @@ export const AppStateProvider = AppStateContext.Provider;
 
 /**
  * The state the main bar and the views share: whose cookbook this is, how it is laid out for
- * them, and which recipe the PDF export would download.
+ * them, and which recipe is being shown - its name and category for the bar, and the page the PDF
+ * export downloads.
  *
  * It is context rather than props because it is not passed in one direction: the recipe view
  * publishes what to export, and the main bar offers it. What the views show - which recipe, which
@@ -27,7 +28,7 @@ export const useAppState = () => {
 
 const AppState = ({children}) => {
     const [user, setUser] = useState(loadUser);
-    const [pdfTarget, setPdfTarget] = useState(null);
+    const [shownRecipe, setShownRecipe] = useState(null);
 
     const selectUser = useCallback((value) => {
         saveUser(value);
@@ -47,9 +48,9 @@ const AppState = ({children}) => {
         user,
         userConfig: config.data ?? DEFAULT_USER_CONFIG,
         selectUser,
-        pdfTarget,
-        setPdfTarget,
-    }), [user, config.data, selectUser, pdfTarget]);
+        shownRecipe,
+        setShownRecipe,
+    }), [user, config.data, selectUser, shownRecipe]);
 
     return <AppStateProvider value={value}>{children}</AppStateProvider>;
 };

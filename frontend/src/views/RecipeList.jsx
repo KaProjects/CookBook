@@ -3,19 +3,26 @@ import {useNavigate, useSearchParams} from "react-router-dom";
 import {Card, CardContent, List, ListItemButton, ListItemText, Tooltip, Typography} from "@mui/material";
 import NoPhotographyIcon from "@mui/icons-material/NoPhotography";
 import ContentPasteOffIcon from "@mui/icons-material/ContentPasteOff";
+import CategoryPager from "../components/CategoryPager";
 import Loader from "../components/Loader";
+import {useWideScreen} from "../hooks/useWideScreen";
 import {useData} from "../fetch";
 import {paths} from "../services/api";
 import {useAppState} from "../state/appState";
 import {colors} from "../theme/colors";
 
-/** The user's recipes by category, filtered by the category or ingredient in the address. */
+/**
+ * The user's recipes by category, filtered by the ingredient in the address. On a wide screen the
+ * category in the address filters the list too; on a phone it picks the one category shown, among
+ * all of them, so the others are a swipe away.
+ */
 export default function RecipeList() {
     const {user, userConfig} = useAppState();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const wide = useWideScreen();
     const {data, loaded, error} = useData(paths.recipes(user, {
-        category: searchParams.get("category"),
+        category: wide ? searchParams.get("category") : null,
         ingredient: searchParams.get("ingredient"),
     }));
 
@@ -28,6 +35,8 @@ export default function RecipeList() {
             </Typography>
         );
     }
+
+    if (!wide) return <CategoryPager categories={data.categories}/>;
 
     return (
         <main style={{maxWidth: 500, margin: "0 auto"}}>

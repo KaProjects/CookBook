@@ -14,6 +14,12 @@ public interface RecipeDao
     Optional<Recipe> find(Long id);
 
     /**
+     * @return the recipe's picture only, without loading the rest of it: empty if there is no
+     * recipe of that ID, an empty inner value if it has no picture
+     */
+    Optional<Optional<String>> findImage(Long id);
+
+    /**
      * persists a new recipe together with its steps and ingredients
      */
     void create(Recipe recipe);

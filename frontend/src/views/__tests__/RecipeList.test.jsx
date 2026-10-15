@@ -2,7 +2,7 @@ import React from "react";
 import {fireEvent, screen, within} from "@testing-library/react";
 import {useData} from "../../fetch";
 import RecipeList from "../RecipeList";
-import {renderPage} from "../../testUtils";
+import {renderPage, resetScreen, setScreenWide} from "../../testUtils";
 
 jest.mock("../../fetch", () => ({useData: jest.fn()}));
 
@@ -19,7 +19,12 @@ const list = {
 const setup = (at = "/", state = {}) => renderPage(<RecipeList/>, {at, state});
 
 describe("RecipeList", () => {
-    beforeEach(() => useData.mockReturnValue({data: list, loaded: true, error: null}));
+    afterEach(resetScreen);
+
+    beforeEach(() => {
+        setScreenWide(true);
+        useData.mockReturnValue({data: list, loaded: true, error: null});
+    });
 
     test("reads the user's recipes", () => {
         setup();
@@ -72,5 +77,13 @@ describe("RecipeList", () => {
         setup();
 
         expect(screen.getByText("No recipes yet - add one with the + button.")).toBeInTheDocument();
+    });
+
+    test("on a phone, reads every category, whichever is open", () => {
+        setScreenWide(false);
+        setup("/?category=Maso&ingredient=Batatas");
+
+        expect(useData).toHaveBeenLastCalledWith("/user/Stanley/recipes?ingredient=Batatas");
+        expect(screen.getByRole("region", {name: "Maso"})).toBeInTheDocument();
     });
 });

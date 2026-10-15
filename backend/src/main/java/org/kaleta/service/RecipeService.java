@@ -17,8 +17,12 @@ import org.kaleta.rest.dto.RecipeUpdateDto;
 import org.kaleta.rest.dto.StepDto;
 import org.kaleta.rest.error.ResourceNotFoundException;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.Collator;
 import java.util.Comparator;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -43,6 +47,34 @@ public class RecipeService
     public RecipeDto get(Long id)
     {
         return toDto(find(id));
+    }
+
+    /** The longest side of a picture in a list - a few times the size it is shown at, for sharp screens. */
+    public static final int THUMBNAIL_DIMENSION = 192;
+
+    /**
+     * The recipe's picture as stored, or scaled down to a thumbnail. The tag changes whenever the
+     * picture does, so a browser can keep it until then.
+     */
+    public RecipeImage getImage(Long id, boolean thumbnail)
+    {
+        String dataUrl = recipeDao.findImage(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe '" + id + "' does not exist."))
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe '" + id + "' has no picture."));
+        byte[] bytes = thumbnail ? imageService.toJpegBytes(dataUrl, THUMBNAIL_DIMENSION) : imageService.bytesOf(dataUrl);
+        return new RecipeImage(bytes, ImageService.mediaTypeOf(bytes), tagOf(dataUrl, thumbnail));
+    }
+
+    public record RecipeImage(byte[] bytes, String mediaType, String tag) {}
+
+    private static String tagOf(String dataUrl, boolean thumbnail)
+    {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(dataUrl.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest, 0, 12) + (thumbnail ? "-thumbnail" : "");
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public RecipeDto create(RecipeCreateDto dto)

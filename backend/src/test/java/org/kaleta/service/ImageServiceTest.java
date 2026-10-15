@@ -66,6 +66,27 @@ class ImageServiceTest
     }
 
     @Test
+    void scalesToAnyLongestSide() throws Exception
+    {
+        byte[] thumbnail = imageService.toJpegBytes(Generator.image("bmp", 300, 600), 100);
+
+        BufferedImage image = javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(thumbnail));
+        assertThat(image.getWidth(), is(50));
+        assertThat(image.getHeight(), is(100));
+    }
+
+    @Test
+    void readsTheBytesAndTheirTypeFromTheBytesThemselves()
+    {
+        byte[] jpeg = imageService.bytesOf(imageService.toJpeg(Generator.image("bmp", 8, 8)));
+        assertThat(ImageService.mediaTypeOf(jpeg), is("image/jpeg"));
+        // Stored before 2.2: compressed to JPEG, but still labelled with the uploaded type.
+        assertThat(ImageService.mediaTypeOf(imageService.bytesOf("data:image/png;base64," + java.util.Base64.getEncoder().encodeToString(jpeg))), is("image/jpeg"));
+        assertThat(ImageService.mediaTypeOf(imageService.bytesOf(Generator.image("png", 8, 8))), is("image/png"));
+        assertThat(ImageService.mediaTypeOf(new byte[]{1, 2, 3}), is("application/octet-stream"));
+    }
+
+    @Test
     void refusesWhatIsNotAPicture()
     {
         assertThat(assertThrows(InvalidInputException.class, () -> imageService.toJpeg("no comma")).getMessage(),

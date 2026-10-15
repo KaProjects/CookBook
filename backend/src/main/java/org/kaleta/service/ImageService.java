@@ -42,9 +42,40 @@ public class ImageService
      */
     public String toJpeg(String dataUrl)
     {
+        return JPEG_PREFIX + Base64.getEncoder().encodeToString(toJpegBytes(dataUrl, MAX_DIMENSION));
+    }
+
+    /**
+     * @param dataUrl a stored picture
+     * @param maxDimension the longest side it is scaled down to, if it is longer
+     * @return the picture as JPEG bytes
+     */
+    public byte[] toJpegBytes(String dataUrl, int maxDimension)
+    {
         BufferedImage source = decode(dataUrl);
-        BufferedImage image = flatten(source, scaledWidth(source), scaledHeight(source));
-        return JPEG_PREFIX + Base64.getEncoder().encodeToString(encode(image));
+        double scale = Math.min(1.0, (double) maxDimension / Math.max(source.getWidth(), source.getHeight()));
+        BufferedImage image = flatten(source, (int) Math.round(source.getWidth() * scale), (int) Math.round(source.getHeight() * scale));
+        return encode(image);
+    }
+
+    /** The bytes a data URL holds, as they are. */
+    public byte[] bytesOf(String dataUrl)
+    {
+        int comma = dataUrl.indexOf(',');
+        if (comma < 0) throw new InvalidInputException("The image is not a data URL.");
+        return Base64.getDecoder().decode(WHITESPACE.matcher(dataUrl.substring(comma + 1)).replaceAll(""));
+    }
+
+    /**
+     * The type of picture the bytes are, read from their first bytes rather than taken from the data
+     * URL: pictures stored before 2.2 were compressed to JPEG but kept the prefix they were uploaded
+     * with.
+     */
+    public static String mediaTypeOf(byte[] bytes)
+    {
+        if (bytes.length > 2 && (bytes[0] & 0xFF) == 0xFF && (bytes[1] & 0xFF) == 0xD8) return "image/jpeg";
+        if (bytes.length > 3 && (bytes[0] & 0xFF) == 0x89 && bytes[1] == 'P' && bytes[2] == 'N' && bytes[3] == 'G') return "image/png";
+        return "application/octet-stream";
     }
 
     private BufferedImage decode(String dataUrl)
@@ -63,21 +94,6 @@ public class ImageService
         } catch (IOException e) {
             throw new InvalidInputException("The image could not be read.");
         }
-    }
-
-    private static int scaledWidth(BufferedImage image)
-    {
-        return (int) Math.round(image.getWidth() * scale(image));
-    }
-
-    private static int scaledHeight(BufferedImage image)
-    {
-        return (int) Math.round(image.getHeight() * scale(image));
-    }
-
-    private static double scale(BufferedImage image)
-    {
-        return Math.min(1.0, (double) MAX_DIMENSION / Math.max(image.getWidth(), image.getHeight()));
     }
 
     /**
