@@ -8,7 +8,7 @@ describe("paths", () => {
         expect(paths.users()).toBe("/user");
         expect(paths.userConfig("Anna Mária")).toBe("/user/Anna%20M%C3%A1ria/config");
         expect(paths.menu("a/b")).toBe("/user/a%2Fb/menu");
-        expect(paths.recipe("id?x")).toBe("/recipe/id%3Fx");
+        expect(paths.recipe(42)).toBe("/recipe/42");
     });
 
     test("add only the recipe filters that are set", () => {
@@ -27,23 +27,23 @@ describe("recipe writes", () => {
     });
 
     test("create posts the recipe for the cook and answers what was stored", async () => {
-        axios.post.mockResolvedValue({data: {id: "new"}});
+        axios.post.mockResolvedValue({data: {id: 31}});
 
-        await expect(createRecipe("Stanley", {name: "Soup"})).resolves.toEqual({id: "new"});
+        await expect(createRecipe("Stanley", {name: "Soup"})).resolves.toEqual({id: 31});
         expect(axios.post).toHaveBeenCalledWith("/api/recipe", {name: "Soup", cook: "Stanley"});
     });
 
-    test("delete deletes the recipe at its encoded address", async () => {
+    test("delete deletes the recipe at its address", async () => {
         axios.delete.mockResolvedValue({status: 204});
 
-        await expect(deleteRecipe("a/b")).resolves.toBeUndefined();
-        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/a%2Fb");
+        await expect(deleteRecipe(7)).resolves.toBeUndefined();
+        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/7");
     });
 
     test("update puts the recipe at its address", async () => {
-        axios.put.mockResolvedValue({data: {id: "7"}});
+        axios.put.mockResolvedValue({data: {id: 7}});
 
-        await expect(updateRecipe("7", {name: "Soup"})).resolves.toEqual({id: "7"});
+        await expect(updateRecipe(7, {name: "Soup"})).resolves.toEqual({id: 7});
         expect(axios.put).toHaveBeenCalledWith("/api/recipe/7", {name: "Soup"});
     });
 });

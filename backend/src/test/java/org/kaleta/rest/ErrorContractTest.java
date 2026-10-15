@@ -42,7 +42,7 @@ class ErrorContractTest
     @Test
     void aProblemLeavesOutWhatItDoesNotHave()
     {
-        assertProblem(given().when().get("/recipe/missing").then(), 404, "Not Found")
+        assertProblem(given().when().get("/recipe/999999").then(), 404, "Not Found")
                 .body("violations", nullValue())
                 .body("errorId", nullValue());
     }

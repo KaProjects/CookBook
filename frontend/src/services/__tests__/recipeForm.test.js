@@ -1,7 +1,7 @@
 import {emptyForm, formFromRecipe, formReducer, formToRecipe, isValid, validateForm} from "../recipeForm";
 
 const recipe = {
-    id: "7",
+    id: 7,
     name: "Soup",
     category: "Polievky",
     image: "data:image/jpeg;base64,AA==",

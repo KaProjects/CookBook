@@ -8,8 +8,7 @@ import {paths} from "../services/api";
 import {useAppState} from "../state/appState";
 
 /**
- * Picks whose cookbook to open. There is no password: the cookbook is shared on the home network
- * and only keeps everybody's recipes apart. With a single user there is nothing to pick.
+ * Picks whose cookbook to open. With a single user there is nothing to pick.
  */
 export default function Login() {
     const {selectUser} = useAppState();

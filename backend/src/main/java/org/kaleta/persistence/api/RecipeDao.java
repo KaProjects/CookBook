@@ -11,7 +11,7 @@ public interface RecipeDao
     /**
      * @return the recipe with its steps and ingredients, or empty if there is none of that ID
      */
-    Optional<Recipe> find(String id);
+    Optional<Recipe> find(Long id);
 
     /**
      * persists a new recipe together with its steps and ingredients

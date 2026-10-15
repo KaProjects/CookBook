@@ -9,7 +9,7 @@ jest.mock("axios");
 const menu = {categories: ["Maso", "Polievky"], ingredients: ["Batatas", "Pomodoro"]};
 
 const stored = {
-    id: "2",
+    id: 2,
     cook: "Stanley",
     name: "Tomato soup",
     category: "Polievky",
@@ -66,7 +66,7 @@ describe("RecipeEditor", () => {
 
         test("is created for the user and then opened", async () => {
             backend();
-            axios.post.mockResolvedValue({data: {...stored, id: "new id"}});
+            axios.post.mockResolvedValue({data: {...stored, id: 31}});
             create();
 
             fireEvent.change(nameField(), {target: {value: "  Guláš "}});
@@ -75,7 +75,7 @@ describe("RecipeEditor", () => {
             fireEvent.change(screen.getByRole("textbox", {name: "Step 1"}), {target: {value: "Cook it"}});
             fireEvent.click(saveButton("Create Recipe"));
 
-            await waitFor(() => expect(screen.getByTestId("location")).toHaveTextContent("/recipe/new%20id"));
+            await waitFor(() => expect(screen.getByTestId("location")).toHaveTextContent("/recipe/31"));
             expect(axios.post).toHaveBeenCalledWith("/api/recipe", {
                 cook: "Stanley",
                 name: "Guláš",

@@ -43,7 +43,7 @@ class RecipeResourceTest
                 .extract().as(RecipeDto.class);
     }
 
-    private static RecipeDto update(String id, RecipeUpdateDto dto)
+    private static RecipeDto update(Long id, RecipeUpdateDto dto)
     {
         return given().contentType(ContentType.JSON).body(dto)
                 .when().put("/recipe/" + id)
@@ -51,7 +51,7 @@ class RecipeResourceTest
                 .extract().as(RecipeDto.class);
     }
 
-    private static RecipeDto get(String id)
+    private static RecipeDto get(Long id)
     {
         return given().when().get("/recipe/" + id).then().statusCode(200).extract().as(RecipeDto.class);
     }
@@ -73,7 +73,7 @@ class RecipeResourceTest
         given().when().get("/recipe/2").then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("id", is("2"))
+                .body("id", is(2))
                 .body("cook", is("user"))
                 .body("name", is("Second Recipe"))
                 .body("category", is("Polievky"))
@@ -87,14 +87,21 @@ class RecipeResourceTest
     @Test
     void get_unknownRecipeIsNotFound()
     {
-        assertNotFound("/recipe/does-not-exist").body("detail", is("Recipe 'does-not-exist' does not exist."));
+        assertNotFound("/recipe/999999").body("detail", is("Recipe '999999' does not exist."));
     }
 
     @Test
-    void get_malformedIdIsInvalid()
+    void get_idOutOfRangeIsInvalid()
     {
-        assertProblem(given().when().get("/recipe/not an id!").then(), 400, "Bad Request")
+        assertProblem(given().when().get("/recipe/0").then(), 400, "Bad Request")
                 .body("violations[0].field", is("id"));
+        assertProblem(given().when().get("/recipe/4294967296").then(), 400, "Bad Request");
+    }
+
+    @Test
+    void get_aNonNumericIdIsNotARecipe()
+    {
+        assertProblem(given().when().get("/recipe/abc").then(), 404, "Not Found");
     }
 
     @Test
@@ -257,7 +264,7 @@ class RecipeResourceTest
     void update_unknownRecipeIsNotFound()
     {
         assertProblem(given().contentType(ContentType.JSON).body(Generator.updateDto())
-                .when().put("/recipe/does-not-exist").then(), 404, "Not Found");
+                .when().put("/recipe/999999").then(), 404, "Not Found");
     }
 
     @Test
@@ -269,20 +276,20 @@ class RecipeResourceTest
 
         assertNotFound("/recipe/" + recipe.getId());
         given().when().get("/user/" + COOK + "/recipes").then()
-                .body("categories.recipes.flatten().id", not(org.hamcrest.Matchers.hasItem(recipe.getId())));
+                .body("categories.recipes.flatten().id", not(org.hamcrest.Matchers.hasItem(recipe.getId().intValue())));
     }
 
     @Test
     void delete_unknownRecipeIsNotFound()
     {
-        assertProblem(given().when().delete("/recipe/does-not-exist").then(), 404, "Not Found")
-                .body("detail", is("Recipe 'does-not-exist' does not exist."));
+        assertProblem(given().when().delete("/recipe/999999").then(), 404, "Not Found")
+                .body("detail", is("Recipe '999999' does not exist."));
     }
 
     @Test
-    void delete_malformedIdIsInvalid()
+    void delete_idOutOfRangeIsInvalid()
     {
-        assertProblem(given().when().delete("/recipe/not an id!").then(), 400, "Bad Request");
+        assertProblem(given().when().delete("/recipe/0").then(), 400, "Bad Request");
     }
 
     @Test

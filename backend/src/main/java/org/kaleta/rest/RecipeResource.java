@@ -28,7 +28,7 @@ public class RecipeResource
 
     @GET
     @Path("/{id}")
-    public RecipeDto get(@ValidId @PathParam("id") String id)
+    public RecipeDto get(@NotNull @ValidId @PathParam("id") Long id)
     {
         return recipeService.get(id);
     }
@@ -43,14 +43,14 @@ public class RecipeResource
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public RecipeDto update(@ValidId @PathParam("id") String id, @Valid @NotNull RecipeUpdateDto dto)
+    public RecipeDto update(@NotNull @ValidId @PathParam("id") Long id, @Valid @NotNull RecipeUpdateDto dto)
     {
         return recipeService.update(id, dto);
     }
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@ValidId @PathParam("id") String id)
+    public Response delete(@NotNull @ValidId @PathParam("id") Long id)
     {
         recipeService.delete(id);
         return Response.noContent().build();

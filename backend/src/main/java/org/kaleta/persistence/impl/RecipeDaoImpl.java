@@ -19,7 +19,7 @@ public class RecipeDaoImpl implements RecipeDao
     EntityManager entityManager;
 
     @Override
-    public Optional<Recipe> find(String id)
+    public Optional<Recipe> find(Long id)
     {
         return Optional.ofNullable(entityManager.find(Recipe.class, id));
     }
