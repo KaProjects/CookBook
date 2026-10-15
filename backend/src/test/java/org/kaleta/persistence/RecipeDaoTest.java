@@ -75,6 +75,14 @@ class RecipeDaoTest
     }
 
     @Test
+    void findImage_tellsAMissingPictureFromAMissingRecipe()
+    {
+        assertThat(recipeDao.findImage(2L).orElseThrow().orElseThrow(), is("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2Q=="));
+        assertThat(recipeDao.findImage(1L).orElseThrow().isEmpty(), is(true));
+        assertThat(recipeDao.findImage(999L).isEmpty(), is(true));
+    }
+
+    @Test
     @TestTransaction
     void listSummaries_isOneRowPerRecipeHoweverManyChildren()
     {

@@ -1,8 +1,8 @@
 import React from "react";
-import {screen, within} from "@testing-library/react";
+import {fireEvent, screen, within} from "@testing-library/react";
 import {useData} from "../../fetch";
 import Recipe, {orderIngredients} from "../Recipe";
-import {renderPage} from "../../testUtils";
+import {renderPage, resetScreen, setScreenWide} from "../../testUtils";
 
 jest.mock("../../fetch", () => ({useData: jest.fn()}));
 
@@ -24,12 +24,15 @@ const recipe = {
 
 function setup(data = recipe) {
     useData.mockReturnValue({data, loaded: true, error: null});
-    const setPdfTarget = jest.fn();
-    const view = renderPage(<Recipe/>, {path: "/recipe/:id", at: "/recipe/2", state: {setPdfTarget}});
-    return {setPdfTarget, view};
+    const setShownRecipe = jest.fn();
+    const view = renderPage(<Recipe/>, {path: "/recipe/:id", at: "/recipe/2", state: {setShownRecipe}});
+    return {setShownRecipe, view};
 }
 
-describe("Recipe", () => {
+describe("Recipe on a wide screen", () => {
+    beforeEach(() => setScreenWide(true));
+    afterEach(resetScreen);
+
     test("reads the recipe in the address", () => {
         useData.mockReturnValue({data: null, loaded: false, error: null});
         renderPage(<Recipe/>, {path: "/recipe/:id", at: "/recipe/42"});
@@ -38,27 +41,36 @@ describe("Recipe", () => {
         expect(screen.getByRole("progressbar")).toBeInTheDocument();
     });
 
-    test("shows the name and the category", () => {
+    test("heads the page with the category, the name and what it takes", () => {
         setup();
 
-        expect(screen.getByRole("heading", {name: "Tomato soup"})).toBeInTheDocument();
-        expect(screen.getByRole("heading", {name: "Polievky"})).toBeInTheDocument();
+        const page = within(screen.getByRole("article", {name: "Tomato soup"}));
+        expect(page.getByRole("heading", {level: 2, name: "Tomato soup"})).toBeInTheDocument();
+        expect(page.getByText("Polievky")).toBeInTheDocument();
+        expect(page.getByText("3 ingredients · 3 steps")).toBeInTheDocument();
     });
 
-    test("lists the required ingredients first, with their quantities", () => {
+    test("lists the required ingredients with their quantities, the optional ones apart", () => {
         setup();
 
-        const items = within(screen.getByRole("list", {name: "Ingredients"})).getAllByText(/./, {selector: "p"});
-        expect(items.map((item) => item.textContent)).toEqual(["Tomatoes", "(4 pcs)", "Salt", "(1 pinch)", "Basil"]);
+        const required = within(screen.getByRole("list", {name: "Ingredients"})).getAllByRole("listitem");
+        expect(required.map((item) => item.textContent)).toEqual(["Tomatoes4 pcs", "Salt1 pinch"]);
+        const optional = within(screen.getByRole("list", {name: "Optional ingredients"})).getAllByRole("listitem");
+        expect(optional.map((item) => item.textContent)).toEqual(["Basil"]);
     });
 
-    test("lists the steps in order, marking the optional one", () => {
+    test("lists the steps in order, tagging the optional one", () => {
         setup();
 
-        const steps = screen.getByRole("list", {name: "Steps"});
-        expect(within(steps).getByText(/Boil/)).toHaveTextContent("Boil for 20 minutes");
-        expect(within(steps).getAllByTitle("optional")).toHaveLength(1);
-        expect(within(steps).getAllByTitle("required")).toHaveLength(2);
+        const steps = within(screen.getByRole("list", {name: "Steps"})).getAllByRole("listitem");
+        expect(steps.map((step) => step.textContent)).toEqual(["1Chop", "2Boil\nfor 20 minutes", "3Garnishoptional"]);
+    });
+
+    test("says so when a recipe has no ingredients or steps yet", () => {
+        setup({...recipe, ingredients: [], steps: []});
+
+        expect(screen.getByText("No ingredients yet.")).toBeInTheDocument();
+        expect(screen.getByText("No steps yet.")).toBeInTheDocument();
     });
 
     test("shows the picture only when there is one", () => {
@@ -72,12 +84,12 @@ describe("Recipe", () => {
     });
 
     test("offers itself for PDF export while it is shown", () => {
-        const {setPdfTarget, view} = setup();
+        const {setShownRecipe, view} = setup();
 
-        expect(setPdfTarget).toHaveBeenCalledWith({ref: expect.objectContaining({current: expect.anything()}), name: "Tomato soup"});
+        expect(setShownRecipe).toHaveBeenCalledWith({ref: expect.objectContaining({current: expect.anything()}), name: "Tomato soup", category: "Polievky"});
 
         view.unmount();
-        expect(setPdfTarget).toHaveBeenLastCalledWith(null);
+        expect(setShownRecipe).toHaveBeenLastCalledWith(null);
     });
 });
 
@@ -89,5 +101,64 @@ describe("orderIngredients", () => {
         const d = {name: "d", optional: false};
 
         expect(orderIngredients([a, b, c, d])).toEqual([b, d, a, c]);
+    });
+});
+
+describe("Recipe on a phone", () => {
+    const setupPhone = (data = recipe) => setup(data);
+
+    test("shows the picture with the name over it", () => {
+        setupPhone({...recipe, image: "data:image/jpeg;base64,AA=="});
+
+        const article = screen.getByRole("article", {name: "Tomato soup"});
+        expect(within(article).getByRole("heading", {name: "Tomato soup"})).toBeInTheDocument();
+        expect(screen.getByTestId("recipe-picture")).toHaveStyle({backgroundImage: "url(data:image/jpeg;base64,AA==)"});
+    });
+
+    test("shows just the name when there is no picture", () => {
+        setupPhone();
+
+        const article = screen.getByRole("article", {name: "Tomato soup"});
+        expect(within(article).getByRole("heading", {name: "Tomato soup"})).toBeInTheDocument();
+        expect(screen.queryByTestId("recipe-picture")).not.toBeInTheDocument();
+    });
+
+    test("opens on the ingredients, required first and the optional ones apart", () => {
+        setupPhone();
+
+        expect(screen.getByRole("tab", {name: "Ingredients 3"})).toHaveAttribute("aria-selected", "true");
+        const required = within(screen.getByRole("list", {name: "Ingredients"})).getAllByRole("listitem");
+        expect(required.map((item) => item.textContent)).toEqual(["Tomatoes4 pcs", "Salt1 pinch"]);
+        const optional = within(screen.getByRole("list", {name: "Optional ingredients"})).getAllByRole("listitem");
+        expect(optional.map((item) => item.textContent)).toEqual(["Basil"]);
+        expect(screen.queryByRole("list", {name: "Steps"})).not.toBeInTheDocument();
+    });
+
+    test("shows the steps in order on their tab, the optional ones tagged", () => {
+        setupPhone();
+
+        fireEvent.click(screen.getByRole("tab", {name: "Steps 3"}));
+
+        const steps = within(screen.getByRole("list", {name: "Steps"})).getAllByRole("listitem");
+        expect(steps.map((step) => step.textContent)).toEqual(["1Chop", "2Boil\nfor 20 minutes", "3Garnishoptional"]);
+        expect(screen.queryByRole("list", {name: "Ingredients"})).not.toBeInTheDocument();
+    });
+
+    test("says so when a recipe has no ingredients or steps yet", () => {
+        setupPhone({...recipe, ingredients: [], steps: []});
+
+        expect(screen.getByText("No ingredients yet.")).toBeInTheDocument();
+        fireEvent.click(screen.getByRole("tab", {name: "Steps 0"}));
+        expect(screen.getByText("No steps yet.")).toBeInTheDocument();
+    });
+
+    test("still exports the full page, kept out of sight", () => {
+        const {setShownRecipe} = setupPhone();
+
+        const page = screen.getByTestId("pdf-page");
+        expect(page).toHaveAttribute("aria-hidden", "true");
+        expect(page).toHaveTextContent("Garnish");
+        expect(page).toHaveTextContent("Basil");
+        expect(setShownRecipe.mock.calls[0][0].ref.current).toHaveTextContent("Tomato soup");
     });
 });

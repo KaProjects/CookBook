@@ -211,6 +211,42 @@ class RecipeServiceTest
     }
 
     @Test
+    void getImage_tagsThePictureByItsContent()
+    {
+        when(recipeDao.findImage(1L)).thenReturn(Optional.of(Optional.of("data:image/jpeg;base64,/9j/AA==")));
+        when(recipeDao.findImage(2L)).thenReturn(Optional.of(Optional.of("data:image/jpeg;base64,/9j/AB==")));
+        when(imageService.bytesOf(anyString())).thenReturn(new byte[]{(byte) 0xFF, (byte) 0xD8, 0});
+
+        RecipeService.RecipeImage first = recipeService.getImage(1L, false);
+
+        assertThat(first.mediaType(), is("image/jpeg"));
+        assertThat(recipeService.getImage(1L, false).tag(), is(first.tag()));
+        assertThat(recipeService.getImage(2L, false).tag(), is(org.hamcrest.Matchers.not(first.tag())));
+    }
+
+    @Test
+    void getImage_scalesAThumbnail()
+    {
+        when(recipeDao.findImage(1L)).thenReturn(Optional.of(Optional.of("data:image/jpeg;base64,/9j/AA==")));
+        when(imageService.toJpegBytes(anyString(), org.mockito.ArgumentMatchers.anyInt())).thenReturn(new byte[]{(byte) 0xFF, (byte) 0xD8, 0});
+
+        RecipeService.RecipeImage thumbnail = recipeService.getImage(1L, true);
+
+        verify(imageService).toJpegBytes("data:image/jpeg;base64,/9j/AA==", RecipeService.THUMBNAIL_DIMENSION);
+        assertThat(thumbnail.tag(), org.hamcrest.Matchers.endsWith("-thumbnail"));
+    }
+
+    @Test
+    void getImage_ofNoPictureOrNoRecipeIsNotFound()
+    {
+        when(recipeDao.findImage(1L)).thenReturn(Optional.of(Optional.empty()));
+        when(recipeDao.findImage(2L)).thenReturn(Optional.empty());
+
+        assertThat(assertThrows(ResourceNotFoundException.class, () -> recipeService.getImage(1L, true)).getMessage(), is("Recipe '1' has no picture."));
+        assertThat(assertThrows(ResourceNotFoundException.class, () -> recipeService.getImage(2L, true)).getMessage(), is("Recipe '2' does not exist."));
+    }
+
+    @Test
     void getMenu_sortsTheSlovakWay()
     {
         when(recipeDao.listCategories("cook")).thenReturn(List.of("Šaláty", "Polievky", "Cestoviny", "Čaje"));

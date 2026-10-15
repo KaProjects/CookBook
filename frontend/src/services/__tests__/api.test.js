@@ -1,5 +1,5 @@
 import axios from "axios";
-import {createRecipe, deleteRecipe, paths, updateRecipe} from "../api";
+import {createRecipe, deleteRecipe, imageUrl, paths, updateRecipe} from "../api";
 
 jest.mock("axios");
 
@@ -9,6 +9,11 @@ describe("paths", () => {
         expect(paths.userConfig("Anna Mária")).toBe("/user/Anna%20M%C3%A1ria/config");
         expect(paths.menu("a/b")).toBe("/user/a%2Fb/menu");
         expect(paths.recipe(42)).toBe("/recipe/42");
+    });
+
+    test("point a picture at the recipe, full size or as a thumbnail", () => {
+        expect(imageUrl(7)).toBe("/api/recipe/7/image");
+        expect(imageUrl(7, {thumbnail: true})).toBe("/api/recipe/7/image?size=thumbnail");
     });
 
     test("add only the recipe filters that are set", () => {

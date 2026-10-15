@@ -24,6 +24,15 @@ public class RecipeDaoImpl implements RecipeDao
         return Optional.ofNullable(entityManager.find(Recipe.class, id));
     }
 
+    @Override
+    public Optional<Optional<String>> findImage(Long id)
+    {
+        List<String> images = entityManager.createQuery("SELECT r.image FROM Recipe r WHERE r.id = :id", String.class)
+                .setParameter("id", id)
+                .getResultList();
+        return images.isEmpty() ? Optional.empty() : Optional.of(Optional.ofNullable(images.get(0)));
+    }
+
     @Transactional
     @Override
     public void create(Recipe recipe)

@@ -18,6 +18,10 @@ export const paths = {
     recipe: (id) => `/recipe/${segment(id)}`,
 }
 
+/** Where an <img> loads a recipe's picture from, as stored or scaled down to a thumbnail. */
+export const imageUrl = (id, {thumbnail = false} = {}) =>
+    properties.backend + paths.recipe(id) + "/image" + (thumbnail ? "?size=thumbnail" : "")
+
 /** Creates a recipe of the cook, answering it as stored - with its new ID. */
 export const createRecipe = (cook, recipe) =>
     axios.post(properties.backend + "/recipe", {...recipe, cook}).then((response) => response.data)

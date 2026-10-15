@@ -72,9 +72,9 @@ describe("AppState", () => {
         const {result} = renderHook(useAppState, {wrapper});
         const target = {ref: {current: null}, name: "Soup"};
 
-        act(() => result.current.setPdfTarget(target));
+        act(() => result.current.setShownRecipe(target));
 
-        expect(result.current.pdfTarget).toBe(target);
+        expect(result.current.shownRecipe).toBe(target);
     });
 
     test("refuses to be read outside its provider", () => {

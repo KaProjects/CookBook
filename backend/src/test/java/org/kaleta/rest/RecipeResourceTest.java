@@ -293,6 +293,60 @@ class RecipeResourceTest
     }
 
     @Test
+    void image_answersThePictureAndAThumbnail() throws Exception
+    {
+        RecipeCreateDto dto = Generator.createDto(COOK);
+        dto.setImage(Generator.image("png", 800, 400));
+        RecipeDto recipe = create(dto);
+
+        byte[] full = given().when().get("/recipe/" + recipe.getId() + "/image").then()
+                .statusCode(200).contentType("image/jpeg").header("ETag", notNullValue())
+                .extract().asByteArray();
+        assertThat(java.util.Arrays.equals(full, java.util.Base64.getDecoder().decode(recipe.getImage().split(",")[1])), is(true));
+
+        byte[] thumbnail = given().queryParam("size", "thumbnail").when().get("/recipe/" + recipe.getId() + "/image").then()
+                .statusCode(200).contentType("image/jpeg").extract().asByteArray();
+        java.awt.image.BufferedImage scaled = javax.imageio.ImageIO.read(new java.io.ByteArrayInputStream(thumbnail));
+        assertThat(scaled.getWidth(), is(org.kaleta.service.RecipeService.THUMBNAIL_DIMENSION));
+        assertThat(scaled.getHeight(), is(96));
+    }
+
+    @Test
+    void image_isRevalidatedUntilThePictureChanges()
+    {
+        RecipeCreateDto dto = Generator.createDto(COOK);
+        dto.setImage(Generator.image("png", 40, 40));
+        RecipeDto recipe = create(dto);
+        String path = "/recipe/" + recipe.getId() + "/image";
+
+        String tag = given().when().get(path).then().statusCode(200)
+                .header("Cache-Control", org.hamcrest.Matchers.containsString("no-cache"))
+                .extract().header("ETag");
+        given().header("If-None-Match", tag).when().get(path).then().statusCode(304);
+
+        RecipeUpdateDto changed = editable(recipe);
+        changed.setImage(Generator.image("png", 50, 50));
+        update(recipe.getId(), changed);
+        given().header("If-None-Match", tag).when().get(path).then().statusCode(200);
+    }
+
+    @Test
+    void image_ofARecipeWithoutOneOrOfNoRecipeIsNotFound()
+    {
+        RecipeDto recipe = create(Generator.createDto(COOK));
+
+        assertNotFound("/recipe/" + recipe.getId() + "/image").body("detail", is("Recipe '" + recipe.getId() + "' has no picture."));
+        assertNotFound("/recipe/999999/image").body("detail", is("Recipe '999999' does not exist."));
+    }
+
+    @Test
+    void image_sizeMustBeKnown()
+    {
+        assertProblem(given().queryParam("size", "huge").when().get("/recipe/2/image").then(), 400, "Bad Request")
+                .body("violations[0].field", is("size"));
+    }
+
+    @Test
     void update_validatesTheRecipe()
     {
         RecipeUpdateDto dto = Generator.updateDto();
