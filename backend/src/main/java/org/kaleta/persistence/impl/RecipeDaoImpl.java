@@ -38,6 +38,13 @@ public class RecipeDaoImpl implements RecipeDao
         return entityManager.merge(recipe);
     }
 
+    @Transactional
+    @Override
+    public void delete(Recipe recipe)
+    {
+        entityManager.remove(entityManager.contains(recipe) ? recipe : entityManager.merge(recipe));
+    }
+
     @Override
     public List<String> listCategories(String cook)
     {

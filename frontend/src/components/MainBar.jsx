@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import {useMatch, useNavigate, useSearchParams} from "react-router-dom";
 import {AppBar, Box, IconButton, SwipeableDrawer, Toolbar, Tooltip, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import generatePDF from "react-to-pdf";
+import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import RecipeMenu from "./RecipeMenu";
 import {useAppState} from "../state/appState";
 import {colors} from "../theme/colors";
@@ -35,7 +37,9 @@ export default function MainBar() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const viewing = useMatch("/recipe/:id");
+    const creating = useMatch("/create");
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const filter = searchParams.get("category") ?? searchParams.get("ingredient");
 
@@ -55,9 +59,14 @@ export default function MainBar() {
                     <BarButton title="Edit recipe" onClick={() => navigate(`/recipe/${encodeURIComponent(viewing.params.id)}/edit`)}>
                         <EditIcon/>
                     </BarButton>}
-                <BarButton title="New recipe" onClick={() => navigate("/create")}>
-                    <AddIcon/>
-                </BarButton>
+                {viewing &&
+                    <BarButton title="Delete recipe" onClick={() => setDeleteOpen(true)}>
+                        <DeleteIcon/>
+                    </BarButton>}
+                {!creating &&
+                    <BarButton title="New recipe" onClick={() => navigate("/create")}>
+                        <AddIcon/>
+                    </BarButton>}
                 <BarButton title="Filter recipes" onClick={() => setDrawerOpen(true)}>
                     <FilterListIcon/>
                 </BarButton>
@@ -74,6 +83,9 @@ export default function MainBar() {
             >
                 <RecipeMenu open={drawerOpen} onClose={() => setDrawerOpen(false)}/>
             </SwipeableDrawer>
+            {viewing &&
+                <DeleteRecipeDialog open={deleteOpen} recipeId={viewing.params.id} recipeName={pdfTarget?.name}
+                                    onClose={() => setDeleteOpen(false)}/>}
         </AppBar>
     );
 }

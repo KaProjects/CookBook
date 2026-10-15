@@ -22,6 +22,10 @@ export const paths = {
 export const createRecipe = (cook, recipe) =>
     axios.post(properties.backend + "/recipe", {...recipe, cook}).then((response) => response.data)
 
+/** Deletes a recipe with its steps, ingredients and picture. */
+export const deleteRecipe = (id) =>
+    axios.delete(properties.backend + paths.recipe(id)).then(() => undefined)
+
 /** Replaces the editable part of a recipe, answering it as stored. */
 export const updateRecipe = (id, recipe) =>
     axios.put(properties.backend + paths.recipe(id), recipe).then((response) => response.data)

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {createRecipe, paths, updateRecipe} from "../api";
+import {createRecipe, deleteRecipe, paths, updateRecipe} from "../api";
 
 jest.mock("axios");
 
@@ -23,6 +23,7 @@ describe("recipe writes", () => {
     beforeEach(() => {
         axios.post.mockReset();
         axios.put.mockReset();
+        axios.delete.mockReset();
     });
 
     test("create posts the recipe for the cook and answers what was stored", async () => {
@@ -30,6 +31,13 @@ describe("recipe writes", () => {
 
         await expect(createRecipe("Stanley", {name: "Soup"})).resolves.toEqual({id: "new"});
         expect(axios.post).toHaveBeenCalledWith("/api/recipe", {name: "Soup", cook: "Stanley"});
+    });
+
+    test("delete deletes the recipe at its encoded address", async () => {
+        axios.delete.mockResolvedValue({status: 204});
+
+        await expect(deleteRecipe("a/b")).resolves.toBeUndefined();
+        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/a%2Fb");
     });
 
     test("update puts the recipe at its address", async () => {

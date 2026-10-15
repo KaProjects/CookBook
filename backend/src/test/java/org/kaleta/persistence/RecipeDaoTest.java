@@ -136,6 +136,25 @@ class RecipeDaoTest
                 .getSingleResult(), is(0L));
     }
 
+    @Test
+    @TestTransaction
+    void delete_removesTheRecipeWithItsChildren()
+    {
+        Recipe recipe = Generator.recipe("daoCook", "Pancakes", "Breakfast");
+        Generator.step(recipe, 1, "mix");
+        Generator.ingredient(recipe, "Flour", "200 g");
+        recipeDao.create(recipe);
+        entityManager.flush();
+        entityManager.clear();
+
+        recipeDao.delete(recipeDao.find(recipe.getId()).orElseThrow());
+        entityManager.flush();
+
+        assertThat(recipeDao.find(recipe.getId()).isEmpty(), is(true));
+        assertThat(entityManager.createQuery("SELECT COUNT(s) FROM Step s WHERE s.text = 'mix'", Long.class).getSingleResult(), is(0L));
+        assertThat(entityManager.createQuery("SELECT COUNT(i) FROM Ingredient i WHERE i.name = 'Flour'", Long.class).getSingleResult(), is(0L));
+    }
+
     private static List<String> ids(List<RecipeSummary> summaries)
     {
         return summaries.stream().map(RecipeSummary::id).toList();

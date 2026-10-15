@@ -28,10 +28,8 @@ public class RecipeUpdateDto
     private String image;
 
     @NotNull
-    @Valid
-    private List<@NotNull StepDto> steps = new ArrayList<>();
+    private List<@NotNull @Valid StepDto> steps = new ArrayList<>();
 
     @NotNull
-    @Valid
-    private List<@NotNull IngredientDto> ingredients = new ArrayList<>();
+    private List<@NotNull @Valid IngredientDto> ingredients = new ArrayList<>();
 }

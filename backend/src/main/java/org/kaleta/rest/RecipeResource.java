@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -45,5 +46,13 @@ public class RecipeResource
     public RecipeDto update(@ValidId @PathParam("id") String id, @Valid @NotNull RecipeUpdateDto dto)
     {
         return recipeService.update(id, dto);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@ValidId @PathParam("id") String id)
+    {
+        recipeService.delete(id);
+        return Response.noContent().build();
     }
 }

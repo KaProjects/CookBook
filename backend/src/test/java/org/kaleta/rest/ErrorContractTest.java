@@ -24,7 +24,7 @@ class ErrorContractTest
     @Test
     void aMethodAPathDoesNotAllowIsRefused()
     {
-        assertProblem(given().when().delete("/recipe/1").then(), 405, "Method Not Allowed");
+        assertProblem(given().when().delete("/user").then(), 405, "Method Not Allowed");
     }
 
     @Test

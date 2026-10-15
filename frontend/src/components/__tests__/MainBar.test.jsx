@@ -5,6 +5,11 @@ import MainBar from "../MainBar";
 import {renderPage} from "../../testUtils";
 
 jest.mock("react-to-pdf", () => jest.fn());
+jest.mock("../DeleteRecipeDialog", () => {
+    const DeleteRecipeDialog = ({open, recipeId, recipeName}) =>
+        <div>delete dialog {open ? "open" : "closed"} for {recipeId} {recipeName}</div>;
+    return DeleteRecipeDialog;
+});
 jest.mock("../RecipeMenu", () => {
     const RecipeMenu = ({open}) => <div>recipe menu {open ? "open" : "closed"}</div>;
     return RecipeMenu;
@@ -29,6 +34,16 @@ describe("MainBar", () => {
         setup("/");
         expect(screen.queryByRole("button", {name: "Edit recipe"})).not.toBeInTheDocument();
         expect(screen.queryByRole("button", {name: "Download PDF"})).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", {name: "Delete recipe"})).not.toBeInTheDocument();
+    });
+
+    test("asks to delete the recipe being read", () => {
+        setup("/recipe/7", {pdfTarget: {ref: {current: null}, name: "Soup"}});
+        expect(screen.getByText("delete dialog closed for 7 Soup")).toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", {name: "Delete recipe"}));
+
+        expect(screen.getByText("delete dialog open for 7 Soup")).toBeInTheDocument();
     });
 
     test("edits the recipe being read", () => {
@@ -61,6 +76,13 @@ describe("MainBar", () => {
 
         fireEvent.click(screen.getByRole("button", {name: "All recipes"}));
         expect(screen.getByTestId("location")).toHaveTextContent(/^\/$/);
+    });
+
+    test("does not offer a new recipe while one is being created", () => {
+        setup("/create");
+
+        expect(screen.queryByRole("button", {name: "New recipe"})).not.toBeInTheDocument();
+        expect(screen.getByRole("button", {name: "All recipes"})).toBeInTheDocument();
     });
 
     test("opens the filter drawer", () => {
