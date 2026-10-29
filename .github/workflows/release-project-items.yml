@@ -99,12 +99,24 @@ jobs:
 
             const expectedRepository = `${owner}/${repo}`.toLowerCase();
             const results = [];
+            const { data: projectOwnerAccount } =
+              await github.rest.users.getByUsername({
+                username: projectOwner,
+              });
+            const projectOwnerField =
+              projectOwnerAccount.type === "Organization"
+                ? "organization"
+                : projectOwnerAccount.type === "User"
+                  ? "user"
+                  : null;
+
+            if (!projectOwnerField) {
+              throw new Error(
+                `Unsupported project owner type: ${projectOwnerAccount.type}.`,
+              );
+            }
 
             for (const projectNumber of projectNumbers) {
-              // repositoryOwner resolves an organization or a person in one field. Asking for
-              // organization(login:) and user(login:) side by side returns the project AND a
-              // NOT_FOUND error for whichever of the two the owner is not, and the GraphQL client
-              // throws as soon as a response carries any error at all, however complete its data.
               const projectResult = await github.graphql(
                 `
                   query(
@@ -112,16 +124,9 @@ jobs:
                     $number: Int!
                     $statusFieldName: String!
                   ) {
-                    repositoryOwner(login: $login) {
-                      ... on Organization {
-                        projectV2(number: $number) {
-                          ...ProjectData
-                        }
-                      }
-                      ... on User {
-                        projectV2(number: $number) {
-                          ...ProjectData
-                        }
+                    projectOwner: ${projectOwnerField}(login: $login) {
+                      projectV2(number: $number) {
+                        ...ProjectData
                       }
                     }
                   }
@@ -148,7 +153,7 @@ jobs:
                 },
               );
 
-              const project = projectResult.repositoryOwner?.projectV2;
+              const project = projectResult.projectOwner?.projectV2;
               if (!project) {
                 throw new Error(
                   `Project ${projectOwner}/${projectNumber} was not found.`,
