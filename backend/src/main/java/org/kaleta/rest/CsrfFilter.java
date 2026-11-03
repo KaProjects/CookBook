@@ -14,11 +14,10 @@ import java.util.Set;
 /**
  * Refuses a state-changing request that another site could have caused the browser to make.
  * <p>
- * There is no login, so nothing but this stands between a request and the recipes: every page open
- * in the browser can send requests to the application, and the browser gives each one the same
- * access the application's own page has. A form on another site cannot set a header of its own,
- * and a script that tries has to ask permission first, through a preflight this application never
- * grants.
+ * Every page open in the browser can send requests to the application, and the browser treats
+ * them no differently from the application's own. A form on another site cannot set a header of
+ * its own, and a script that tries has to ask permission first, through a preflight this
+ * application never grants.
  * <p>
  * It is global so that every endpoint which can write is covered by the fact of existing, rather
  * than by somebody remembering.
