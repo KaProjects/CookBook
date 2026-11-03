@@ -83,7 +83,7 @@ describe("RecipeEditor", () => {
                 image: null,
                 ingredients: [],
                 steps: [{number: 1, text: "Cook it", optional: false}],
-            });
+            }, {headers: {"X-Cookbook-Client": "web"}});
         });
 
         test("cannot be saved with an unnamed ingredient or an empty step", () => {
@@ -160,7 +160,7 @@ describe("RecipeEditor", () => {
                 image: null,
                 ingredients: [{name: "Pomodoro", quantity: "4 pcs", optional: false}],
                 steps: [{number: 1, text: "Boil", optional: true}],
-            });
+            }, {headers: {"X-Cookbook-Client": "web"}});
         });
 
         test("keeps each step's own text when one above it is deleted", async () => {

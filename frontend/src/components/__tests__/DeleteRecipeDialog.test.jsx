@@ -36,7 +36,7 @@ describe("DeleteRecipeDialog", () => {
         fireEvent.click(screen.getByRole("button", {name: "Delete"}));
 
         await waitFor(() => expect(screen.getByTestId("location")).toHaveTextContent(/^\/$/));
-        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/7");
+        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/7", {headers: {"X-Cookbook-Client": "web"}});
         expect(onClose).toHaveBeenCalled();
     });
 

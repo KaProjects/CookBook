@@ -1,5 +1,5 @@
 import axios from "axios";
-import {createRecipe, deleteRecipe, imageUrl, paths, updateRecipe} from "../api";
+import {CLIENT_HEADER, createRecipe, deleteRecipe, imageUrl, paths, updateRecipe} from "../api";
 
 jest.mock("axios");
 
@@ -25,6 +25,8 @@ describe("paths", () => {
 });
 
 describe("recipe writes", () => {
+    const writes = {headers: {[CLIENT_HEADER]: "web"}};
+
     beforeEach(() => {
         axios.post.mockReset();
         axios.put.mockReset();
@@ -35,20 +37,24 @@ describe("recipe writes", () => {
         axios.post.mockResolvedValue({data: {id: 31}});
 
         await expect(createRecipe("Stanley", {name: "Soup"})).resolves.toEqual({id: 31});
-        expect(axios.post).toHaveBeenCalledWith("/api/recipe", {name: "Soup", cook: "Stanley"});
+        expect(axios.post).toHaveBeenCalledWith("/api/recipe", {name: "Soup", cook: "Stanley"}, writes);
     });
 
     test("delete deletes the recipe at its address", async () => {
         axios.delete.mockResolvedValue({status: 204});
 
         await expect(deleteRecipe(7)).resolves.toBeUndefined();
-        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/7");
+        expect(axios.delete).toHaveBeenCalledWith("/api/recipe/7", writes);
     });
 
     test("update puts the recipe at its address", async () => {
         axios.put.mockResolvedValue({data: {id: 7}});
 
         await expect(updateRecipe(7, {name: "Soup"})).resolves.toEqual({id: 7});
-        expect(axios.put).toHaveBeenCalledWith("/api/recipe/7", {name: "Soup"});
+        expect(axios.put).toHaveBeenCalledWith("/api/recipe/7", {name: "Soup"}, writes);
+    });
+
+    test("every write names the client the backend lets through", () => {
+        expect(CLIENT_HEADER).toBe("X-Cookbook-Client");
     });
 });
