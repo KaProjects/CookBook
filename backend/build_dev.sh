@@ -5,14 +5,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEPLOY_DIR="$(cd "$SCRIPT_DIR/../deploy" && pwd)"
 USE_PROD_DB=0
-DEV_FRONTEND_ORIGIN="${DEV_FRONTEND_ORIGIN:-http://localhost:3002}"
-DEV_HTTP_PORT="${DEV_HTTP_PORT:-9092}"
+DEV_FRONTEND_ORIGIN="${DEV_FRONTEND_ORIGIN:-${FRONTEND_ORIGIN:-http://localhost:3000}}"
+DEV_HTTP_PORT="${DEV_HTTP_PORT:-9090}"
 
-# Quarkus defaults the debugger to 5005, which is the port Trading's dev stack already uses (and
-# Accountant's 5006), so running them at once left the later ones without a debugger. The host
-# defaults to loopback and is only widened inside the development container, where the published
-# port is itself bound to the host's loopback.
-DEV_DEBUG_PORT="${DEV_DEBUG_PORT:-5007}"
+# The debugger port can be set so that several dev stacks on one machine each keep their own. The
+# host defaults to loopback and is only widened inside the development container, where the
+# published port is itself bound to the host's loopback.
+DEV_DEBUG_PORT="${DEV_DEBUG_PORT:-5005}"
 DEV_DEBUG_HOST="${DEV_DEBUG_HOST:-localhost}"
 
 load_env_file() {
@@ -122,4 +121,5 @@ if [[ $USE_PROD_DB -eq 1 ]]; then
     ./mvnw -Pdev-output clean compile quarkus:dev "-Ddebug=$DEV_DEBUG_PORT" "-DdebugHost=$DEV_DEBUG_HOST"
 fi
 
-exec ./mvnw -Pdev,dev-output clean compile quarkus:dev "-Ddebug=$DEV_DEBUG_PORT" "-DdebugHost=$DEV_DEBUG_HOST"
+exec env HTTP_PORT="$DEV_HTTP_PORT" \
+  ./mvnw -Pdev,dev-output clean compile quarkus:dev "-Ddebug=$DEV_DEBUG_PORT" "-DdebugHost=$DEV_DEBUG_HOST"

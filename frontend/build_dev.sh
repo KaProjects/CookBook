@@ -4,9 +4,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Trading (3000 / 9090 / 5005) and Accountant (3001 / 9091 / 5006) dev stacks
-# already use these ports, so CookBook is offset by two to let all run side by side.
-export PORT="${PORT:-3002}"
+# Set PORT to run several dev stacks side by side on one machine.
+export PORT="${PORT:-3000}"
 
 # Bind to the loopback interface, as the backend already does. Unset, the development server binds
 # every interface, and because its proxy forwards to the backend from the server side, that puts
