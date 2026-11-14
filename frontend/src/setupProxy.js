@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const backendPort = process.env.REACT_APP_BACKEND_PORT || "9090";
+const backendPort = process.env.REACT_APP_BACKEND_PORT || "9000";
 
 module.exports = function (app) {
   app.use(

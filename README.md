@@ -7,7 +7,7 @@ ingredient, with pictures and PDF export. `backend` is Quarkus, `frontend` is Re
 
 ```sh
 ./verify.sh                      # backend tests, frontend lint and tests
-(cd backend && ./build_dev.sh)   # http://localhost:9090, Swagger at /docs
+(cd backend && ./build_dev.sh)   # http://localhost:9000, Swagger at /docs
 (cd frontend && ./build_dev.sh)  # http://localhost:3000
 ```
 
