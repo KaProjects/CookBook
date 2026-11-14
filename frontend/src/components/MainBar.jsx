@@ -13,6 +13,7 @@ import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import RecipeMenu from "./RecipeMenu";
 import {useWideScreen} from "../hooks/useWideScreen";
 import {useAppState} from "../state/appState";
+import {appVersion} from "../version";
 
 const BarButton = ({title, onClick, children, edge = false, sx}) => (
     <Tooltip title={title}>
@@ -73,9 +74,29 @@ export default function MainBar() {
         <AppBar position="static">
             <Toolbar variant="dense">
                 {wide && allRecipes}
-                <Typography variant="h6" component="h1">
-                    {phoneTitle ?? <>{user}'s CookBook{filter !== null && " - " + filter}</>}
-                </Typography>
+                {/* Which version is running, and whether it is a release yet. Hung below the title
+                    rather than set under it, so the title stays where it always was; outside the
+                    heading, so it is not part of the heading's name. Styled as in Trading. */}
+                <Box sx={{position: "relative"}}>
+                    <Typography variant="h6" component="h1">
+                        {phoneTitle ?? <>{user}'s CookBook{filter !== null && " - " + filter}</>}
+                    </Typography>
+                    {appVersion &&
+                        <Box component="span" data-testid="app-version" sx={{
+                            position: "absolute",
+                            left: 0,
+                            top: "100%",
+                            marginTop: "-7px",
+                            fontSize: 8,
+                            lineHeight: 1,
+                            fontWeight: 400,
+                            letterSpacing: 0,
+                            opacity: 0.7,
+                            whiteSpace: "nowrap",
+                        }}>
+                            {appVersion}
+                        </Box>}
+                </Box>
                 <Box sx={{flexGrow: 1}}/>
                 {viewing && shownRecipe &&
                     <BarButton title="Download PDF"
